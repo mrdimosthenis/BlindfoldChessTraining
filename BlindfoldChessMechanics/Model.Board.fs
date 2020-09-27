@@ -35,12 +35,12 @@ let blackPawn: Resident = Some {PieceType=Pawn; IsWhite=false}
 
 // utils
 
-let toArrays (board: Board): Resident array array =
-    board
+let toArrays<'a> (s: 'a seq seq): 'a array array =
+    s
     |> Seq.map Seq.toArray
     |> Seq.toArray
 
-let ofArrays (arr: Resident array array): Board =
+let ofArrays<'a> (arr: 'a array array): 'a seq seq =
     arr
     |> Seq.ofArray
     |> Seq.map Seq.ofArray
