@@ -5,6 +5,17 @@ open FsUnit.Xunit
 
 open BlindfoldChessMechanics.Model.Logic.Board
 
+let emptyBoard =
+    [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
+    |> ofArrays
+
 [<Fact>]
 let ``Indices cotrolled by rook`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -26,13 +37,18 @@ let ``Indices cotrolled by rook`` () =
           (4, 0); (4, 1)|]
 
 [<Fact>]
+let ``Indices cotrolled by ghost rook`` () =
+    (fun () -> indicesControlledByRook (4, 2) emptyBoard |> Seq.toArray |> ignore)
+    |> should throw typeof<NoPieceInBoard>
+
+[<Fact>]
 let ``Indices cotrolled by bishop`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-      [|blackPawn; emptySquare;   emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
+      [|blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> ofArrays
@@ -46,6 +62,11 @@ let ``Indices cotrolled by bishop`` () =
           (3, 1)|]
 
 [<Fact>]
+let ``Indices cotrolled by ghost bishop`` () =
+    (fun () -> indicesControlledByBishop (4, 2) emptyBoard |> Seq.toArray |> ignore)
+    |> should throw typeof<NoPieceInBoard>
+
+[<Fact>]
 let ``Indices cotrolled by queen`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -54,7 +75,7 @@ let ``Indices cotrolled by queen`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
-      [|whitePawn;   emptySquare;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
+      [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> ofArrays
     |> Seq.rev
     |> indicesControlledByQueen (4, 4)
@@ -69,3 +90,46 @@ let ``Indices cotrolled by queen`` () =
           (7, 1); (6, 2); (5, 3)
           (0, 0); (1, 1); (2, 2); (3, 3)|]
 
+[<Fact>]
+let ``Indices cotrolled by ghost queen`` () =
+    (fun () -> indicesControlledByQueen (4, 2) emptyBoard |> Seq.toArray |> ignore)
+    |> should throw typeof<NoPieceInBoard>
+
+[<Fact>]
+let ``Indices cotrolled by knight in the middle`` () =
+    [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
+    |> ofArrays
+    |> Seq.rev
+    |> indicesControlledByKnight (2, 5)
+    |> Seq.toArray
+    |> should equal
+        [|(0, 4); (1, 3); (3, 3); (0, 6); (1, 7); (4, 6); (3, 7)|]
+
+[<Fact>]
+let ``Indices cotrolled by knight in the corner`` () =
+    [|[|emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|whiteKnight; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; whiteKing; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
+    |> ofArrays
+    |> Seq.rev
+    |> indicesControlledByKnight (6, 0)
+    |> Seq.toArray
+    |> should equal
+        [|(5, 2); (7, 2)|]
+
+[<Fact>]
+let ``Indices cotrolled by ghost knight`` () =
+    (fun () -> indicesControlledByKnight (4, 2) emptyBoard |> ignore)
+    |> should throw typeof<NoPieceInBoard>

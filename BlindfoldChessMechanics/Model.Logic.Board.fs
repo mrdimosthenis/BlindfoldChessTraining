@@ -144,3 +144,27 @@ let indicesControlledByQueen (coordinates: int * int) (board: Board): (int * int
       indicesControlledByBishop coordinates board|]
     |> Seq.ofArray
     |> Seq.concat
+
+let indicesControlledByKnight (coordinates: int * int) (board: Board): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
+    match resident coordinates board with
+    | Some {PieceType=Knight; IsWhite=isWhite} ->
+        [|if rowIndex >= 2 && columnIndex >= 1 then [|(rowIndex - 2, columnIndex - 1)|] else [||]
+          if rowIndex >= 1 && columnIndex >= 2 then [|(rowIndex - 1, columnIndex - 2)|] else [||]
+          if rowIndex <= 5 && columnIndex >= 1 then [|(rowIndex + 2, columnIndex - 1)|] else [||]
+          if rowIndex <= 6 && columnIndex >= 2 then [|(rowIndex + 1, columnIndex - 2)|] else [||]
+          if rowIndex >= 2 && columnIndex <= 6 then [|(rowIndex - 2, columnIndex + 1)|] else [||]
+          if rowIndex >= 1 && columnIndex <= 5 then [|(rowIndex - 1, columnIndex + 2)|] else [||]
+          if rowIndex <= 5 && columnIndex <= 6 then [|(rowIndex + 2, columnIndex + 1)|] else [||]
+          if rowIndex <= 6 && columnIndex <= 5 then [|(rowIndex + 1, columnIndex + 2)|] else [||]|]
+        |> Seq.ofArray
+        |> Seq.map Seq.ofArray
+        |> Seq.concat
+        |> Seq.filter (fun coord ->
+                        match resident coord board with
+                        | Some {IsWhite=w} when w = isWhite -> false
+                        | _ -> true
+                      )
+    | _ ->
+        raise NoPieceInBoard
+    
