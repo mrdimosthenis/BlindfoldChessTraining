@@ -52,19 +52,22 @@ let updatedSeq<'a> (index: int) (newItem: 'a) (s: 'a seq): 'a seq =
                     if i = index then newItem else item
                 )
 
+let prependedSeq<'a> (a: 'a) (s: 'a seq): 'a seq =
+    Seq.append (seq [a]) s
+
 // actual implementation
 
 let init: Board =
-    [|[|blackRook; blackKnight; blackBishop; blackQueen; blackKing; blackBishop; blackKnight; blackRook|]
-      [|blackPawn; blackPawn; blackPawn; blackPawn; blackPawn; blackPawn; blackPawn; blackPawn|]
+    [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
+      [|blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-      [|whitePawn; whitePawn; whitePawn; whitePawn; whitePawn; whitePawn; whitePawn; whitePawn|]
-      [|whiteRook; whiteKnight; whiteBishop; whiteQueen; whiteKing; whiteBishop; whiteKnight; whiteRook|]|]
+      [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn|]
+      [|whiteRook;   whiteKnight; whiteBishop; whiteQueen; whiteKing;    whiteBishop; whiteKnight; whiteRook|]|]
     |> Seq.ofArray
     |> Seq.map Seq.ofArray
     |> Seq.rev
@@ -125,35 +128,35 @@ let resident (position: int * int) (board: Board): Resident =
     |> Seq.item rowIndex
     |> Seq.item columnIndex
 
-let indicesControlledByRook (position: int * int) (board: Board): (int * int) seq =
+let collectControlledIndices (position: int * int) (board: Board) (directionF: int * int -> (int * int) seq): (int * int) seq =
     match resident position board with
     | None ->
         raise NoPieceInPosition
-    | Some {IsWhite=isWhite}
-        -> let takeOrNot pos = match resident pos board with
-                               | Some {IsWhite=w} when w = isWhite -> false
-                               | _ -> true
-           [|position |> upIndices |> Seq.takeWhile takeOrNot
-             position |> downIndices |> Seq.takeWhile takeOrNot
-             position |> rightIndices |> Seq.takeWhile takeOrNot
-             position |> leftIndices |> Seq.takeWhile takeOrNot|]
-           |> Seq.ofArray
-           |> Seq.concat
+    | Some piece ->
+        position
+        |> directionF
+        |> Seq.fold
+            (fun (accIndices, accMetPiece) pos ->
+                if accMetPiece then (accIndices, accMetPiece)
+                else match resident pos board with
+                     | Some {IsWhite=w} when w = piece.IsWhite -> (accIndices, true)
+                     | Some _ -> (prependedSeq pos accIndices, true)
+                     | _ -> (prependedSeq pos accIndices, false)
+            )
+            (Seq.empty, false)
+        |> fst
+
+let indicesControlledByRook (position: int * int) (board: Board): (int * int) seq =
+    [|upIndices; downIndices; rightIndices; leftIndices|]
+    |> Seq.ofArray
+    |> Seq.map (collectControlledIndices position board)
+    |> Seq.concat
 
 let indicesControlledByBishop (position: int * int) (board: Board): (int * int) seq =
-    match resident position board with
-    | None ->
-        raise NoPieceInPosition
-    | Some {IsWhite=isWhite}
-        -> let takeOrNot pos = match resident pos board with
-                               | Some {IsWhite=w} when w = isWhite -> false
-                               | _ -> true
-           [|position |> upRightDiagonal |> Seq.takeWhile takeOrNot
-             position |> downRightDiagonal |> Seq.takeWhile takeOrNot
-             position |> upLeftDiagonal |> Seq.takeWhile takeOrNot
-             position |> downLeftDiagonal |> Seq.takeWhile takeOrNot|]
-           |> Seq.ofArray
-           |> Seq.concat
+    [|upRightDiagonal; downRightDiagonal; upLeftDiagonal; downLeftDiagonal|]
+    |> Seq.ofArray
+    |> Seq.map (collectControlledIndices position board)
+    |> Seq.concat
 
 let indicesControlledByQueen (position: int * int) (board: Board): (int * int) seq =
     [|indicesControlledByRook position board
