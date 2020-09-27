@@ -7,7 +7,7 @@ open Fabulous.XamarinForms
 open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
-open BlindfoldChessMechanics.Model
+open BlindfoldChessMechanics.Model.Logic
 
 module App = 
     type Model = 

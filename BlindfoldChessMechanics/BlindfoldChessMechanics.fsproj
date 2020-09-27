@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Model.Board.fs" />
+    <Compile Include="Model.Logic.Board.fs" />
+	<Compile Include="Model.Logic.Position.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 

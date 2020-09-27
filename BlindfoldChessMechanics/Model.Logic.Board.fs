@@ -1,11 +1,8 @@
-﻿module BlindfoldChessMechanics.Model.Board
+﻿module BlindfoldChessMechanics.Model.Logic.Board
 
-exception InvalidMove
-exception NoPieceInPosition
+exception NoPieceInBoard
 
 // types
-
-type Move = int * int * int * int
 
 type Piece = King | Queen | Rook | Bishop | Knight | Pawn
 
@@ -69,95 +66,81 @@ let init: Board =
     |> Seq.ofArray
     |> Seq.map Seq.ofArray
     |> Seq.rev
-        
-let afterMove (move: Move) (board: Board): Board =
-    let (fromRowIndex, fromColumnIndex, toRowIndex, toColumnIndex) = move
-    let fromRow = Seq.item fromRowIndex board
-    let fromResident = Seq.item fromColumnIndex fromRow
-    let toRow = Seq.item toRowIndex board
-    let toResident = Seq.item toColumnIndex toRow
-    match (fromResident, toResident) with
-    | (None, _) | (Some {IsWhite=false}, Some {IsWhite=false}) |(Some {IsWhite=true}, Some {IsWhite=true}) -> raise InvalidMove
-    | _ -> let updatedFromRow = updatedSeq fromColumnIndex None fromRow
-           let updatedToRow = updatedSeq toColumnIndex fromResident toRow
-           board
-           |> updatedSeq fromRowIndex updatedFromRow
-           |> updatedSeq toRowIndex updatedToRow
 
-let upIndices (position: int * int): (int * int) seq =
-    let (rowIndex, columnIndex) = position
+let upIndices (coordinates: int * int): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
     Seq.init (7 - rowIndex) (fun i -> (rowIndex + i + 1, columnIndex))
 
-let downIndices (position: int * int): (int * int) seq =
-    let (rowIndex, columnIndex) = position
+let downIndices (coordinates: int * int): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
     Seq.init rowIndex (fun i -> (rowIndex - i - 1, columnIndex))
 
-let leftIndices (position: int * int): (int * int) seq =
-    let (rowIndex, columnIndex) = position
+let leftIndices (coordinates: int * int): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
     Seq.init columnIndex (fun i -> (rowIndex, columnIndex - i - 1))
 
-let rightIndices (position: int * int): (int * int) seq =
-    let (rowIndex, columnIndex) = position
+let rightIndices (coordinates: int * int): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
     Seq.init (7 - columnIndex) (fun i -> (rowIndex, columnIndex + i + 1))
 
-let upRightDiagonal (position: int * int): (int * int) seq =
-    let (rowIndex, columnIndex) = position
+let upRightDiagonal (coordinates: int * int): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
     let minDist = min (7 - rowIndex) (7 - columnIndex)
     Seq.init minDist (fun i -> (rowIndex + i + 1, columnIndex + i + 1))
 
-let downRightDiagonal (position: int * int): (int * int) seq =
-    let (rowIndex, columnIndex) = position
+let downRightDiagonal (coordinates: int * int): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
     let minDist = min rowIndex (7 - columnIndex)
     Seq.init minDist (fun i -> (rowIndex - i - 1, columnIndex + i + 1))
 
-let upLeftDiagonal (position: int * int): (int * int) seq =
-    let (rowIndex, columnIndex) = position
+let upLeftDiagonal (coordinates: int * int): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
     let minDist = min (7 - rowIndex) columnIndex
     Seq.init minDist (fun i -> (rowIndex + i + 1, columnIndex - i - 1))
 
-let downLeftDiagonal (position: int * int): (int * int) seq =
-    let (rowIndex, columnIndex) = position
+let downLeftDiagonal (coordinates: int * int): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
     let minDist = min rowIndex columnIndex
     Seq.init minDist (fun i -> (rowIndex - i - 1, columnIndex - i - 1))
 
-let resident (position: int * int) (board: Board): Resident =
-    let (rowIndex, columnIndex) = position
+let resident (coordinates: int * int) (board: Board): Resident =
+    let (rowIndex, columnIndex) = coordinates
     board
     |> Seq.item rowIndex
     |> Seq.item columnIndex
 
-let collectControlledIndices (position: int * int) (board: Board) (directionF: int * int -> (int * int) seq): (int * int) seq =
-    match resident position board with
+let collectControlledIndices (coordinates: int * int) (board: Board) (directionF: int * int -> (int * int) seq): (int * int) seq =
+    match resident coordinates board with
     | None ->
-        raise NoPieceInPosition
+        raise NoPieceInBoard
     | Some piece ->
-        position
+        coordinates
         |> directionF
         |> Seq.fold
-            (fun (accIndices, accMetPiece) pos ->
+            (fun (accIndices, accMetPiece) coord ->
                 if accMetPiece then (accIndices, accMetPiece)
-                else match resident pos board with
+                else match resident coord board with
                      | Some {IsWhite=w} when w = piece.IsWhite -> (accIndices, true)
-                     | Some _ -> (prependedSeq pos accIndices, true)
-                     | _ -> (prependedSeq pos accIndices, false)
+                     | Some _ -> (prependedSeq coord accIndices, true)
+                     | _ -> (prependedSeq coord accIndices, false)
             )
             (Seq.empty, false)
         |> fst
 
-let indicesControlledByRook (position: int * int) (board: Board): (int * int) seq =
+let indicesControlledByRook (coordinates: int * int) (board: Board): (int * int) seq =
     [|upIndices; downIndices; rightIndices; leftIndices|]
     |> Seq.ofArray
-    |> Seq.map (collectControlledIndices position board)
+    |> Seq.map (collectControlledIndices coordinates board)
     |> Seq.concat
 
-let indicesControlledByBishop (position: int * int) (board: Board): (int * int) seq =
+let indicesControlledByBishop (coordinates: int * int) (board: Board): (int * int) seq =
     [|upRightDiagonal; downRightDiagonal; upLeftDiagonal; downLeftDiagonal|]
     |> Seq.ofArray
-    |> Seq.map (collectControlledIndices position board)
+    |> Seq.map (collectControlledIndices coordinates board)
     |> Seq.concat
 
-let indicesControlledByQueen (position: int * int) (board: Board): (int * int) seq =
-    [|indicesControlledByRook position board
-      indicesControlledByBishop position board|]
+let indicesControlledByQueen (coordinates: int * int) (board: Board): (int * int) seq =
+    [|indicesControlledByRook coordinates board
+      indicesControlledByBishop coordinates board|]
     |> Seq.ofArray
     |> Seq.concat

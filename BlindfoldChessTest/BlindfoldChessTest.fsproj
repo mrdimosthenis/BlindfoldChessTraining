@@ -8,7 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="BlindfoldChessMechanics.Model.BoardTest.fs" />
+	<Compile Include="BlindfoldChessMechanics.Model.Logic.BoardTest.fs" />
+	<Compile Include="BlindfoldChessMechanics.Model.Logic.PositionTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
