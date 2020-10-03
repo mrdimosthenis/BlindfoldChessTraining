@@ -4,9 +4,15 @@ exception NoPieceInBoard
 
 // types
 
-type Piece = King | Queen | Rook | Bishop | Knight | Pawn
+type Piece =
+    | King
+    | Queen
+    | Rook
+    | Bishop
+    | Knight
+    | Pawn
 
-type ColoredPiece = {PieceType:Piece; IsWhite:bool}
+type ColoredPiece = { PieceType: Piece; IsWhite: bool }
 
 type Resident = ColoredPiece Option
 
@@ -16,41 +22,55 @@ type Board = Resident seq seq
 
 let emptySquare: Resident = None
 
-let whiteKing: Resident = Some {PieceType=King; IsWhite=true}
-let whiteQueen: Resident = Some {PieceType=Queen; IsWhite=true}
-let whiteRook: Resident = Some {PieceType=Rook; IsWhite=true}
-let whiteBishop: Resident = Some {PieceType=Bishop; IsWhite=true}
-let whiteKnight: Resident = Some {PieceType=Knight; IsWhite=true}
-let whitePawn: Resident = Some {PieceType=Pawn; IsWhite=true}
+let whiteKing: Resident =
+    Some { PieceType = King; IsWhite = true }
 
-let blackKing: Resident = Some {PieceType=King; IsWhite=false}
-let blackQueen: Resident = Some {PieceType=Queen; IsWhite=false}
-let blackRook: Resident = Some {PieceType=Rook; IsWhite=false}
-let blackBishop: Resident = Some {PieceType=Bishop; IsWhite=false}
-let blackKnight: Resident = Some {PieceType=Knight; IsWhite=false}
-let blackPawn: Resident = Some {PieceType=Pawn; IsWhite=false}
+let whiteQueen: Resident =
+    Some { PieceType = Queen; IsWhite = true }
+
+let whiteRook: Resident =
+    Some { PieceType = Rook; IsWhite = true }
+
+let whiteBishop: Resident =
+    Some { PieceType = Bishop; IsWhite = true }
+
+let whiteKnight: Resident =
+    Some { PieceType = Knight; IsWhite = true }
+
+let whitePawn: Resident =
+    Some { PieceType = Pawn; IsWhite = true }
+
+let blackKing: Resident =
+    Some { PieceType = King; IsWhite = false }
+
+let blackQueen: Resident =
+    Some { PieceType = Queen; IsWhite = false }
+
+let blackRook: Resident =
+    Some { PieceType = Rook; IsWhite = false }
+
+let blackBishop: Resident =
+    Some { PieceType = Bishop; IsWhite = false }
+
+let blackKnight: Resident =
+    Some { PieceType = Knight; IsWhite = false }
+
+let blackPawn: Resident =
+    Some { PieceType = Pawn; IsWhite = false }
 
 // utils
 
-let toArrays<'a> (s: 'a seq seq): 'a array array =
-    s
-    |> Seq.map Seq.toArray
-    |> Seq.toArray
+let toArrays<'a> (s: 'a seq seq): 'a array array = s |> Seq.map Seq.toArray |> Seq.toArray
 
 let ofArrays<'a> (arr: 'a array array): 'a seq seq =
-    arr
-    |> Seq.ofArray
-    |> Seq.map Seq.ofArray
+    arr |> Seq.ofArray |> Seq.map Seq.ofArray
 
 let updatedSeq<'a> (index: int) (newItem: 'a) (s: 'a seq): 'a seq =
     s
     |> Seq.indexed
-    |> Seq.map (fun (i, item) ->
-                    if i = index then newItem else item
-                )
+    |> Seq.map (fun (i, item) -> if i = index then newItem else item)
 
-let prependedSeq<'a> (a: 'a) (s: 'a seq): 'a seq =
-    Seq.append (seq [a]) s
+let prependedSeq<'a> (a: 'a) (s: 'a seq): 'a seq = Seq.append (seq [ a ]) s
 
 // actual implementation
 
@@ -105,66 +125,70 @@ let downLeftDiagonal (coordinates: int * int): (int * int) seq =
 
 let resident (coordinates: int * int) (board: Board): Resident =
     let (rowIndex, columnIndex) = coordinates
-    board
-    |> Seq.item rowIndex
-    |> Seq.item columnIndex
+    board |> Seq.item rowIndex |> Seq.item columnIndex
 
-let collectControlledIndices (coordinates: int * int) (board: Board) (directionF: int * int -> (int * int) seq): (int * int) seq =
+let collectControlledIndices (coordinates: int * int)
+                             (board: Board)
+                             (directionF: int * int -> (int * int) seq)
+                             : (int * int) seq =
     match resident coordinates board with
-    | None ->
-        raise NoPieceInBoard
+    | None -> raise NoPieceInBoard
     | Some piece ->
         coordinates
         |> directionF
-        |> Seq.fold
-            (fun (accIndices, accMetPiece) coord ->
-                if accMetPiece then (accIndices, accMetPiece)
-                else match resident coord board with
-                     | Some {IsWhite=w} when w = piece.IsWhite -> (accIndices, true)
-                     | Some _ -> (prependedSeq coord accIndices, true)
-                     | _ -> (prependedSeq coord accIndices, false)
-            )
-            (Seq.empty, false)
+        |> Seq.fold (fun (accIndices, accMetPiece) coord ->
+            if accMetPiece then
+                (accIndices, accMetPiece)
+            else
+                match resident coord board with
+                | Some { IsWhite = w } when w = piece.IsWhite -> (accIndices, true)
+                | Some _ -> (prependedSeq coord accIndices, true)
+                | _ -> (prependedSeq coord accIndices, false)) (Seq.empty, false)
         |> fst
 
 let indicesControlledByRook (coordinates: int * int) (board: Board): (int * int) seq =
-    [|upIndices; downIndices; rightIndices; leftIndices|]
+    [| upIndices
+       downIndices
+       rightIndices
+       leftIndices |]
     |> Seq.ofArray
     |> Seq.map (collectControlledIndices coordinates board)
     |> Seq.concat
 
 let indicesControlledByBishop (coordinates: int * int) (board: Board): (int * int) seq =
-    [|upRightDiagonal; downRightDiagonal; upLeftDiagonal; downLeftDiagonal|]
+    [| upRightDiagonal
+       downRightDiagonal
+       upLeftDiagonal
+       downLeftDiagonal |]
     |> Seq.ofArray
     |> Seq.map (collectControlledIndices coordinates board)
     |> Seq.concat
 
 let indicesControlledByQueen (coordinates: int * int) (board: Board): (int * int) seq =
-    [|indicesControlledByRook coordinates board
-      indicesControlledByBishop coordinates board|]
+    [| indicesControlledByRook coordinates board
+       indicesControlledByBishop coordinates board |]
     |> Seq.ofArray
     |> Seq.concat
 
 let indicesControlledByKnight (coordinates: int * int) (board: Board): (int * int) seq =
     let (rowIndex, columnIndex) = coordinates
+
     match resident coordinates board with
-    | Some {PieceType=Knight; IsWhite=isWhite} ->
-        [|if rowIndex >= 2 && columnIndex >= 1 then [|(rowIndex - 2, columnIndex - 1)|] else [||]
-          if rowIndex >= 1 && columnIndex >= 2 then [|(rowIndex - 1, columnIndex - 2)|] else [||]
-          if rowIndex <= 5 && columnIndex >= 1 then [|(rowIndex + 2, columnIndex - 1)|] else [||]
-          if rowIndex <= 6 && columnIndex >= 2 then [|(rowIndex + 1, columnIndex - 2)|] else [||]
-          if rowIndex >= 2 && columnIndex <= 6 then [|(rowIndex - 2, columnIndex + 1)|] else [||]
-          if rowIndex >= 1 && columnIndex <= 5 then [|(rowIndex - 1, columnIndex + 2)|] else [||]
-          if rowIndex <= 5 && columnIndex <= 6 then [|(rowIndex + 2, columnIndex + 1)|] else [||]
-          if rowIndex <= 6 && columnIndex <= 5 then [|(rowIndex + 1, columnIndex + 2)|] else [||]|]
+    | Some { PieceType = Knight
+             IsWhite = isWhite } ->
+        [| if rowIndex >= 2 && columnIndex >= 1 then [| (rowIndex - 2, columnIndex - 1) |] else [||]
+           if rowIndex >= 1 && columnIndex >= 2 then [| (rowIndex - 1, columnIndex - 2) |] else [||]
+           if rowIndex <= 5 && columnIndex >= 1 then [| (rowIndex + 2, columnIndex - 1) |] else [||]
+           if rowIndex <= 6 && columnIndex >= 2 then [| (rowIndex + 1, columnIndex - 2) |] else [||]
+           if rowIndex >= 2 && columnIndex <= 6 then [| (rowIndex - 2, columnIndex + 1) |] else [||]
+           if rowIndex >= 1 && columnIndex <= 5 then [| (rowIndex - 1, columnIndex + 2) |] else [||]
+           if rowIndex <= 5 && columnIndex <= 6 then [| (rowIndex + 2, columnIndex + 1) |] else [||]
+           if rowIndex <= 6 && columnIndex <= 5 then [| (rowIndex + 1, columnIndex + 2) |] else [||] |]
         |> Seq.ofArray
         |> Seq.map Seq.ofArray
         |> Seq.concat
         |> Seq.filter (fun coord ->
-                        match resident coord board with
-                        | Some {IsWhite=w} when w = isWhite -> false
-                        | _ -> true
-                      )
-    | _ ->
-        raise NoPieceInBoard
-    
+            match resident coord board with
+            | Some { IsWhite = w } when w = isWhite -> false
+            | _ -> true)
+    | _ -> raise NoPieceInBoard
