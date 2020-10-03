@@ -172,3 +172,76 @@ let ``Indices cotrolled by king in the corner`` () =
 let ``Indices cotrolled by ghost king`` () =
     (fun () -> indicesControlledByKing (4, 2) emptyBoard |> ignore)
     |> should throw typeof<NoPieceInBoard>
+
+[<Fact>]
+let ``Indices cotrolled by white init pawn in the edge`` () =
+    [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackBishop; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
+    |> ofArrays
+    |> Seq.rev
+    |> indicesControlledByPawn (1, 7)
+    |> Seq.toArray
+    |> should equal
+        [|(2, 7); (3, 7); (2, 6)|]
+
+[<Fact>]
+let ``Indices cotrolled by white init blocked pawn`` () =
+    [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; whiteRook;   emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
+    |> ofArrays
+    |> Seq.rev
+    |> indicesControlledByPawn (1, 3)
+    |> Seq.toArray
+    |> should equal
+        [|(2, 3)|]
+
+[<Fact>]
+let ``Indices cotrolled by black blocked pawn`` () =
+    [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; whiteRook;   whiteRook;   whiteRook;   emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
+    |> ofArrays
+    |> Seq.rev
+    |> indicesControlledByPawn (4, 3)
+    |> Seq.toArray
+    |> should equal
+        [|(3, 2); (3, 4)|]
+
+[<Fact>]
+let ``Indices cotrolled by black init pawn in the edge`` () =
+    [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
+    |> ofArrays
+    |> Seq.rev
+    |> indicesControlledByPawn (6, 0)
+    |> Seq.toArray
+    |> should equal
+        [||]
+
+[<Fact>]
+let ``Indices cotrolled by ghost pawn`` () =
+    (fun () -> indicesControlledByKing (4, 2) emptyBoard |> ignore)
+    |> should throw typeof<NoPieceInBoard>

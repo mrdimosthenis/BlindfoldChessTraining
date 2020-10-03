@@ -174,6 +174,7 @@ let indicesControlledByQueen (coordinates: int * int) (board: Board): (int * int
        indicesControlledByBishop coordinates board |]
     |> Seq.ofArray
     |> Seq.concat
+
 let indicesControlledByKnight (coordinates: int * int) (board: Board): (int * int) seq =
     let (rowIndex, columnIndex) = coordinates
 
@@ -215,4 +216,36 @@ let indicesControlledByKing (coordinates: int * int) (board: Board): (int * int)
             match resident coord board with
             | Some { IsWhite = w } when w = isWhite -> false
             | _ -> true)
+    | _ -> raise NoPieceInBoard
+
+let indicesControlledByPawn (coordinates: int * int) (board: Board): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
+
+    match resident coordinates board with
+    | Some { PieceType = Pawn; IsWhite = isWhite } ->
+        let rowIncrease = if isWhite then 1 else -1
+        let nextRowIndex = rowIndex + rowIncrease
+        let forwardCoords = (nextRowIndex, columnIndex)
+
+        let twoSquaresForward =
+            match (isWhite, rowIndex, resident forwardCoords board) with
+            | (true, 1, None)
+            | (false, 6, None) -> [| ((nextRowIndex + rowIncrease, columnIndex), false) |]
+            | _ -> [||]
+            |> Seq.ofArray
+
+        let diagCoordsWithCapt =
+            [| ((nextRowIndex, columnIndex - 1), true)
+               ((nextRowIndex, columnIndex + 1), true) |]
+            |> Seq.ofArray
+            |> Seq.filter (fun (coords, _) -> areValidCoordinates coords)
+
+        Seq.append twoSquaresForward diagCoordsWithCapt
+        |> prependedSeq (forwardCoords, false)
+        |> Seq.filter (fun (coords, isCapt) ->
+            match (resident coords board, isCapt) with
+            | (Some piece, true) -> piece.IsWhite <> isWhite
+            | (None, false) -> true
+            | _ -> false)
+        |> Seq.map fst
     | _ -> raise NoPieceInBoard
