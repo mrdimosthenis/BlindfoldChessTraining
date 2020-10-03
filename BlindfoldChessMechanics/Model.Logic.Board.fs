@@ -174,7 +174,6 @@ let indicesControlledByQueen (coordinates: int * int) (board: Board): (int * int
        indicesControlledByBishop coordinates board |]
     |> Seq.ofArray
     |> Seq.concat
-
 let indicesControlledByKnight (coordinates: int * int) (board: Board): (int * int) seq =
     let (rowIndex, columnIndex) = coordinates
 
@@ -201,8 +200,7 @@ let indicesControlledByKing (coordinates: int * int) (board: Board): (int * int)
     let (rowIndex, columnIndex) = coordinates
 
     match resident coordinates board with
-    | Some { PieceType = King
-             IsWhite = isWhite } ->
+    | Some { PieceType = King; IsWhite = isWhite } ->
         [| (rowIndex - 1, columnIndex - 1)
            (rowIndex - 1, columnIndex)
            (rowIndex - 1, columnIndex + 1)
