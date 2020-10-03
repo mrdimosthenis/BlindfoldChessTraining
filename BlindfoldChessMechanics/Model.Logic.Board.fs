@@ -87,6 +87,11 @@ let init: Board =
     |> Seq.map Seq.ofArray
     |> Seq.rev
 
+let areValidCoordinates(coordinates: int * int): bool =
+    let (rowIndex, columnIndex) = coordinates
+
+    rowIndex >= 0 && rowIndex <= 7 && columnIndex >= 0 && columnIndex <= 7
+
 let upIndices (coordinates: int * int): (int * int) seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init (7 - rowIndex) (fun i -> (rowIndex + i + 1, columnIndex))
@@ -176,17 +181,38 @@ let indicesControlledByKnight (coordinates: int * int) (board: Board): (int * in
     match resident coordinates board with
     | Some { PieceType = Knight
              IsWhite = isWhite } ->
-        [| if rowIndex >= 2 && columnIndex >= 1 then [| (rowIndex - 2, columnIndex - 1) |] else [||]
-           if rowIndex >= 1 && columnIndex >= 2 then [| (rowIndex - 1, columnIndex - 2) |] else [||]
-           if rowIndex <= 5 && columnIndex >= 1 then [| (rowIndex + 2, columnIndex - 1) |] else [||]
-           if rowIndex <= 6 && columnIndex >= 2 then [| (rowIndex + 1, columnIndex - 2) |] else [||]
-           if rowIndex >= 2 && columnIndex <= 6 then [| (rowIndex - 2, columnIndex + 1) |] else [||]
-           if rowIndex >= 1 && columnIndex <= 5 then [| (rowIndex - 1, columnIndex + 2) |] else [||]
-           if rowIndex <= 5 && columnIndex <= 6 then [| (rowIndex + 2, columnIndex + 1) |] else [||]
-           if rowIndex <= 6 && columnIndex <= 5 then [| (rowIndex + 1, columnIndex + 2) |] else [||] |]
+        [| (rowIndex - 2, columnIndex - 1)
+           (rowIndex - 1, columnIndex - 2)
+           (rowIndex + 2, columnIndex - 1)
+           (rowIndex + 1, columnIndex - 2)
+           (rowIndex - 2, columnIndex + 1)
+           (rowIndex - 1, columnIndex + 2)
+           (rowIndex + 2, columnIndex + 1)
+           (rowIndex + 1, columnIndex + 2) |]
         |> Seq.ofArray
-        |> Seq.map Seq.ofArray
-        |> Seq.concat
+        |> Seq.filter areValidCoordinates
+        |> Seq.filter (fun coord ->
+            match resident coord board with
+            | Some { IsWhite = w } when w = isWhite -> false
+            | _ -> true)
+    | _ -> raise NoPieceInBoard
+
+let indicesControlledByKing (coordinates: int * int) (board: Board): (int * int) seq =
+    let (rowIndex, columnIndex) = coordinates
+
+    match resident coordinates board with
+    | Some { PieceType = King
+             IsWhite = isWhite } ->
+        [| (rowIndex - 1, columnIndex - 1)
+           (rowIndex - 1, columnIndex)
+           (rowIndex - 1, columnIndex + 1)
+           (rowIndex, columnIndex - 1)
+           (rowIndex, columnIndex + 1)
+           (rowIndex + 1, columnIndex - 1)
+           (rowIndex + 1, columnIndex)
+           (rowIndex + 1, columnIndex + 1) |]
+        |> Seq.ofArray
+        |> Seq.filter areValidCoordinates
         |> Seq.filter (fun coord ->
             match resident coord board with
             | Some { IsWhite = w } when w = isWhite -> false
