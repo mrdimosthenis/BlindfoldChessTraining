@@ -3,6 +3,7 @@
 open Xunit
 open FsUnit.Xunit
 
+open BlindfoldChessMechanics
 open BlindfoldChessMechanics.Model.Logic.Board
 
 let emptyBoard =
@@ -14,7 +15,7 @@ let emptyBoard =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
 
 [<Fact>]
 let ``Indices cotrolled by rook`` () =
@@ -26,7 +27,7 @@ let ``Indices cotrolled by rook`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByRook (4, 2)
     |> Seq.toArray
@@ -51,7 +52,7 @@ let ``Indices cotrolled by bishop`` () =
       [|blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByBishop (4, 2)
     |> Seq.toArray
@@ -76,7 +77,7 @@ let ``Indices cotrolled by queen`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
       [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByQueen (4, 4)
     |> Seq.toArray
@@ -105,7 +106,7 @@ let ``Indices cotrolled by knight in the middle`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByKnight (2, 5)
     |> Seq.toArray
@@ -122,7 +123,7 @@ let ``Indices cotrolled by knight in the corner`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByKnight (6, 0)
     |> Seq.toArray
@@ -144,7 +145,7 @@ let ``Indices cotrolled by king in the middle`` () =
       [|emptySquare; emptySquare; whiteRook;   whiteKing;   emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByKing (2, 3)
     |> Seq.toArray
@@ -161,7 +162,7 @@ let ``Indices cotrolled by king in the corner`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByKing (7, 0)
     |> Seq.toArray
@@ -183,7 +184,7 @@ let ``Indices cotrolled by white init pawn in the edge`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackBishop; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByPawn (1, 7)
     |> Seq.toArray
@@ -200,7 +201,7 @@ let ``Indices cotrolled by white init blocked pawn`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; whiteRook;   emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByPawn (1, 3)
     |> Seq.toArray
@@ -217,7 +218,7 @@ let ``Indices cotrolled by black blocked pawn`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByPawn (4, 3)
     |> Seq.toArray
@@ -234,7 +235,7 @@ let ``Indices cotrolled by black init pawn in the edge`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByPawn (6, 0)
     |> Seq.toArray
@@ -256,7 +257,7 @@ let ``Indices cotrolled by white color`` () =
       [|emptySquare; blackPawn;   emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare|]
       [|blackPawn;   emptySquare; blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; blackKing;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByColor true
     |> Seq.toArray
@@ -275,7 +276,7 @@ let ``Indices cotrolled by black color`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; whiteQueen;  emptySquare; whitePawn;   whitePawn;   whitePawn|]
       [|emptySquare; emptySquare; whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> indicesControlledByColor false
     |> Seq.toArray
@@ -298,7 +299,7 @@ let ``Is white king in danger`` () =
       [|emptySquare; whiteKing;   emptySquare; whitePawn;   emptySquare; blackRook;   emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> isKingInDanger true
     |> should equal
@@ -314,7 +315,7 @@ let ``Is black king in danger`` () =
       [|emptySquare; blackKing;   emptySquare; emptySquare; emptySquare; whiteRook;   emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> ofArrays
+    |> Utils.seqOfArrays
     |> Seq.rev
     |> isKingInDanger false
     |> should equal

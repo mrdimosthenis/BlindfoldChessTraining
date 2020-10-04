@@ -1,8 +1,12 @@
 ﻿module BlindfoldChessMechanics.Model.Logic.Board
 
+open BlindfoldChessMechanics
+
 exception NoPieceInBoard
 
 // types
+
+type Coordinates = int * int
 
 type Piece =
     | King
@@ -58,21 +62,7 @@ let blackKnight: Resident =
 let blackPawn: Resident =
     Some { PieceType = Pawn; IsWhite = false }
 
-// utils
-
-let toArrays<'a> (s: 'a seq seq): 'a array array = s |> Seq.map Seq.toArray |> Seq.toArray
-
-let ofArrays<'a> (arr: 'a array array): 'a seq seq =
-    arr |> Seq.ofArray |> Seq.map Seq.ofArray
-
-let updatedSeq<'a> (index: int) (newItem: 'a) (s: 'a seq): 'a seq =
-    s
-    |> Seq.indexed
-    |> Seq.map (fun (i, item) -> if i = index then newItem else item)
-
-let prependedSeq<'a> (a: 'a) (s: 'a seq): 'a seq = Seq.append (seq [ a ]) s
-
-// actual implementation
+// implementation
 
 let init: Board =
     [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
@@ -87,55 +77,55 @@ let init: Board =
     |> Seq.map Seq.ofArray
     |> Seq.rev
 
-let areValidCoordinates(coordinates: int * int): bool =
+let areValidCoordinates(coordinates: Coordinates): bool =
     let (rowIndex, columnIndex) = coordinates
 
     rowIndex >= 0 && rowIndex <= 7 && columnIndex >= 0 && columnIndex <= 7
 
-let upIndices (coordinates: int * int): (int * int) seq =
+let upIndices (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init (7 - rowIndex) (fun i -> (rowIndex + i + 1, columnIndex))
 
-let downIndices (coordinates: int * int): (int * int) seq =
+let downIndices (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init rowIndex (fun i -> (rowIndex - i - 1, columnIndex))
 
-let leftIndices (coordinates: int * int): (int * int) seq =
+let leftIndices (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init columnIndex (fun i -> (rowIndex, columnIndex - i - 1))
 
-let rightIndices (coordinates: int * int): (int * int) seq =
+let rightIndices (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init (7 - columnIndex) (fun i -> (rowIndex, columnIndex + i + 1))
 
-let upRightDiagonal (coordinates: int * int): (int * int) seq =
+let upRightDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min (7 - rowIndex) (7 - columnIndex)
     Seq.init minDist (fun i -> (rowIndex + i + 1, columnIndex + i + 1))
 
-let downRightDiagonal (coordinates: int * int): (int * int) seq =
+let downRightDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min rowIndex (7 - columnIndex)
     Seq.init minDist (fun i -> (rowIndex - i - 1, columnIndex + i + 1))
 
-let upLeftDiagonal (coordinates: int * int): (int * int) seq =
+let upLeftDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min (7 - rowIndex) columnIndex
     Seq.init minDist (fun i -> (rowIndex + i + 1, columnIndex - i - 1))
 
-let downLeftDiagonal (coordinates: int * int): (int * int) seq =
+let downLeftDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min rowIndex columnIndex
     Seq.init minDist (fun i -> (rowIndex - i - 1, columnIndex - i - 1))
 
-let resident (coordinates: int * int) (board: Board): Resident =
+let resident (coordinates: Coordinates) (board: Board): Resident =
     let (rowIndex, columnIndex) = coordinates
     board |> Seq.item rowIndex |> Seq.item columnIndex
 
-let collectControlledIndices (coordinates: int * int)
+let collectControlledIndices (directionF: Coordinates -> Coordinates seq)
+                             (coordinates: Coordinates)
                              (board: Board)
-                             (directionF: int * int -> (int * int) seq)
-                             : (int * int) seq =
+                             : Coordinates seq =
     match resident coordinates board with
     | None -> raise NoPieceInBoard
     | Some piece ->
@@ -147,35 +137,35 @@ let collectControlledIndices (coordinates: int * int)
             else
                 match resident coord board with
                 | Some { IsWhite = w } when w = piece.IsWhite -> (accIndices, true)
-                | Some _ -> (prependedSeq coord accIndices, true)
-                | _ -> (prependedSeq coord accIndices, false)) (Seq.empty, false)
+                | Some _ -> (Utils.prependedSeq coord accIndices, true)
+                | _ -> (Utils.prependedSeq coord accIndices, false)) (Seq.empty, false)
         |> fst
 
-let indicesControlledByRook (coordinates: int * int) (board: Board): (int * int) seq =
+let indicesControlledByRook (coordinates: Coordinates) (board: Board): Coordinates seq =
     [| upIndices
        downIndices
        rightIndices
        leftIndices |]
     |> Seq.ofArray
-    |> Seq.map (collectControlledIndices coordinates board)
+    |> Seq.map (fun dirF -> collectControlledIndices dirF coordinates board)
     |> Seq.concat
 
-let indicesControlledByBishop (coordinates: int * int) (board: Board): (int * int) seq =
+let indicesControlledByBishop (coordinates: Coordinates) (board: Board): Coordinates seq =
     [| upRightDiagonal
        downRightDiagonal
        upLeftDiagonal
        downLeftDiagonal |]
     |> Seq.ofArray
-    |> Seq.map (collectControlledIndices coordinates board)
+    |> Seq.map (fun dirF -> collectControlledIndices dirF coordinates board)
     |> Seq.concat
 
-let indicesControlledByQueen (coordinates: int * int) (board: Board): (int * int) seq =
+let indicesControlledByQueen (coordinates: Coordinates) (board: Board): Coordinates seq =
     [| indicesControlledByRook coordinates board
        indicesControlledByBishop coordinates board |]
     |> Seq.ofArray
     |> Seq.concat
 
-let indicesControlledByKnight (coordinates: int * int) (board: Board): (int * int) seq =
+let indicesControlledByKnight (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
 
     match resident coordinates board with
@@ -197,7 +187,7 @@ let indicesControlledByKnight (coordinates: int * int) (board: Board): (int * in
             | _ -> true)
     | _ -> raise NoPieceInBoard
 
-let indicesControlledByKing (coordinates: int * int) (board: Board): (int * int) seq =
+let indicesControlledByKing (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
 
     match resident coordinates board with
@@ -218,7 +208,7 @@ let indicesControlledByKing (coordinates: int * int) (board: Board): (int * int)
             | _ -> true)
     | _ -> raise NoPieceInBoard
 
-let indicesControlledByPawn (coordinates: int * int) (board: Board): (int * int) seq =
+let indicesControlledByPawn (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
 
     match resident coordinates board with
@@ -241,7 +231,7 @@ let indicesControlledByPawn (coordinates: int * int) (board: Board): (int * int)
             |> Seq.filter (fun (coords, _) -> areValidCoordinates coords)
 
         Seq.append twoSquaresForward diagCoordsWithCapt
-        |> prependedSeq (forwardCoords, false)
+        |> Utils.prependedSeq (forwardCoords, false)
         |> Seq.filter (fun (coords, isCapt) ->
             match (resident coords board, isCapt) with
             | (Some piece, true) -> piece.IsWhite <> isWhite
@@ -250,7 +240,7 @@ let indicesControlledByPawn (coordinates: int * int) (board: Board): (int * int)
         |> Seq.map fst
     | _ -> raise NoPieceInBoard
 
-let indicesControlledByPiece (board: Board) (coordinates: int * int): (int * int) seq =
+let indicesControlledByPiece (coordinates: Coordinates) (board: Board): Coordinates seq =
     let indicesF =
         match resident coordinates board with
         | Some { PieceType = Rook } -> indicesControlledByRook
@@ -263,7 +253,7 @@ let indicesControlledByPiece (board: Board) (coordinates: int * int): (int * int
 
     indicesF coordinates board
 
-let indicesControlledByColor (isWhite: bool) (board: Board): (int * int) seq =
+let indicesControlledByColor (isWhite: bool) (board: Board): Coordinates seq =
     seq {
         for rowIndex in 0 .. 7 do
             for columnIndex in 0 .. 7 ->
@@ -273,7 +263,7 @@ let indicesControlledByColor (isWhite: bool) (board: Board): (int * int) seq =
         match resident coords board with
         | Some { IsWhite = isWh } when isWh = isWhite -> true
         | _ -> false)
-    |> Seq.map (indicesControlledByPiece board)
+    |> Seq.map (fun coords -> indicesControlledByPiece coords board)
     |> Seq.concat
     |> Seq.distinct
 
