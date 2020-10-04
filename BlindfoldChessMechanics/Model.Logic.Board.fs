@@ -249,3 +249,29 @@ let indicesControlledByPawn (coordinates: int * int) (board: Board): (int * int)
             | _ -> false)
         |> Seq.map fst
     | _ -> raise NoPieceInBoard
+
+let indicesControlledByPiece (board: Board) (coordinates: int * int): (int * int) seq =
+    let indicesF =
+        match resident coordinates board with
+        | Some { PieceType = Rook } -> indicesControlledByRook
+        | Some { PieceType = Bishop } -> indicesControlledByBishop
+        | Some { PieceType = Queen } -> indicesControlledByQueen
+        | Some { PieceType = Knight } -> indicesControlledByKnight
+        | Some { PieceType = King } -> indicesControlledByKing
+        | Some { PieceType = Pawn } -> indicesControlledByPawn
+        | _ -> raise NoPieceInBoard
+
+    indicesF coordinates board
+
+let indicesControlledByColor (isWhite: bool) (board: Board): (int * int) seq =
+    seq {
+        for i in 0 .. 7 do
+            for j in 0 .. 7 -> (i, j)
+    }
+    |> Seq.filter (fun coords ->
+        match resident coords board with
+        | Some { IsWhite = isWh } when isWh = isWhite -> true
+        | _ -> false)
+    |> Seq.map (indicesControlledByPiece board)
+    |> Seq.concat
+    |> Seq.distinct

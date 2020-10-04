@@ -245,3 +245,45 @@ let ``Indices cotrolled by black init pawn in the edge`` () =
 let ``Indices cotrolled by ghost pawn`` () =
     (fun () -> indicesControlledByKing (4, 2) emptyBoard |> ignore)
     |> should throw typeof<NoPieceInBoard>
+
+[<Fact>]
+let ``Indices cotrolled by white color`` () =
+    [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|whiteKing;   blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; whiteBishop; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; blackPawn;   emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare|]
+      [|blackPawn;   emptySquare; blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; blackKing;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
+    |> ofArrays
+    |> Seq.rev
+    |> indicesControlledByColor true
+    |> Seq.toArray
+    |> should equal
+        [| (3, 4)
+           (7, 7); (6, 6); (5, 5); (4, 4); (5, 1); (4, 2); (0, 0); (1, 1); (2, 2)
+           (6, 1); (7, 0); (7, 1) |]
+
+[<Fact>]
+let ``Indices cotrolled by black color`` () =
+    [|[|blackRook;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare|]
+      [|emptySquare; blackPawn;   emptySquare; emptySquare; blackQueen;  blackPawn;   blackPawn;   emptySquare|]
+      [|blackPawn;   emptySquare; emptySquare; emptySquare; blackPawn;   emptySquare; blackBishop; blackPawn|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare|]
+      [|whitePawn;   whitePawn;   blackPawn;   whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
+      [|emptySquare; emptySquare; emptySquare; whiteQueen;  emptySquare; whitePawn;   whitePawn;   whitePawn|]
+      [|emptySquare; emptySquare; whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare|]|]
+    |> ofArrays
+    |> Seq.rev
+    |> indicesControlledByColor false
+    |> Seq.toArray
+    |> should equal
+        [| (2, 2)
+           (4, 0)
+           (6, 7); (4, 7); (0, 1); (1, 2); (2, 3); (3, 4); (4, 5)
+           (5, 1); (4, 1)
+           (7, 4); (6, 2); (6, 3); (7, 5); (3, 7); (4, 6); (5, 5); (7, 3); (3, 1); (4, 2); (5, 3)
+           (6, 0); (7, 2); (7, 1)
+           (7, 7) |]
