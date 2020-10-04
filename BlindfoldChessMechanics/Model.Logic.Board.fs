@@ -265,8 +265,9 @@ let indicesControlledByPiece (board: Board) (coordinates: int * int): (int * int
 
 let indicesControlledByColor (isWhite: bool) (board: Board): (int * int) seq =
     seq {
-        for i in 0 .. 7 do
-            for j in 0 .. 7 -> (i, j)
+        for rowIndex in 0 .. 7 do
+            for columnIndex in 0 .. 7 ->
+                (rowIndex, columnIndex)
     }
     |> Seq.filter (fun coords ->
         match resident coords board with
@@ -275,3 +276,12 @@ let indicesControlledByColor (isWhite: bool) (board: Board): (int * int) seq =
     |> Seq.map (indicesControlledByPiece board)
     |> Seq.concat
     |> Seq.distinct
+
+let isKingInDanger (isWhite: bool) (board: Board): bool =
+    board
+    |> indicesControlledByColor (not isWhite)
+    |> Seq.exists (fun coords ->
+                    match resident coords board with
+                    | Some { PieceType = King; IsWhite = isWh } when isWh = isWhite -> true
+                    | _ -> false
+                  )
