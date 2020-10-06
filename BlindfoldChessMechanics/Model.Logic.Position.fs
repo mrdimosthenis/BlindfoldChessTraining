@@ -19,20 +19,58 @@ type Move = { Piece: Board.Piece
               IsCheck: bool
               Promotion: PromotedPiece Option }
 
-type CastlingAvailability =
+type CastlingAbility =
     { WhiteKingSideCastle: bool
       WhiteQueenSideCastle: bool
       BlackKingSideCastle: bool
       BlackQueenSideCastle: bool }
 
-type EnPassantMove = Board.Coordinates Option
-
 type Position = { CurrentBoard: Board.Board
                   IsWhiteToMove: bool
-                  Castling: CastlingAvailability
-                  EnPassant: EnPassantMove
+                  Castling: CastlingAbility
+                  EnPassant: Board.Coordinates Option
                   Halfmove: int
                   Fullmove: int }
+
+type CastleMove =
+    | WhiteKingSideCastle 
+    | WhiteQueenSideCastle
+    | BlackKingSideCastle
+    | BlackQueenSideCastle
+
+let specialKingMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
+    let (rowIndex, columnIndex) = coordinates
+    match Board.resident coordinates position.CurrentBoard with
+    | Some { PieceType = Board.King; IsWhite = isWhite } ->
+        let controlledCoordsByOpponent = Board.indicesControlledByColor (not isWhite) position.CurrentBoard
+        [| (WhiteKingSideCastle, position.Castling.WhiteKingSideCastle, (+))
+           (WhiteQueenSideCastle, position.Castling.WhiteQueenSideCastle, (-))
+           (BlackKingSideCastle, position.Castling.BlackKingSideCastle, (+))
+           (BlackQueenSideCastle, position.Castling.BlackQueenSideCastle, (-)) |]
+        |> Seq.ofArray
+        |> Seq.map ( fun (castleMove, ability, op) ->
+                        (
+                            castleMove,
+                            ability && (Seq.forall ((<>) coordinates) controlledCoordsByOpponent)
+                                    && (Seq.forall ((<>) (op rowIndex 1, columnIndex)) controlledCoordsByOpponent)
+                                    && (Seq.forall ((<>) (op rowIndex 2, columnIndex)) controlledCoordsByOpponent)
+                        )
+                   )
+        |> Seq.filter snd
+        |> Seq.map (fun (castleMove, _) ->
+                        match castleMove with
+                        | WhiteKingSideCastle | BlackKingSideCastle -> (rowIndex + 2, columnIndex)
+                        | WhiteQueenSideCastle | BlackQueenSideCastle -> (rowIndex - 2, columnIndex)
+                   )
+        |> Seq.map (fun toCoords ->
+                        { Piece = Board.King
+                          FromCoords = coordinates
+                          ToCoords = toCoords
+                          IsCapture = false
+                          IsCheck = false
+                          Promotion= None }
+                   )
+    | _ -> raise Board.NoPieceInBoard
 
 // implementation
 
