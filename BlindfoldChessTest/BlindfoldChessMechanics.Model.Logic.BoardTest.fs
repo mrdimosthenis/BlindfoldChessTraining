@@ -18,7 +18,7 @@ let emptyBoard =
     |> Utils.seqOfArrays
 
 [<Fact>]
-let ``Indices cotrolled by rook`` () =
+let ``Coordinates cotrolled by rook`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -29,7 +29,7 @@ let ``Indices cotrolled by rook`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByRook (4, 2)
+    |> coordinatesControlledByRook (4, 2)
     |> Seq.toArray
     |> should equal
         [|(7, 2); (6, 2); (5, 2)
@@ -38,12 +38,12 @@ let ``Indices cotrolled by rook`` () =
           (4, 0); (4, 1)|]
 
 [<Fact>]
-let ``Indices cotrolled by ghost rook`` () =
-    (fun () -> indicesControlledByRook (4, 2) emptyBoard |> Seq.toArray |> ignore)
+let ``Coordinates cotrolled by ghost rook`` () =
+    (fun () -> coordinatesControlledByRook (4, 2) emptyBoard |> Seq.toArray |> ignore)
     |> should throw typeof<NoPieceInBoard>
 
 [<Fact>]
-let ``Indices cotrolled by bishop`` () =
+let ``Coordinates cotrolled by bishop`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -54,7 +54,7 @@ let ``Indices cotrolled by bishop`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByBishop (4, 2)
+    |> coordinatesControlledByBishop (4, 2)
     |> Seq.toArray
     |> should equal
         [|(7, 5); (6, 4); (5, 3)
@@ -63,12 +63,12 @@ let ``Indices cotrolled by bishop`` () =
           (3, 1)|]
 
 [<Fact>]
-let ``Indices cotrolled by ghost bishop`` () =
-    (fun () -> indicesControlledByBishop (4, 2) emptyBoard |> Seq.toArray |> ignore)
+let ``Coordinates cotrolled by ghost bishop`` () =
+    (fun () -> coordinatesControlledByBishop (4, 2) emptyBoard |> Seq.toArray |> ignore)
     |> should throw typeof<NoPieceInBoard>
 
 [<Fact>]
-let ``Indices cotrolled by queen`` () =
+let ``Coordinates cotrolled by queen`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -79,7 +79,7 @@ let ``Indices cotrolled by queen`` () =
       [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByQueen (4, 4)
+    |> coordinatesControlledByQueen (4, 4)
     |> Seq.toArray
     |> should equal
         [|(7, 4); (6, 4); (5, 4)
@@ -92,12 +92,12 @@ let ``Indices cotrolled by queen`` () =
           (0, 0); (1, 1); (2, 2); (3, 3)|]
 
 [<Fact>]
-let ``Indices cotrolled by ghost queen`` () =
-    (fun () -> indicesControlledByQueen (4, 2) emptyBoard |> Seq.toArray |> ignore)
+let ``Coordinates cotrolled by ghost queen`` () =
+    (fun () -> coordinatesControlledByQueen (4, 2) emptyBoard |> Seq.toArray |> ignore)
     |> should throw typeof<NoPieceInBoard>
 
 [<Fact>]
-let ``Indices cotrolled by knight in the middle`` () =
+let ``Coordinates cotrolled by knight in the middle`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -108,13 +108,13 @@ let ``Indices cotrolled by knight in the middle`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByKnight (2, 5)
+    |> coordinatesControlledByKnight (2, 5)
     |> Seq.toArray
     |> should equal
         [|(0, 4); (1, 3); (3, 3); (0, 6); (1, 7); (4, 6); (3, 7)|]
 
 [<Fact>]
-let ``Indices cotrolled by knight in the corner`` () =
+let ``Coordinates cotrolled by knight in the corner`` () =
     [|[|emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|whiteKnight; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -125,18 +125,18 @@ let ``Indices cotrolled by knight in the corner`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByKnight (6, 0)
+    |> coordinatesControlledByKnight (6, 0)
     |> Seq.toArray
     |> should equal
         [|(5, 2); (7, 2)|]
 
 [<Fact>]
-let ``Indices cotrolled by ghost knight`` () =
-    (fun () -> indicesControlledByKnight (4, 2) emptyBoard |> ignore)
+let ``Coordinates cotrolled by ghost knight`` () =
+    (fun () -> coordinatesControlledByKnight (4, 2) emptyBoard |> ignore)
     |> should throw typeof<NoPieceInBoard>
 
 [<Fact>]
-let ``Indices cotrolled by king in the middle`` () =
+let ``Coordinates cotrolled by king in the middle`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -147,13 +147,13 @@ let ``Indices cotrolled by king in the middle`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByKing (2, 3)
+    |> coordinatesControlledByKing (2, 3)
     |> Seq.toArray
     |> should equal
         [|(1, 2); (1, 3); (1, 4); (2, 4); (3, 2); (3, 3); (3, 4)|]
 
 [<Fact>]
-let ``Indices cotrolled by king in the corner`` () =
+let ``Coordinates cotrolled by king in the corner`` () =
     [|[|blackKing;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|whiteQueen;  blackBishop; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -164,18 +164,18 @@ let ``Indices cotrolled by king in the corner`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByKing (7, 0)
+    |> coordinatesControlledByKing (7, 0)
     |> Seq.toArray
     |> should equal
         [|(6, 0); (7, 1)|]
 
 [<Fact>]
-let ``Indices cotrolled by ghost king`` () =
-    (fun () -> indicesControlledByKing (4, 2) emptyBoard |> ignore)
+let ``Coordinates cotrolled by ghost king`` () =
+    (fun () -> coordinatesControlledByKing (4, 2) emptyBoard |> ignore)
     |> should throw typeof<NoPieceInBoard>
 
 [<Fact>]
-let ``Indices cotrolled by white init pawn in the edge`` () =
+let ``Coordinates cotrolled by white init pawn in the edge`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -186,13 +186,13 @@ let ``Indices cotrolled by white init pawn in the edge`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByPawn (1, 7)
+    |> coordinatesControlledByPawn (1, 7)
     |> Seq.toArray
     |> should equal
         [|(2, 7); (3, 7); (2, 6)|]
 
 [<Fact>]
-let ``Indices cotrolled by white init blocked pawn`` () =
+let ``Coordinates cotrolled by white init blocked pawn`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -203,13 +203,13 @@ let ``Indices cotrolled by white init blocked pawn`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByPawn (1, 3)
+    |> coordinatesControlledByPawn (1, 3)
     |> Seq.toArray
     |> should equal
         [|(2, 3)|]
 
 [<Fact>]
-let ``Indices cotrolled by black blocked pawn`` () =
+let ``Coordinates cotrolled by black blocked pawn`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -220,13 +220,13 @@ let ``Indices cotrolled by black blocked pawn`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByPawn (4, 3)
+    |> coordinatesControlledByPawn (4, 3)
     |> Seq.toArray
     |> should equal
         [|(3, 2); (3, 4)|]
 
 [<Fact>]
-let ``Indices cotrolled by black init pawn in the edge`` () =
+let ``Coordinates cotrolled by black init pawn in the edge`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -237,18 +237,18 @@ let ``Indices cotrolled by black init pawn in the edge`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByPawn (6, 0)
+    |> coordinatesControlledByPawn (6, 0)
     |> Seq.toArray
     |> should equal
         [||]
 
 [<Fact>]
-let ``Indices cotrolled by ghost pawn`` () =
-    (fun () -> indicesControlledByKing (4, 2) emptyBoard |> ignore)
+let ``Coordinates cotrolled by ghost pawn`` () =
+    (fun () -> coordinatesControlledByKing (4, 2) emptyBoard |> ignore)
     |> should throw typeof<NoPieceInBoard>
 
 [<Fact>]
-let ``Indices cotrolled by white color`` () =
+let ``Coordinates cotrolled by white color`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|whiteKing;   blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -259,7 +259,7 @@ let ``Indices cotrolled by white color`` () =
       [|emptySquare; blackKing;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByColor true
+    |> coordinatesControlledByColor true
     |> Seq.toArray
     |> should equal
         [| (3, 4)
@@ -267,7 +267,7 @@ let ``Indices cotrolled by white color`` () =
            (6, 1); (7, 0); (7, 1) |]
 
 [<Fact>]
-let ``Indices cotrolled by black color`` () =
+let ``Coordinates cotrolled by black color`` () =
     [|[|blackRook;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare|]
       [|emptySquare; blackPawn;   emptySquare; emptySquare; blackQueen;  blackPawn;   blackPawn;   emptySquare|]
       [|blackPawn;   emptySquare; emptySquare; emptySquare; blackPawn;   emptySquare; blackBishop; blackPawn|]
@@ -278,7 +278,7 @@ let ``Indices cotrolled by black color`` () =
       [|emptySquare; emptySquare; whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare|]|]
     |> Utils.seqOfArrays
     |> Seq.rev
-    |> indicesControlledByColor false
+    |> coordinatesControlledByColor false
     |> Seq.toArray
     |> should equal
         [| (2, 2)

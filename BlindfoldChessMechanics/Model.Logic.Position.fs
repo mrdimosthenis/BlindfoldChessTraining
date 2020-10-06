@@ -42,7 +42,7 @@ let specialKingMoves (coordinates: Board.Coordinates) (position: Position): Move
     let (rowIndex, columnIndex) = coordinates
     match Board.resident coordinates position.CurrentBoard with
     | Some { PieceType = Board.King; IsWhite = isWhite } ->
-        let controlledCoordsByOpponent = Board.indicesControlledByColor (not isWhite) position.CurrentBoard
+        let controlledCoordsByOpponent = Board.coordinatesControlledByColor (not isWhite) position.CurrentBoard
         [| (WhiteKingSideCastle, position.Castling.WhiteKingSideCastle, (+))
            (WhiteQueenSideCastle, position.Castling.WhiteQueenSideCastle, (-))
            (BlackKingSideCastle, position.Castling.BlackKingSideCastle, (+))

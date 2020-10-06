@@ -82,19 +82,19 @@ let areValidCoordinates(coordinates: Coordinates): bool =
 
     rowIndex >= 0 && rowIndex <= 7 && columnIndex >= 0 && columnIndex <= 7
 
-let upIndices (coordinates: Coordinates): Coordinates seq =
+let upCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init (7 - rowIndex) (fun i -> (rowIndex + i + 1, columnIndex))
 
-let downIndices (coordinates: Coordinates): Coordinates seq =
+let downCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init rowIndex (fun i -> (rowIndex - i - 1, columnIndex))
 
-let leftIndices (coordinates: Coordinates): Coordinates seq =
+let leftCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init columnIndex (fun i -> (rowIndex, columnIndex - i - 1))
 
-let rightIndices (coordinates: Coordinates): Coordinates seq =
+let rightCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init (7 - columnIndex) (fun i -> (rowIndex, columnIndex + i + 1))
 
@@ -122,50 +122,50 @@ let resident (coordinates: Coordinates) (board: Board): Resident =
     let (rowIndex, columnIndex) = coordinates
     board |> Seq.item rowIndex |> Seq.item columnIndex
 
-let collectControlledIndices (directionF: Coordinates -> Coordinates seq)
-                             (coordinates: Coordinates)
-                             (board: Board)
+let collectControlledCoordinates (directionF: Coordinates -> Coordinates seq)
+                                 (coordinates: Coordinates)
+                                 (board: Board)
                              : Coordinates seq =
     match resident coordinates board with
     | None -> raise NoPieceInBoard
     | Some piece ->
         coordinates
         |> directionF
-        |> Seq.fold (fun (accIndices, accMetPiece) coord ->
+        |> Seq.fold (fun (accCoords, accMetPiece) coord ->
             if accMetPiece then
-                (accIndices, accMetPiece)
+                (accCoords, accMetPiece)
             else
                 match resident coord board with
-                | Some { IsWhite = w } when w = piece.IsWhite -> (accIndices, true)
-                | Some _ -> (Utils.prependedSeq coord accIndices, true)
-                | _ -> (Utils.prependedSeq coord accIndices, false)) (Seq.empty, false)
+                | Some { IsWhite = w } when w = piece.IsWhite -> (accCoords, true)
+                | Some _ -> (Utils.prependedSeq coord accCoords, true)
+                | _ -> (Utils.prependedSeq coord accCoords, false)) (Seq.empty, false)
         |> fst
 
-let indicesControlledByRook (coordinates: Coordinates) (board: Board): Coordinates seq =
-    [| upIndices
-       downIndices
-       rightIndices
-       leftIndices |]
+let coordinatesControlledByRook (coordinates: Coordinates) (board: Board): Coordinates seq =
+    [| upCoordinates
+       downCoordinates
+       rightCoordinates
+       leftCoordinates |]
     |> Seq.ofArray
-    |> Seq.map (fun dirF -> collectControlledIndices dirF coordinates board)
+    |> Seq.map (fun dirF -> collectControlledCoordinates dirF coordinates board)
     |> Seq.concat
 
-let indicesControlledByBishop (coordinates: Coordinates) (board: Board): Coordinates seq =
+let coordinatesControlledByBishop (coordinates: Coordinates) (board: Board): Coordinates seq =
     [| upRightDiagonal
        downRightDiagonal
        upLeftDiagonal
        downLeftDiagonal |]
     |> Seq.ofArray
-    |> Seq.map (fun dirF -> collectControlledIndices dirF coordinates board)
+    |> Seq.map (fun dirF -> collectControlledCoordinates dirF coordinates board)
     |> Seq.concat
 
-let indicesControlledByQueen (coordinates: Coordinates) (board: Board): Coordinates seq =
-    [| indicesControlledByRook coordinates board
-       indicesControlledByBishop coordinates board |]
+let coordinatesControlledByQueen (coordinates: Coordinates) (board: Board): Coordinates seq =
+    [| coordinatesControlledByRook coordinates board
+       coordinatesControlledByBishop coordinates board |]
     |> Seq.ofArray
     |> Seq.concat
 
-let indicesControlledByKnight (coordinates: Coordinates) (board: Board): Coordinates seq =
+let coordinatesControlledByKnight (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
 
     match resident coordinates board with
@@ -187,7 +187,7 @@ let indicesControlledByKnight (coordinates: Coordinates) (board: Board): Coordin
             | _ -> true)
     | _ -> raise NoPieceInBoard
 
-let indicesControlledByKing (coordinates: Coordinates) (board: Board): Coordinates seq =
+let coordinatesControlledByKing (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
 
     match resident coordinates board with
@@ -208,7 +208,7 @@ let indicesControlledByKing (coordinates: Coordinates) (board: Board): Coordinat
             | _ -> true)
     | _ -> raise NoPieceInBoard
 
-let indicesControlledByPawn (coordinates: Coordinates) (board: Board): Coordinates seq =
+let coordinatesControlledByPawn (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
 
     match resident coordinates board with
@@ -240,20 +240,20 @@ let indicesControlledByPawn (coordinates: Coordinates) (board: Board): Coordinat
         |> Seq.map fst
     | _ -> raise NoPieceInBoard
 
-let indicesControlledByPiece (coordinates: Coordinates) (board: Board): Coordinates seq =
-    let indicesF =
+let coordinatesControlledByPiece (coordinates: Coordinates) (board: Board): Coordinates seq =
+    let coordsF =
         match resident coordinates board with
-        | Some { PieceType = Rook } -> indicesControlledByRook
-        | Some { PieceType = Bishop } -> indicesControlledByBishop
-        | Some { PieceType = Queen } -> indicesControlledByQueen
-        | Some { PieceType = Knight } -> indicesControlledByKnight
-        | Some { PieceType = King } -> indicesControlledByKing
-        | Some { PieceType = Pawn } -> indicesControlledByPawn
+        | Some { PieceType = Rook } -> coordinatesControlledByRook
+        | Some { PieceType = Bishop } -> coordinatesControlledByBishop
+        | Some { PieceType = Queen } -> coordinatesControlledByQueen
+        | Some { PieceType = Knight } -> coordinatesControlledByKnight
+        | Some { PieceType = King } -> coordinatesControlledByKing
+        | Some { PieceType = Pawn } -> coordinatesControlledByPawn
         | _ -> raise NoPieceInBoard
 
-    indicesF coordinates board
+    coordsF coordinates board
 
-let indicesControlledByColor (isWhite: bool) (board: Board): Coordinates seq =
+let coordinatesControlledByColor (isWhite: bool) (board: Board): Coordinates seq =
     seq {
         for rowIndex in 0 .. 7 do
             for columnIndex in 0 .. 7 ->
@@ -263,13 +263,13 @@ let indicesControlledByColor (isWhite: bool) (board: Board): Coordinates seq =
         match resident coords board with
         | Some { IsWhite = isWh } when isWh = isWhite -> true
         | _ -> false)
-    |> Seq.map (fun coords -> indicesControlledByPiece coords board)
+    |> Seq.map (fun coords -> coordinatesControlledByPiece coords board)
     |> Seq.concat
     |> Seq.distinct
 
 let isKingInDanger (isWhite: bool) (board: Board): bool =
     board
-    |> indicesControlledByColor (not isWhite)
+    |> coordinatesControlledByColor (not isWhite)
     |> Seq.exists (fun coords ->
                     match resident coords board with
                     | Some { PieceType = King; IsWhite = isWh } when isWh = isWhite -> true
