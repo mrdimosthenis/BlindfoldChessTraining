@@ -62,8 +62,6 @@ let blackKnight: Resident =
 let blackPawn: Resident =
     Some { PieceType = Pawn; IsWhite = false }
 
-// implementation
-
 let init: Board =
     [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
       [|blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn|]
@@ -72,10 +70,12 @@ let init: Board =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn|]
-      [|whiteRook;   whiteKnight; whiteBishop; whiteQueen; whiteKing;    whiteBishop; whiteKnight; whiteRook|]|]
+      [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
     |> Seq.ofArray
     |> Seq.map Seq.ofArray
     |> Seq.rev
+
+// functions
 
 let areValidCoordinates(coordinates: Coordinates): bool =
     let (rowIndex, columnIndex) = coordinates

@@ -1,6 +1,7 @@
 ﻿module BlindfoldChessMechanics.Model.Logic.Position
 
 open BlindfoldChessMechanics.Model.Logic
+open BlindfoldChessMechanics
 
 exception WrongPiece
 
@@ -24,6 +25,20 @@ type Position = { CurrentBoard: Board.Board
                   EnPassant: Board.Coordinates Option
                   Halfmove: int
                   Fullmove: int }
+
+// constants
+
+let init: Position = { CurrentBoard = Board.init
+                       IsWhiteToMove = true
+                       Castling = { WhiteKingSideCastle = true
+                                    WhiteQueenSideCastle = true
+                                    BlackKingSideCastle = true
+                                    BlackQueenSideCastle = true } 
+                       EnPassant = None
+                       Halfmove = 0
+                       Fullmove = 1 }
+
+// functions
 
 let specialKingMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
     let (rowIndex, columnIndex) = coordinates
@@ -125,6 +140,36 @@ let pieceMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
         |> Seq.map (fun toCoords -> simplePieceMove coordinates toCoords position)
     | None ->
         raise Board.NoPieceInBoard
+
+let positionAfterMove (move: Move) (position: Position): Position =
+    let newIsWhiteToMove = not position.IsWhiteToMove
+    let newHalfMove = if move.IsCapture || move.Piece = Board.Pawn then 0
+                      else position.Halfmove + 1
+    let newFullMove = if position.IsWhiteToMove then position.Fullmove
+                      else position.Fullmove + 1
+    let newEnPassant =
+        if move.Piece = Board.Pawn && abs(fst move.FromCoords - fst move.ToCoords) = 2 then Some move.ToCoords
+        else None
+    let newWhiteKingSideCastle = position.Castling.WhiteKingSideCastle && move.FromCoords <> (0, 4) && move.FromCoords <> (0, 7)
+    let newWhiteQueenSideCastle = position.Castling.WhiteQueenSideCastle && move.FromCoords <> (0, 4) && move.FromCoords <> (0, 0)
+    let newBlackKingSideCastle = position.Castling.BlackKingSideCastle && move.FromCoords <> (7, 4) && move.FromCoords <> (7, 7)
+    let newBlackQueenSideCastle = position.Castling.BlackQueenSideCastle && move.FromCoords <> (7, 4) && move.FromCoords <> (7, 0)
+    let pieceInNewCoords =
+        match move.Promotion with
+        | Some piece -> Some { Board.PieceType = piece; Board.IsWhite = position.IsWhiteToMove }
+        | _ -> Some { Board.PieceType = move.Piece; Board.IsWhite = position.IsWhiteToMove }
+    let newCurrentBoard = position.CurrentBoard
+                          |> Utils.updatedSequences move.FromCoords None
+                          |> Utils.updatedSequences move.ToCoords pieceInNewCoords
+    { CurrentBoard = newCurrentBoard
+      IsWhiteToMove = newIsWhiteToMove
+      Castling = { WhiteKingSideCastle = newWhiteKingSideCastle
+                   WhiteQueenSideCastle = newWhiteQueenSideCastle
+                   BlackKingSideCastle = newBlackKingSideCastle
+                   BlackQueenSideCastle = newBlackQueenSideCastle } 
+      EnPassant = newEnPassant
+      Halfmove = newHalfMove
+      Fullmove = newFullMove }
 
 // implementation
 
