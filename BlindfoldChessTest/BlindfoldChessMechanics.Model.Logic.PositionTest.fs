@@ -262,3 +262,123 @@ let ``Black pawn moves with promotion ability`` () =
              ToCoords = (0, 7)
              IsCapture = true
              Promotion = Some Knight } |]
+
+[<Fact>]
+let ``White rook piece move in initial position`` () =
+    { CurrentBoard = Board.init
+      IsWhiteToMove = true
+      Castling = { WhiteKingSideCastle = true
+                   WhiteQueenSideCastle = true
+                   BlackKingSideCastle = true
+                   BlackQueenSideCastle = true }
+      EnPassant = None
+      Halfmove = 0
+      Fullmove = 0 }
+    |> pieceMoves (0, 0)
+    |> Seq.toArray
+    |> should equal
+        [||]
+
+[<Fact>]
+let ``White knight piece move in initial position`` () =
+    { CurrentBoard = Board.init
+      IsWhiteToMove = true
+      Castling = { WhiteKingSideCastle = true
+                   WhiteQueenSideCastle = true
+                   BlackKingSideCastle = true
+                   BlackQueenSideCastle = true }
+      EnPassant = None
+      Halfmove = 0
+      Fullmove = 0 }
+    |> pieceMoves (0, 6)
+    |> Seq.toArray
+    |> should equal
+        [| { Piece = Knight
+             FromCoords = (0, 6)
+             ToCoords = (2, 5)
+             IsCapture = false
+             Promotion = None }
+           { Piece = Knight
+             FromCoords = (0, 6)
+             ToCoords = (2, 7)
+             IsCapture = false
+             Promotion = None } |]
+
+[<Fact>]
+let ``White pawn piece move in initial position`` () =
+    { CurrentBoard = Board.init
+      IsWhiteToMove = true
+      Castling = { WhiteKingSideCastle = true
+                   WhiteQueenSideCastle = true
+                   BlackKingSideCastle = true
+                   BlackQueenSideCastle = true }
+      EnPassant = None
+      Halfmove = 0
+      Fullmove = 0 }
+    |> pieceMoves (1, 5)
+    |> Seq.toArray
+    |> should equal
+        [| { Piece = Pawn
+             FromCoords = (1, 5)
+             ToCoords = (2, 5)
+             IsCapture = false
+             Promotion = None }
+           { Piece = Pawn
+             FromCoords = (1, 5)
+             ToCoords = (3, 5)
+             IsCapture = false
+             Promotion = None } |]
+
+[<Fact>]
+let ``Black king piece moves`` () =
+    { CurrentBoard = [|[|blackRook;   emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; blackRook|]
+                       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
+                       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                       [|emptySquare; emptySquare; whiteRook;   emptySquare;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                       [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; emptySquare|]|]
+                     |> Utils.seqOfArrays
+                     |> Seq.rev
+      IsWhiteToMove = true
+      Castling = { WhiteKingSideCastle = true
+                   WhiteQueenSideCastle = true
+                   BlackKingSideCastle = true
+                   BlackQueenSideCastle = true }
+      EnPassant = None
+      Halfmove = 12
+      Fullmove = 20 }
+    |> pieceMoves (7, 4)
+    |> Seq.toArray
+    |> should equal
+        [| { Piece = King
+             FromCoords = (7, 4)
+             ToCoords = (7, 6)
+             IsCapture = false
+             Promotion = None }
+           { Piece = King
+             FromCoords = (7, 4)
+             ToCoords = (6, 3)
+             IsCapture = false
+             Promotion = None }
+           { Piece = King
+             FromCoords = (7, 4)
+             ToCoords = (6, 4)
+             IsCapture = false
+             Promotion = None };
+           { Piece = King
+             FromCoords = (7, 4)
+             ToCoords = (6, 5)
+             IsCapture = true
+             Promotion = None }
+           { Piece = King
+             FromCoords = (7, 4)
+             ToCoords = (7, 3)
+             IsCapture = false
+             Promotion = None }
+           { Piece = King
+             FromCoords = (7, 4)
+             ToCoords = (7, 5)
+             IsCapture = false
+             Promotion = None } |]

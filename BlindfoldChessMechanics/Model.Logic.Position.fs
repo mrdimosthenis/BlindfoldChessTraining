@@ -98,7 +98,33 @@ let pawnMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
                           Promotion = promotion }
                    )
     | _ -> raise WrongPiece
-    
+
+let simplePieceMove (fromCoords: Board.Coordinates) (toCoords: Board.Coordinates) (position: Position): Move =
+    match Board.resident fromCoords position.CurrentBoard with
+    | Some piece -> let isCapture =
+                        match Board.resident toCoords position.CurrentBoard with
+                        | None -> false
+                        | _ -> true
+                    { Piece = piece.PieceType
+                      FromCoords = fromCoords
+                      ToCoords = toCoords
+                      IsCapture = isCapture
+                      Promotion = None }
+    | _ -> raise Board.NoPieceInBoard
+
+let pieceMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
+    match Board.resident coordinates position.CurrentBoard with
+    | Some { PieceType = Board.Pawn} ->
+        pawnMoves coordinates position
+    | Some { PieceType = Board.King} ->
+        Board.coordinatesControlledByKing coordinates position.CurrentBoard
+        |> Seq.map (fun toCoords -> simplePieceMove coordinates toCoords position)
+        |> Seq.append (specialKingMoves coordinates position)
+    | Some piece ->
+        Board.coordinatesControlledByPiece coordinates position.CurrentBoard
+        |> Seq.map (fun toCoords -> simplePieceMove coordinates toCoords position)
+    | None ->
+        raise Board.NoPieceInBoard
 
 // implementation
 
