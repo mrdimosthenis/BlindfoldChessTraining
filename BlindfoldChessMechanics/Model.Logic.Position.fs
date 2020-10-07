@@ -2,22 +2,15 @@
 
 open BlindfoldChessMechanics.Model.Logic
 
-exception InvalidMove
+exception WrongPiece
 
 // types
-
-type PromotedPiece =
-    | Queen
-    | Rook
-    | Bishop
-    | Knight
 
 type Move = { Piece: Board.Piece
               FromCoords: Board.Coordinates
               ToCoords: Board.Coordinates
               IsCapture: bool
-              IsCheck: bool
-              Promotion: PromotedPiece Option }
+              Promotion: Board.Piece option }
 
 type CastlingAbility =
     { WhiteKingSideCastle: bool
@@ -60,10 +53,52 @@ let specialKingMoves (coordinates: Board.Coordinates) (position: Position): Move
                           FromCoords = coordinates
                           ToCoords = toCoords
                           IsCapture = false
-                          IsCheck = false
-                          Promotion= None }
+                          Promotion = None }
                    )
-    | _ -> raise Board.NoPieceInBoard
+    | _ -> raise WrongPiece
+
+let pawnMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
+    let (rowIndex, columnIndex) = coordinates
+    match Board.resident coordinates position.CurrentBoard with
+    | Some { PieceType = Board.Pawn; IsWhite = isWhite } ->
+        let enPassantMoveTuples =
+            match position.EnPassant with
+            | Some (enPasRow, enPasCol) when (rowIndex = enPasRow) && ( columnIndex = enPasCol + 1 || columnIndex = enPasCol - 1 ) ->
+                let toRowIndex = if isWhite then rowIndex + 1 else rowIndex - 1
+                let toCoords = (toRowIndex, enPasCol)
+                let isCapture = true
+                let promotion = None
+                [|(toCoords, isCapture, promotion)|]
+            | _ -> [||]
+            |> Seq.ofArray
+        let otherMoveTuples = Board.coordinatesControlledByPawn coordinates position.CurrentBoard
+                              |> Seq.map (fun toCoords ->
+                                            let (toRowIndex, _) = toCoords
+                                            let isCapture =
+                                                match Board.resident toCoords position.CurrentBoard with
+                                                | None -> false
+                                                | _ -> true
+                                            match toRowIndex with
+                                            | 0 | 7 ->
+                                                [| (toCoords, isCapture, Some Board.Queen)
+                                                   (toCoords, isCapture, Some Board.Rook)
+                                                   (toCoords, isCapture, Some Board.Bishop)
+                                                   (toCoords, isCapture, Some Board.Knight) |]
+                                            | _ ->
+                                                [|(toCoords, isCapture, None)|]
+                                            |> Seq.ofArray
+                                         )
+                              |> Seq.concat
+        Seq.append enPassantMoveTuples otherMoveTuples
+        |> Seq.map (fun (toCoords, isCapture, promotion) ->
+                        { Piece = Board.Pawn
+                          FromCoords = coordinates
+                          ToCoords = toCoords
+                          IsCapture = isCapture
+                          Promotion = promotion }
+                   )
+    | _ -> raise WrongPiece
+    
 
 // implementation
 
