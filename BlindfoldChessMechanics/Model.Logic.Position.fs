@@ -13,22 +13,22 @@ type Move = { Piece: Board.Piece
               IsCapture: bool
               Promotion: Board.Piece option }
 
-type CastlingAbility =
+type Castling =
     { WhiteKingSideCastle: bool
       WhiteQueenSideCastle: bool
       BlackKingSideCastle: bool
       BlackQueenSideCastle: bool }
 
-type Position = { CurrentBoard: Board.Board
+type Position = { Board: Board.Board
                   IsWhiteToMove: bool
-                  Castling: CastlingAbility
+                  Castling: Castling
                   EnPassant: Board.Coordinates Option
                   Halfmove: int
                   Fullmove: int }
 
 // constants
 
-let init: Position = { CurrentBoard = Board.init
+let init: Position = { Board = Board.init
                        IsWhiteToMove = true
                        Castling = { WhiteKingSideCastle = true
                                     WhiteQueenSideCastle = true
@@ -42,9 +42,9 @@ let init: Position = { CurrentBoard = Board.init
 
 let specialKingMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
     let (rowIndex, columnIndex) = coordinates
-    match Board.resident coordinates position.CurrentBoard with
+    match Board.resident coordinates position.Board with
     | Some { PieceType = Board.King; IsWhite = isWhite } ->
-        let controlledCoordsByOpponent = Board.coordinatesControlledByColor (not isWhite) position.CurrentBoard
+        let controlledCoordsByOpponent = Board.coordinatesControlledByColor (not isWhite) position.Board
         [| (true, position.Castling.WhiteKingSideCastle, (+))
            (true, position.Castling.WhiteQueenSideCastle, (-))
            (false, position.Castling.BlackKingSideCastle, (+))
@@ -52,8 +52,8 @@ let specialKingMoves (coordinates: Board.Coordinates) (position: Position): Move
         |> Seq.ofArray
         |> Seq.map ( fun (isWh, ability, op) ->
                         ability && isWh = isWhite
-                        && Board.resident (rowIndex, op columnIndex 1) position.CurrentBoard = None
-                        && Board.resident (rowIndex, op columnIndex 2) position.CurrentBoard = None
+                        && Board.resident (rowIndex, op columnIndex 1) position.Board = None
+                        && Board.resident (rowIndex, op columnIndex 2) position.Board = None
                         && (Seq.forall ((<>) coordinates) controlledCoordsByOpponent)
                         && (Seq.forall ((<>) (rowIndex, op columnIndex 1)) controlledCoordsByOpponent)
                         && (Seq.forall ((<>) (rowIndex, op columnIndex 2)) controlledCoordsByOpponent)
@@ -74,7 +74,7 @@ let specialKingMoves (coordinates: Board.Coordinates) (position: Position): Move
 
 let pawnMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
     let (rowIndex, columnIndex) = coordinates
-    match Board.resident coordinates position.CurrentBoard with
+    match Board.resident coordinates position.Board with
     | Some { PieceType = Board.Pawn; IsWhite = isWhite } ->
         let enPassantMoveTuples =
             match position.EnPassant with
@@ -86,11 +86,11 @@ let pawnMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
                 [|(toCoords, isCapture, promotion)|]
             | _ -> [||]
             |> Seq.ofArray
-        let otherMoveTuples = Board.coordinatesControlledByPawn coordinates position.CurrentBoard
+        let otherMoveTuples = Board.coordinatesControlledByPawn coordinates position.Board
                               |> Seq.map (fun toCoords ->
                                             let (toRowIndex, _) = toCoords
                                             let isCapture =
-                                                match Board.resident toCoords position.CurrentBoard with
+                                                match Board.resident toCoords position.Board with
                                                 | None -> false
                                                 | _ -> true
                                             match toRowIndex with
@@ -115,9 +115,9 @@ let pawnMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
     | _ -> raise WrongPiece
 
 let simplePieceMove (fromCoords: Board.Coordinates) (toCoords: Board.Coordinates) (position: Position): Move =
-    match Board.resident fromCoords position.CurrentBoard with
+    match Board.resident fromCoords position.Board with
     | Some piece -> let isCapture =
-                        match Board.resident toCoords position.CurrentBoard with
+                        match Board.resident toCoords position.Board with
                         | None -> false
                         | _ -> true
                     { Piece = piece.PieceType
@@ -128,15 +128,15 @@ let simplePieceMove (fromCoords: Board.Coordinates) (toCoords: Board.Coordinates
     | _ -> raise Board.NoPieceInBoard
 
 let pieceMoves (coordinates: Board.Coordinates) (position: Position): Move seq =
-    match Board.resident coordinates position.CurrentBoard with
+    match Board.resident coordinates position.Board with
     | Some { PieceType = Board.Pawn} ->
         pawnMoves coordinates position
     | Some { PieceType = Board.King} ->
-        Board.coordinatesControlledByKing coordinates position.CurrentBoard
+        Board.coordinatesControlledByKing coordinates position.Board
         |> Seq.map (fun toCoords -> simplePieceMove coordinates toCoords position)
         |> Seq.append (specialKingMoves coordinates position)
     | Some piece ->
-        Board.coordinatesControlledByPiece coordinates position.CurrentBoard
+        Board.coordinatesControlledByPiece coordinates position.Board
         |> Seq.map (fun toCoords -> simplePieceMove coordinates toCoords position)
     | None ->
         raise Board.NoPieceInBoard
@@ -158,10 +158,10 @@ let positionAfterMove (move: Move) (position: Position): Position =
         match move.Promotion with
         | Some piece -> Some { Board.PieceType = piece; Board.IsWhite = position.IsWhiteToMove }
         | _ -> Some { Board.PieceType = move.Piece; Board.IsWhite = position.IsWhiteToMove }
-    let newCurrentBoard = position.CurrentBoard
-                          |> Utils.updatedSequences move.FromCoords None
-                          |> Utils.updatedSequences move.ToCoords pieceInNewCoords
-    { CurrentBoard = newCurrentBoard
+    let newBoard = position.Board
+                   |> Utils.updatedSequences move.FromCoords None
+                   |> Utils.updatedSequences move.ToCoords pieceInNewCoords
+    { Board = newBoard
       IsWhiteToMove = newIsWhiteToMove
       Castling = { WhiteKingSideCastle = newWhiteKingSideCastle
                    WhiteQueenSideCastle = newWhiteQueenSideCastle
