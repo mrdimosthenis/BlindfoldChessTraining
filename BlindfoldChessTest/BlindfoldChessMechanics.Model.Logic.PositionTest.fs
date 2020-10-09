@@ -471,3 +471,14 @@ let ``Position after third half move`` () =
                            Promotion = None }
     |> realizedPosition
     |> should equal realizedPositionAfterThirdHalfMove
+
+[<Fact>]
+let ``Movements in initial position`` () =
+    Position.init
+    |> validMoves
+    |> Seq.toArray
+    |> should equal [|{ Piece = Pawn
+                        FromCoords = (1, 4)
+                        ToCoords = (3, 4)
+                        IsCapture = false
+                        Promotion = None }|]

@@ -13,6 +13,16 @@ type Move = { Piece: Board.Piece
               IsCapture: bool
               Promotion: Board.Piece option }
 
+type Movement = { Piece: Board.Piece
+                  FromCoords: Board.Coordinates
+                  ToCoords: Board.Coordinates
+                  IsCapture: bool
+                  Promotion: Board.Piece option
+                  IsCheck: bool
+                  IsMate: bool
+                  IsStalemate: bool
+                  SamePieceCoords: Board.Coordinates option }
+
 type Castling =
     { WhiteKingSideCastle: bool
       WhiteQueenSideCastle: bool
@@ -171,26 +181,50 @@ let positionAfterMove (move: Move) (position: Position): Position =
       Halfmove = newHalfMove
       Fullmove = newFullMove }
 
-// implementation
+let validMoves (position: Position): Move seq =
+    seq {
+        for rowIndex in 0 .. 7 do
+            for columnIndex in 0 .. 7 ->
+                (rowIndex, columnIndex)
+    }
+    |> Seq.filter (fun coords ->
+                        match Board.resident coords position.Board with
+                        | Some {Board.IsWhite = isWh} when isWh = position.IsWhiteToMove -> true
+                        | _ -> false
+                  )
+    |> Seq.map (fun coords -> pieceMoves coords position)
+    |> Seq.concat
+    |> Seq.filter (fun move ->
+                        let newPos = positionAfterMove move position
+                        Board.isKingInDanger position.IsWhiteToMove newPos.Board
+                  )
 
-//let possibleMovesWithResultedPosition
-//    (coordinates: Board.Coordinates)
-//    (position: Position)
-//    : (Move * Position) seq =
-//    match Board.resident coordinates position.CurrentBoard with
-//    | Some { PieceType = piece; IsWhite = isWhite } ->
-//        position.CurrentBoard
-//        |> Board.indicesControlledByPiece coordinates
-//        |> Seq.map (fun toCoords ->
-//                        let isCapture =
-//                            match Board.resident toCoords position.CurrentBoard with
-//                            | Some _ -> true
-//                            | _ -> false
-//                        let promotion = 
-//
-//                        let nextCurrentBoard =
-//                            
-//                        let isCheck =
-//                            Board.isKingInDanger
-//                   )
-//    | _ -> raise Board.NoPieceInBoard
+let movements (position: Position): Movement seq =
+    position
+    |> validMoves
+    |> Seq.map (fun move ->
+                    let newPos = positionAfterMove move position
+                    let isCheck =
+                        Board.isKingInDanger newPos.IsWhiteToMove newPos.Board
+                    let canMove = newPos
+                                  |> validMoves
+                                  |> Seq.isEmpty
+                                  |> not
+                    let isMate = isCheck && (not canMove)
+                    let isStalemate = (not isCheck) && (not canMove)
+                    let samePieceCoords =
+                        position
+                        |> validMoves
+                        |> Seq.filter (fun m -> m.Piece = move.Piece && m.ToCoords = move.ToCoords)
+                        |> Seq.map (fun m -> m.FromCoords)
+                        |> Seq.tryHead
+                    { Piece = move.Piece
+                      FromCoords = move.FromCoords
+                      ToCoords = move.ToCoords
+                      IsCapture = move.IsCapture
+                      Promotion = move.Promotion
+                      IsCheck = isCheck
+                      IsMate = isMate
+                      IsStalemate = isStalemate
+                      SamePieceCoords= samePieceCoords }
+                )

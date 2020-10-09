@@ -290,6 +290,20 @@ let ``Coordinates cotrolled by black color`` () =
            (7, 7) |]
 
 [<Fact>]
+let ``Is white king in danger in initial board`` () =
+    init
+    |> isKingInDanger true
+    |> should equal
+        false
+
+[<Fact>]
+let ``Is black king in danger in initial board`` () =
+    init
+    |> isKingInDanger false
+    |> should equal
+        false
+
+[<Fact>]
 let ``Is white king in danger`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
