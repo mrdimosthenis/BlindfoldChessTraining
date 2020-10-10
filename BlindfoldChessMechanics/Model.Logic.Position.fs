@@ -247,3 +247,11 @@ let movements (position: Position): Movement seq =
                       IsStalemate = isStalemate
                       SamePieceCoords= samePieceCoords }
                 )
+
+let positionAfterMovement (movement: Movement) (position: Position): Position =
+    let move = { Piece = movement.Piece
+                 FromCoords = movement.FromCoords
+                 ToCoords = movement.ToCoords
+                 IsCapture = movement.IsCapture
+                 Promotion = movement.Promotion }
+    positionAfterMove move position
