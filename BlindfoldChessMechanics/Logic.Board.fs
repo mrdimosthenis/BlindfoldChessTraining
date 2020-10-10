@@ -1,4 +1,4 @@
-﻿module BlindfoldChessMechanics.Model.Logic.Board
+﻿module BlindfoldChessMechanics.Logic.Board
 
 open BlindfoldChessMechanics
 

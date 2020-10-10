@@ -1,10 +1,10 @@
-﻿module BlindfoldChessMechanics.Model.Logic.BoardTest
+﻿module BlindfoldChessMechanics.Logic.BoardTest
 
 open Xunit
 open FsUnit.Xunit
 
 open BlindfoldChessMechanics
-open BlindfoldChessMechanics.Model.Logic.Board
+open BlindfoldChessMechanics.Logic.Board
 
 let emptyBoard =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]

@@ -1,10 +1,10 @@
-﻿module BlindfoldChessMechanics.Model.Logic.PositionTest
+﻿module BlindfoldChessMechanics.Logic.PositionTest
 
 open Xunit
 open FsUnit.Xunit
 
-open BlindfoldChessMechanics.Model.Logic.Position
-open BlindfoldChessMechanics.Model.Logic.Board
+open BlindfoldChessMechanics.Logic.Position
+open BlindfoldChessMechanics.Logic.Board
 open BlindfoldChessMechanics
 
 // types

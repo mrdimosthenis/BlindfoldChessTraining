@@ -1,6 +1,6 @@
-﻿module BlindfoldChessMechanics.Model.Logic.Position
+﻿module BlindfoldChessMechanics.Logic.Position
 
-open BlindfoldChessMechanics.Model.Logic
+open BlindfoldChessMechanics.Logic
 open BlindfoldChessMechanics
 
 exception WrongPiece
