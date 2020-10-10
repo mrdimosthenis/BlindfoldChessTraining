@@ -197,6 +197,7 @@ let validMoves (position: Position): Move seq =
     |> Seq.filter (fun move ->
                         let newPos = positionAfterMove move position
                         Board.isKingInDanger position.IsWhiteToMove newPos.Board
+                        |> not
                   )
 
 let movements (position: Position): Movement seq =
@@ -215,7 +216,7 @@ let movements (position: Position): Movement seq =
                     let samePieceCoords =
                         position
                         |> validMoves
-                        |> Seq.filter (fun m -> m.Piece = move.Piece && m.ToCoords = move.ToCoords)
+                        |> Seq.filter (fun m -> m <> move && m.Piece = move.Piece && m.ToCoords = move.ToCoords)
                         |> Seq.map (fun m -> m.FromCoords)
                         |> Seq.tryHead
                     { Piece = move.Piece
