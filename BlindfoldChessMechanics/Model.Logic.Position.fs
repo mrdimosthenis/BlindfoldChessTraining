@@ -158,12 +158,28 @@ let positionAfterMove (move: Move) (position: Position): Position =
     let newFullMove = if position.IsWhiteToMove then position.Fullmove
                       else position.Fullmove + 1
     let newEnPassant =
-        if move.Piece = Board.Pawn && abs(fst move.FromCoords - fst move.ToCoords) = 2 then Some move.ToCoords
-        else None
+        if move.Piece = Board.Pawn && abs(fst move.FromCoords - fst move.ToCoords) = 2
+            then Some ((fst move.FromCoords + fst move.ToCoords)/2, snd move.ToCoords)
+        else
+            None
     let newWhiteKingSideCastle = position.Castling.WhiteKingSideCastle && move.FromCoords <> (0, 4) && move.FromCoords <> (0, 7)
     let newWhiteQueenSideCastle = position.Castling.WhiteQueenSideCastle && move.FromCoords <> (0, 4) && move.FromCoords <> (0, 0)
     let newBlackKingSideCastle = position.Castling.BlackKingSideCastle && move.FromCoords <> (7, 4) && move.FromCoords <> (7, 7)
     let newBlackQueenSideCastle = position.Castling.BlackQueenSideCastle && move.FromCoords <> (7, 4) && move.FromCoords <> (7, 0)
+    let enPassUpdatedBoard (board: Board.Board): Board.Board =
+        match (move.Piece, position.EnPassant) with
+        | (Board.Pawn, Some enPassCoords) when enPassCoords = move.ToCoords -> Utils.updatedSequences enPassCoords None board
+        | _ -> board
+    let castleUpdatedBoard (board: Board.Board): Board.Board =
+        let rook = Some {Board.PieceType = Board.Rook; Board.IsWhite = position.IsWhiteToMove}
+        match (move.Piece, snd move.FromCoords, snd move.ToCoords) with
+        | (Board.King, 4, 6) -> board
+                                |> Utils.updatedSequences (fst move.FromCoords, 7) None
+                                |> Utils.updatedSequences (fst move.FromCoords, 5) rook
+        | (Board.King, 4, 2) -> board
+                                |> Utils.updatedSequences (fst move.FromCoords, 0) None
+                                |> Utils.updatedSequences (fst move.FromCoords, 3) rook
+        | _ -> board
     let pieceInNewCoords =
         match move.Promotion with
         | Some piece -> Some { Board.PieceType = piece; Board.IsWhite = position.IsWhiteToMove }
@@ -171,6 +187,8 @@ let positionAfterMove (move: Move) (position: Position): Position =
     let newBoard = position.Board
                    |> Utils.updatedSequences move.FromCoords None
                    |> Utils.updatedSequences move.ToCoords pieceInNewCoords
+                   |> enPassUpdatedBoard
+                   |> castleUpdatedBoard
     { Board = newBoard
       IsWhiteToMove = newIsWhiteToMove
       Castling = { WhiteKingSideCastle = newWhiteKingSideCastle

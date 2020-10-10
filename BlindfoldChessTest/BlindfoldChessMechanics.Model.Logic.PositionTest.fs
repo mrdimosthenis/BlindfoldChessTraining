@@ -397,7 +397,7 @@ let realizedPositionAfterFirstHalfMove =
                    WhiteQueenSideCastle = true
                    BlackKingSideCastle = true
                    BlackQueenSideCastle = true } 
-      EnPassant = Some (3, 4)
+      EnPassant = Some (2, 4)
       Halfmove = 0
       Fullmove = 1 }
 
@@ -426,7 +426,7 @@ let realizedPositionAfterSecondHalfMove =
                    WhiteQueenSideCastle = true
                    BlackKingSideCastle = true
                    BlackQueenSideCastle = true } 
-      EnPassant = Some (4, 3)
+      EnPassant = Some (5, 3)
       Halfmove = 0
       Fullmove = 2 }
   
