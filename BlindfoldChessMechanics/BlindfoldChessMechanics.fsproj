@@ -9,6 +9,7 @@
     <Compile Include="Logic.Board.fs" />
 	<Compile Include="Logic.Position.fs" />
 	<Compile Include="Notation.Emit.fs" />
+	<Compile Include="Notation.Parse.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 
