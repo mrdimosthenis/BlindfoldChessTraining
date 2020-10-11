@@ -155,7 +155,7 @@ let ``Special black king moves without castling ability`` () =
         [||]
 
 [<Fact>]
-let ``White pawn  moves with en-passant ability`` () =
+let ``White pawn moves with en-passant ability`` () =
     { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
                 [|blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]

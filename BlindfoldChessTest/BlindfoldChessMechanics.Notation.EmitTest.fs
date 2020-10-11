@@ -6,6 +6,7 @@ open FsUnit.Xunit
 open BlindfoldChessMechanics.Notation.Emit
 open BlindfoldChessMechanics.Logic.Board
 open BlindfoldChessMechanics.Logic.Position
+open BlindfoldChessMechanics.Logic
 
 [<Fact>]
 let ``0-0 movement name`` () =
@@ -97,3 +98,81 @@ let ``♕axh2 movement name`` () =
     |> should equal
         "♕axh2"
 
+[<Fact>]
+let ``Position name of initial one`` () =
+    Position.init
+    |> positionName
+    |> should equal
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
+[<Fact>]
+let ``Position name after first half move`` () =
+    PositionTest.realizedPositionAfterFirstHalfMove
+    |> PositionTest.unrealizedPosition
+    |> positionName
+    |> should equal
+        "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
+
+[<Fact>]
+let ``Position name after second half move`` () =
+    PositionTest.realizedPositionAfterSecondHalfMove
+    |> PositionTest.unrealizedPosition
+    |> positionName
+    |> should equal
+        "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2"
+
+[<Fact>]
+let ``Position name after third half move`` () =
+    PositionTest.realizedPositionAfterThirdHalfMove
+    |> PositionTest.unrealizedPosition
+    |> positionName
+    |> should equal
+        "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
+
+[<Fact>]
+let ``Position name after forth half movement`` () =
+    PositionTest.realizedPositionAfterForthHalfMovement
+    |> PositionTest.unrealizedPosition
+    |> positionName
+    |> should equal
+        "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3"
+
+[<Fact>]
+let ``Position name after fifth half movement`` () =
+    PositionTest.realizedPositionAfterFifthHalfMovement
+    |> PositionTest.unrealizedPosition
+    |> positionName
+    |> should equal
+        "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 2 3"
+
+[<Fact>]
+let ``Position name after sixth half movement`` () =
+    PositionTest.realizedPositionAfterSixthHalfMovement
+    |> PositionTest.unrealizedPosition
+    |> positionName
+    |> should equal
+        "rnbqk2r/ppp1pppp/5n2/3P4/8/b7/PPPPBPPP/RNBQK1NR w KQkq - 3 4"
+
+[<Fact>]
+let ``Position name after sevent half movement`` () =
+    PositionTest.realizedPositionAfterSeventhHalfMovement
+    |> PositionTest.unrealizedPosition
+    |> positionName
+    |> should equal
+        "rnbqk2r/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQK1NR b KQkq - 0 4"
+
+[<Fact>]
+let ``Position name after nineth half movement`` () =
+    PositionTest.realizedPositionAfterNinenthHalfMovement
+    |> PositionTest.unrealizedPosition
+    |> positionName
+    |> should equal
+        "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQK1NR w KQ - 1 5"
+
+[<Fact>]
+let ``Position name after tenth half movement`` () =
+    PositionTest.realizedPositionAfterTenthHalfMovement
+    |> PositionTest.unrealizedPosition
+    |> positionName
+    |> should equal
+        "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQ1KNR b - - 2 5"
