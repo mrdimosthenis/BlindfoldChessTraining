@@ -54,7 +54,7 @@ let pieceName (isWhite: bool) (areFigures: bool) (p: Board.Piece): string =
     | (Board.Knight, true, false) -> "♞"
     | (Board.Pawn, true, false) -> "♟︎"
 
-let movementName (isWhite: bool) (areFigures: bool) (m: Position.Movement): string =
+let moveName (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
     match (m.Piece, snd m.FromCoords, snd m.ToCoords) with
     | (Board.King, 4, 6) -> "0-0"
     | (Board.King, 4, 2) -> "0-0-0"

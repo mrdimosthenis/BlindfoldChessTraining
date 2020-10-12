@@ -41,7 +41,7 @@ let unrealizedPosition (realizedPosition: RealizedPosition): Position =
 // tests
 
 [<Fact>]
-let ``Special white king moves with castling ability`` () =
+let ``Special white king movements with castling ability`` () =
     { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -59,7 +59,7 @@ let ``Special white king moves with castling ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> unrealizedPosition
-    |> specialKingMoves (0, 4)
+    |> specialKingMovements (0, 4)
     |> Seq.toArray
     |> should equal
         [| { Piece = King
@@ -74,7 +74,7 @@ let ``Special white king moves with castling ability`` () =
              Promotion = None } |]
 
 [<Fact>]
-let ``Special white king moves without castling ability`` () =
+let ``Special white king movements without castling ability`` () =
     { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -92,13 +92,13 @@ let ``Special white king moves without castling ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> unrealizedPosition
-    |> specialKingMoves (0, 4)
+    |> specialKingMovements (0, 4)
     |> Seq.toArray
     |> should equal
         [||]
 
 [<Fact>]
-let ``Special black king moves with castling ability`` () =
+let ``Special black king movements with castling ability`` () =
     { Board = [|[|blackRook;   emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; blackRook|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -116,7 +116,7 @@ let ``Special black king moves with castling ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> unrealizedPosition
-    |> specialKingMoves (7, 4)
+    |> specialKingMovements (7, 4)
     |> Seq.toArray
     |> should equal
         [| { Piece = King
@@ -131,7 +131,7 @@ let ``Special black king moves with castling ability`` () =
              Promotion = None } |]
 
 [<Fact>]
-let ``Special black king moves without castling ability`` () =
+let ``Special black king movements without castling ability`` () =
     { Board = [|[|blackRook;   emptySquare; emptySquare; emptySquare; blackKing;   blackBishop; emptySquare; blackRook|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -149,13 +149,13 @@ let ``Special black king moves without castling ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> unrealizedPosition
-    |> specialKingMoves (7, 4)
+    |> specialKingMovements (7, 4)
     |> Seq.toArray
     |> should equal
         [||]
 
 [<Fact>]
-let ``White pawn moves with en-passant ability`` () =
+let ``White pawn movements with en-passant ability`` () =
     { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
                 [|blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -173,7 +173,7 @@ let ``White pawn moves with en-passant ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> unrealizedPosition
-    |> pawnMoves (4, 1)
+    |> pawnMovements (4, 1)
     |> Seq.toArray
     |> should equal
         [| { Piece = Pawn
@@ -193,7 +193,7 @@ let ``White pawn moves with en-passant ability`` () =
              Promotion = None } |]
 
 [<Fact>]
-let ``White pawn moves without en-passant ability`` () =
+let ``White pawn movements without en-passant ability`` () =
     { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
                 [|blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -211,7 +211,7 @@ let ``White pawn moves without en-passant ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> unrealizedPosition
-    |> pawnMoves (4, 1)
+    |> pawnMovements (4, 1)
     |> Seq.toArray
     |> should equal
         [| { Piece = Pawn
@@ -226,7 +226,7 @@ let ``White pawn moves without en-passant ability`` () =
              Promotion = None } |]
 
 [<Fact>]
-let ``Black pawn moves with promotion ability`` () =
+let ``Black pawn movements with promotion ability`` () =
     { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
                 [|blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -244,7 +244,7 @@ let ``Black pawn moves with promotion ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> unrealizedPosition
-    |> pawnMoves (1, 6)
+    |> pawnMovements (1, 6)
     |> Seq.toArray
     |> should equal
         [| { Piece = Pawn
@@ -289,17 +289,17 @@ let ``Black pawn moves with promotion ability`` () =
              Promotion = Some Knight } |]
 
 [<Fact>]
-let ``White rook piece move in initial position`` () =
+let ``White rook piece movements in initial position`` () =
     Position.init
-    |> pieceMoves (0, 0)
+    |> pieceMovements (0, 0)
     |> Seq.toArray
     |> should equal
         [||]
 
 [<Fact>]
-let ``White knight piece move in initial position`` () =
+let ``White knight piece movements in initial position`` () =
     Position.init
-    |> pieceMoves (0, 6)
+    |> pieceMovements (0, 6)
     |> Seq.toArray
     |> should equal
         [| { Piece = Knight
@@ -314,9 +314,9 @@ let ``White knight piece move in initial position`` () =
              Promotion = None } |]
 
 [<Fact>]
-let ``White pawn piece move in initial position`` () =
+let ``White pawn piece movements in initial position`` () =
     Position.init
-    |> pieceMoves (1, 5)
+    |> pieceMovements (1, 5)
     |> Seq.toArray
     |> should equal
         [| { Piece = Pawn
@@ -331,7 +331,7 @@ let ``White pawn piece move in initial position`` () =
              Promotion = None } |]
 
 [<Fact>]
-let ``Black king piece moves`` () =
+let ``Black king piece movements`` () =
     { Board = [|[|blackRook;   emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; blackRook|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -349,7 +349,7 @@ let ``Black king piece moves`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> unrealizedPosition
-    |> pieceMoves (7, 4)
+    |> pieceMovements (7, 4)
     |> Seq.toArray
     |> should equal
         [| { Piece = King
@@ -383,7 +383,7 @@ let ``Black king piece moves`` () =
              IsCapture = false
              Promotion = None } |] 
 
-let realizedPositionAfterFirstHalfMove =
+let realizedPositionAfterFirstHalfMovement =
     { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
                 [|blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -402,17 +402,17 @@ let realizedPositionAfterFirstHalfMove =
       Fullmove = 1 }
 
 [<Fact>]
-let ``Position after first half move`` () =
+let ``Position after first half movement`` () =
     Position.init
-    |> positionAfterMove { Piece = Pawn
-                           FromCoords = (1, 4)
-                           ToCoords = (3, 4)
-                           IsCapture = false
-                           Promotion = None }
+    |> positionAfterMovement { Piece = Pawn
+                               FromCoords = (1, 4)
+                               ToCoords = (3, 4)
+                               IsCapture = false
+                               Promotion = None }
     |> realizedPosition
-    |> should equal realizedPositionAfterFirstHalfMove
+    |> should equal realizedPositionAfterFirstHalfMovement
 
-let realizedPositionAfterSecondHalfMove =
+let realizedPositionAfterSecondHalfMovement =
     { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
                 [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -431,18 +431,18 @@ let realizedPositionAfterSecondHalfMove =
       Fullmove = 2 }
   
 [<Fact>]
-let ``Position after second half move`` () =
-    realizedPositionAfterFirstHalfMove
+let ``Position after second half movement`` () =
+    realizedPositionAfterFirstHalfMovement
     |> unrealizedPosition
-    |> positionAfterMove { Piece = Pawn
-                           FromCoords = (6, 3)
-                           ToCoords = (4, 3)
-                           IsCapture = false
-                           Promotion = None }
+    |> positionAfterMovement { Piece = Pawn
+                               FromCoords = (6, 3)
+                               ToCoords = (4, 3)
+                               IsCapture = false
+                               Promotion = None }
     |> realizedPosition
-    |> should equal realizedPositionAfterSecondHalfMove
+    |> should equal realizedPositionAfterSecondHalfMovement
 
-let realizedPositionAfterThirdHalfMove =
+let realizedPositionAfterThirdHalfMovement =
     { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
                 [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -461,21 +461,21 @@ let realizedPositionAfterThirdHalfMove =
       Fullmove = 2 }
 
 [<Fact>]
-let ``Position after third half move`` () =
-    realizedPositionAfterSecondHalfMove
+let ``Position after third half movement`` () =
+    realizedPositionAfterSecondHalfMovement
     |> unrealizedPosition
-    |> positionAfterMove { Piece = Pawn
-                           FromCoords = (3, 4)
-                           ToCoords = (4, 3)
-                           IsCapture = true
-                           Promotion = None }
+    |> positionAfterMovement { Piece = Pawn
+                               FromCoords = (3, 4)
+                               ToCoords = (4, 3)
+                               IsCapture = true
+                               Promotion = None }
     |> realizedPosition
-    |> should equal realizedPositionAfterThirdHalfMove
+    |> should equal realizedPositionAfterThirdHalfMovement
 
 [<Fact>]
-let ``Movements in initial position`` () =
+let ``Moves in initial position`` () =
     Position.init
-    |> movements
+    |> moves
     |> Seq.toArray
     |> should equal [| { Piece = Knight
                          FromCoords = (0, 1)
@@ -658,7 +658,7 @@ let ``Movements in initial position`` () =
                          IsStalemate = false
                          SamePieceCoords = None } |]
 
-let realizedPositionAfterForthHalfMovement =
+let realizedPositionAfterForthHalfMove =
     { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
                 [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
@@ -677,22 +677,22 @@ let realizedPositionAfterForthHalfMovement =
       Fullmove = 3 }
 
 [<Fact>]
-let ``Position after forth half movement`` () =
-    realizedPositionAfterThirdHalfMove
+let ``Position after forth half move`` () =
+    realizedPositionAfterThirdHalfMovement
     |> unrealizedPosition
-    |> positionAfterMovement { Piece = Knight
-                               FromCoords = (7, 6)
-                               ToCoords = (5, 5)
-                               IsCapture = false
-                               Promotion = None
-                               IsCheck = false
-                               IsMate = false
-                               IsStalemate = false
-                               SamePieceCoords = None }    
+    |> positionAfterMove { Piece = Knight
+                           FromCoords = (7, 6)
+                           ToCoords = (5, 5)
+                           IsCapture = false
+                           Promotion = None
+                           IsCheck = false
+                           IsMate = false
+                           IsStalemate = false
+                           SamePieceCoords = None }    
     |> realizedPosition
-    |> should equal realizedPositionAfterForthHalfMovement
+    |> should equal realizedPositionAfterForthHalfMove
 
-let realizedPositionAfterFifthHalfMovement =
+let realizedPositionAfterFifthHalfMove =
     { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
                 [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
@@ -711,22 +711,22 @@ let realizedPositionAfterFifthHalfMovement =
       Fullmove = 3 }
 
 [<Fact>]
-let ``Position after fifth half movement`` () =
-    realizedPositionAfterForthHalfMovement
+let ``Position after fifth half move`` () =
+    realizedPositionAfterForthHalfMove
     |> unrealizedPosition
-    |> positionAfterMovement { Piece = Bishop
-                               FromCoords = (0, 5)
-                               ToCoords = (1, 4)
-                               IsCapture = false
-                               Promotion = None
-                               IsCheck = false
-                               IsMate = false
-                               IsStalemate = false
-                               SamePieceCoords = None }    
+    |> positionAfterMove { Piece = Bishop
+                           FromCoords = (0, 5)
+                           ToCoords = (1, 4)
+                           IsCapture = false
+                           Promotion = None
+                           IsCheck = false
+                           IsMate = false
+                           IsStalemate = false
+                           SamePieceCoords = None }    
     |> realizedPosition
-    |> should equal realizedPositionAfterFifthHalfMovement
+    |> should equal realizedPositionAfterFifthHalfMove
 
-let realizedPositionAfterSixthHalfMovement =
+let realizedPositionAfterSixthHalfMove =
     { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   emptySquare; emptySquare; blackRook|]
                 [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
@@ -745,22 +745,22 @@ let realizedPositionAfterSixthHalfMovement =
       Fullmove = 4 }
 
 [<Fact>]
-let ``Position after sixth half movement`` () =
-    realizedPositionAfterFifthHalfMovement
+let ``Position after sixth half move`` () =
+    realizedPositionAfterFifthHalfMove
     |> unrealizedPosition
-    |> positionAfterMovement { Piece = Bishop
-                               FromCoords = (7, 5)
-                               ToCoords = (2, 0)
-                               IsCapture = false
-                               Promotion = None
-                               IsCheck = false
-                               IsMate = false
-                               IsStalemate = false
-                               SamePieceCoords = None }    
+    |> positionAfterMove { Piece = Bishop
+                           FromCoords = (7, 5)
+                           ToCoords = (2, 0)
+                           IsCapture = false
+                           Promotion = None
+                           IsCheck = false
+                           IsMate = false
+                           IsStalemate = false
+                           SamePieceCoords = None }    
     |> realizedPosition
-    |> should equal realizedPositionAfterSixthHalfMovement
+    |> should equal realizedPositionAfterSixthHalfMove
 
-let realizedPositionAfterSeventhHalfMovement =
+let realizedPositionAfterSeventhHalfMove =
     { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   emptySquare; emptySquare; blackRook|]
                 [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
@@ -779,22 +779,22 @@ let realizedPositionAfterSeventhHalfMovement =
       Fullmove = 4 }
 
 [<Fact>]
-let ``Position after seventh half movement`` () =
-    realizedPositionAfterSixthHalfMovement
+let ``Position after seventh half move`` () =
+    realizedPositionAfterSixthHalfMove
     |> unrealizedPosition
-    |> positionAfterMovement { Piece = Pawn
-                               FromCoords = (1, 1)
-                               ToCoords = (2, 0)
-                               IsCapture = true
-                               Promotion = None
-                               IsCheck = false
-                               IsMate = false
-                               IsStalemate = false
-                               SamePieceCoords = None }    
+    |> positionAfterMove { Piece = Pawn
+                           FromCoords = (1, 1)
+                           ToCoords = (2, 0)
+                           IsCapture = true
+                           Promotion = None
+                           IsCheck = false
+                           IsMate = false
+                           IsStalemate = false
+                           SamePieceCoords = None }    
     |> realizedPosition
-    |> should equal realizedPositionAfterSeventhHalfMovement
+    |> should equal realizedPositionAfterSeventhHalfMove
 
-let realizedPositionAfterNinenthHalfMovement =
+let realizedPositionAfterNinenthHalfMove =
     { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  emptySquare; blackRook;   blackKing;   emptySquare|]
                 [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
@@ -813,22 +813,22 @@ let realizedPositionAfterNinenthHalfMovement =
       Fullmove = 5 }
 
 [<Fact>]
-let ``Position after ninenth half movement`` () =
-    realizedPositionAfterSeventhHalfMovement
+let ``Position after ninenth half move`` () =
+    realizedPositionAfterSeventhHalfMove
     |> unrealizedPosition
-    |> positionAfterMovement { Piece = King
-                               FromCoords = (7, 4)
-                               ToCoords = (7, 6)
-                               IsCapture = false
-                               Promotion = None
-                               IsCheck = false
-                               IsMate = false
-                               IsStalemate = false
-                               SamePieceCoords = None }    
+    |> positionAfterMove { Piece = King
+                           FromCoords = (7, 4)
+                           ToCoords = (7, 6)
+                           IsCapture = false
+                           Promotion = None
+                           IsCheck = false
+                           IsMate = false
+                           IsStalemate = false
+                           SamePieceCoords = None }    
     |> realizedPosition
-    |> should equal realizedPositionAfterNinenthHalfMovement
+    |> should equal realizedPositionAfterNinenthHalfMove
 
-let realizedPositionAfterTenthHalfMovement =
+let realizedPositionAfterTenthHalfMove =
     { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  emptySquare; blackRook;   blackKing;   emptySquare|]
                 [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
                 [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
@@ -847,17 +847,17 @@ let realizedPositionAfterTenthHalfMovement =
       Fullmove = 5 }
 
 [<Fact>]
-let ``Position after tenth half movement`` () =
-    realizedPositionAfterNinenthHalfMovement
+let ``Position after tenth half move`` () =
+    realizedPositionAfterNinenthHalfMove
     |> unrealizedPosition
-    |> positionAfterMovement { Piece = King
-                               FromCoords = (0, 4)
-                               ToCoords = (0, 5)
-                               IsCapture = false
-                               Promotion = None
-                               IsCheck = false
-                               IsMate = false
-                               IsStalemate = false
-                               SamePieceCoords = None }    
+    |> positionAfterMove { Piece = King
+                           FromCoords = (0, 4)
+                           ToCoords = (0, 5)
+                           IsCapture = false
+                           Promotion = None
+                           IsCheck = false
+                           IsMate = false
+                           IsStalemate = false
+                           SamePieceCoords = None }    
     |> realizedPosition
-    |> should equal realizedPositionAfterTenthHalfMovement
+    |> should equal realizedPositionAfterTenthHalfMove
