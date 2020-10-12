@@ -8,10 +8,10 @@ exception InvalidColumn
 
 // functions
 
-let rowName(r: int): string =
+let rowText(r: int): string =
     string (r + 1)
 
-let columnName(c: int): string =
+let columnText(c: int): string =
     match c with
     | 0 -> "a"
     | 1 -> "b"
@@ -23,11 +23,11 @@ let columnName(c: int): string =
     | 7 -> "h"
     | _ -> raise InvalidColumn
 
-let coordinatesName (coords: Board.Coordinates): String =
+let coordinatesText (coords: Board.Coordinates): String =
     let (r, c) = coords
-    columnName c + rowName r
+    columnText c + rowText r
 
-let pieceName (isWhite: bool) (areFigures: bool) (p: Board.Piece): string =
+let pieceText (isWhite: bool) (areFigures: bool) (p: Board.Piece): string =
     match (p, areFigures, isWhite) with
     | (Board.King, false, true) -> "K"
     | (Board.Queen, false, true) -> "Q"
@@ -54,31 +54,31 @@ let pieceName (isWhite: bool) (areFigures: bool) (p: Board.Piece): string =
     | (Board.Knight, true, false) -> "♞"
     | (Board.Pawn, true, false) -> "♟︎"
 
-let moveName (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
+let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
     match (m.Piece, snd m.FromCoords, snd m.ToCoords) with
     | (Board.King, 4, 6) -> "0-0"
     | (Board.King, 4, 2) -> "0-0-0"
     | _ -> let piece = match m.Piece with
                        | Board.Pawn -> ""
                        | _ -> m.Piece
-                              |> pieceName isWhite areFigures
+                              |> pieceText isWhite areFigures
                               |> String.map Char.ToUpper
            let clarification =
                match (m.Piece, m.SamePieceCoords) with
                | (Board.Pawn, _) -> m.FromCoords
                                     |> snd
-                                    |> columnName
+                                    |> columnText
                | (_, Some (_, c)) when c = (snd m.FromCoords) -> m.FromCoords
                                                                  |> fst
-                                                                 |> rowName
+                                                                 |> rowText
                | (_, Some _) -> m.FromCoords
                                 |> snd
-                                |> columnName
+                                |> columnText
                | _ -> ""
            let takes = if m.IsCapture then "x" else ""
-           let targetSquare = coordinatesName m.ToCoords
+           let targetSquare = coordinatesText m.ToCoords
            let promotion = match m.Promotion with
-                           | Some p -> pieceName isWhite areFigures p
+                           | Some p -> pieceText isWhite areFigures p
                                        |> String.map Char.ToUpper
                                        |> (+) "="
                            | None -> ""
@@ -101,13 +101,13 @@ let rowFEN (row: Board.Resident seq): string =
                        | (None, Some i) ->
                             (accStr, Some (i + 1))
                        | (Some p: Board.Resident, _) ->
-                            (accStr + remaining accNumOpt + pieceName p.IsWhite false p.PieceType, None)
+                            (accStr + remaining accNumOpt + pieceText p.IsWhite false p.PieceType, None)
                  )
                  ("", None)
                  row
     lastAccStr + remaining lastAccNumOpt
 
-let positionName (position: Position.Position): string =
+let positionText (position: Position.Position): string =
     let board = position.Board
                 |> Seq.rev
                 |> Seq.map rowFEN
@@ -124,7 +124,7 @@ let positionName (position: Position.Position): string =
                    |> String.concat ""
                    |> (fun s -> if s = "" then "-" else s)
     let enPassant = match position.EnPassant with
-                    | Some coords -> coordinatesName coords
+                    | Some coords -> coordinatesText coords
                     | None -> "-"
     let halfMove = string position.Halfmove
     let fullMove = string position.Fullmove
