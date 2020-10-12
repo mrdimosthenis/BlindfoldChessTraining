@@ -1,9 +1,9 @@
-﻿module BlindfoldChessMechanics.Notation.ParseTest
+﻿module BlindfoldChessMechanics.Notation.ParserTest
 
 open Xunit
 open FsUnit.Xunit
 
-open BlindfoldChessMechanics.Notation.Parse
+open BlindfoldChessMechanics.Notation.Parser
 
 [<Fact>]
 let ``Parse text of meta tags`` () =

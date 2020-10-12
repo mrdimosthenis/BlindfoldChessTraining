@@ -1,4 +1,4 @@
-﻿module BlindfoldChessMechanics.Notation.Parse
+﻿module BlindfoldChessMechanics.Notation.Parser
 
 open System.Text.RegularExpressions
 

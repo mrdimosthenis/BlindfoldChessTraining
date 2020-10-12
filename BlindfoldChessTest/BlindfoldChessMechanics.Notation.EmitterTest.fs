@@ -1,9 +1,9 @@
-﻿module BlindfoldChessMechanics.Notation.EmitTest
+﻿module BlindfoldChessMechanics.Notation.EmitterTest
 
 open Xunit
 open FsUnit.Xunit
 
-open BlindfoldChessMechanics.Notation.Emit
+open BlindfoldChessMechanics.Notation.Emitter
 open BlindfoldChessMechanics.Logic.Board
 open BlindfoldChessMechanics.Logic.Position
 open BlindfoldChessMechanics.Logic

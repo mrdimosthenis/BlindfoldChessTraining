@@ -1,4 +1,4 @@
-﻿module BlindfoldChessMechanics.Notation.Emit
+﻿module BlindfoldChessMechanics.Notation.Emitter
 
 open BlindfoldChessMechanics.Logic
 
