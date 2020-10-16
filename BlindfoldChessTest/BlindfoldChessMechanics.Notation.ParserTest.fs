@@ -4,6 +4,7 @@ open Xunit
 open FsUnit.Xunit
 
 open BlindfoldChessMechanics.Notation.Parser
+open BlindfoldChessMechanics.Logic
 
 [<Fact>]
 let ``Parse text of meta tags`` () =
@@ -145,3 +146,83 @@ let ``Parse text of moves`` () =
            "Ke1"; "Ke4"
            "Rxa5"; "Kf3"
            "Rxc5"; "Rc2" |]
+
+[<Fact>]
+let ``Fen of initial position`` () =
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        (PositionTest.realizedPosition Position.init)
+
+[<Fact>]
+let ``Fen of position after first half movement`` () =
+    "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterFirstHalfMovement
+
+[<Fact>]
+let ``Fen of position after second half movement`` () =
+    "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterSecondHalfMovement
+
+[<Fact>]
+let ``Fen of position after third half movement`` () =
+    "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterThirdHalfMovement
+
+[<Fact>]
+let ``Fen of position after forth half move`` () =
+    "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterForthHalfMove
+
+[<Fact>]
+let ``Fen of position after fifth half move`` () =
+    "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 2 3"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterFifthHalfMove
+
+[<Fact>]
+let ``Fen of position after sixth half move`` () =
+    "rnbqk2r/ppp1pppp/5n2/3P4/8/b7/PPPPBPPP/RNBQK1NR w KQkq - 3 4"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterSixthHalfMove
+
+[<Fact>]
+let ``Fen of position after sevent half move`` () =
+    "rnbqk2r/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQK1NR b KQkq - 0 4"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterSeventhHalfMove
+
+[<Fact>]
+let ``Fen of position after nineth half move`` () =
+    "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQK1NR w KQ - 1 5"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterNinenthHalfMove
+
+[<Fact>]
+let ``Fen of position after tenth half move`` () =
+    "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQ1KNR b - - 2 5"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterTenthHalfMove

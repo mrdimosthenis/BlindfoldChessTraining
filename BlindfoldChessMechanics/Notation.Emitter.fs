@@ -23,7 +23,7 @@ let columnText(c: int): string =
     | 7 -> "h"
     | _ -> raise InvalidColumn
 
-let coordinatesText (coords: Board.Coordinates): String =
+let coordinatesText (coords: Board.Coordinates): string =
     let (r, c) = coords
     columnText c + rowText r
 
