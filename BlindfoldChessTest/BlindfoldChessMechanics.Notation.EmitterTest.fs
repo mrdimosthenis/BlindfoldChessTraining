@@ -176,3 +176,16 @@ let ``Position text after tenth half move`` () =
     |> positionText
     |> should equal
         "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQ1KNR b - - 2 5"
+
+//[<Fact>]
+//let ``Game text`` () =
+//    { MetaTags = Map.ofArray [| ("White", "me"), ("Black", "you") |]
+//      InitialPosition = Position.init
+//      Moves = Seq.ofArray [| PositionTest.
+//                            |]
+//      Result: NotedResult option }
+//    |> PositionTest.unrealizedPosition
+//    |> positionText
+//    |> should equal
+//        "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQ1KNR b - - 2 5"
+

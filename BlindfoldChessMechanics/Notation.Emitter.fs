@@ -130,3 +130,44 @@ let positionText (position: Position.Position): string =
     let fullMove = string position.Fullmove
     sprintf "%s %s %s %s %s %s" board color castling enPassant halfMove fullMove
 
+let metaTagsText(metaTags: Map<string,string>): string =
+    let lines = metaTags
+                |> Map.toSeq
+                |> Seq.map (fun (k, v) ->
+                             sprintf """[%s "%s"]""" k v
+                           )
+    String.Join("/n", lines)
+
+let gameText (game: Game.Game): string =
+    let metaTags = metaTagsText(game.MetaTags)
+    let isWhiteToMove = match game.MetaTags.TryFind("FEN") with
+                        | None -> true
+                        | Some fen -> Parser.textOfFen(fen).IsWhiteToMove
+    let indices = Seq.initInfinite (fun i -> [| i + 1; i + 1 |])
+                  |> Seq.map Seq.ofArray
+                  |> Seq.concat
+                  |> (if isWhiteToMove then id else Seq.tail)
+    let isWhiteToMoveBools = Seq.initInfinite (fun _ ->
+                                                if isWhiteToMove then [| true; false |]
+                                                else [| false; true |]
+                                              )
+                             |> Seq.map Seq.ofArray
+                             |> Seq.concat
+    let moves = Seq.map3 (fun i b m ->
+                            sprintf "%i%s %s"
+                                    i
+                                    (if b then "." else "...")
+                                    (moveText true false m)
+                         )
+                         indices
+                         isWhiteToMoveBools
+                         game.Moves
+    let result = match game.Result with
+                 | None -> ""
+                 | Some Game.White -> "1-0"
+                 | Some Game.Black -> "0-1"
+                 | Some Game.Draw -> "1/2-1/2"
+    sprintf "%s/n/n%s %s"
+            metaTags
+            (String.Join(" ", moves))
+            result
