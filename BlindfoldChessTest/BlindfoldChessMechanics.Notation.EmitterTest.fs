@@ -162,30 +162,39 @@ let ``Position text after sevent half move`` () =
         "rnbqk2r/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQK1NR b KQkq - 0 4"
 
 [<Fact>]
-let ``Position text after nineth half move`` () =
-    PositionTest.realizedPositionAfterNinenthHalfMove
+let ``Position text after eighth half move`` () =
+    PositionTest.realizedPositionAfterEighthHalfMove
     |> PositionTest.unrealizedPosition
     |> positionText
     |> should equal
         "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQK1NR w KQ - 1 5"
 
 [<Fact>]
-let ``Position text after tenth half move`` () =
-    PositionTest.realizedPositionAfterTenthHalfMove
+let ``Position text after ninth half move`` () =
+    PositionTest.realizedPositionAfterNinthHalfMove
     |> PositionTest.unrealizedPosition
     |> positionText
     |> should equal
         "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQ1KNR b - - 2 5"
 
-//[<Fact>]
-//let ``Game text`` () =
-//    { MetaTags = Map.ofArray [| ("White", "me"), ("Black", "you") |]
-//      InitialPosition = Position.init
-//      Moves = Seq.ofArray [| PositionTest.
-//                            |]
-//      Result: NotedResult option }
-//    |> PositionTest.unrealizedPosition
-//    |> positionText
-//    |> should equal
-//        "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQ1KNR b - - 2 5"
-
+[<Fact>]
+let ``Game text`` () =
+    { Game.MetaTags = Map.ofArray [| ("White", "me"); ("Black", "you") |]
+      Game.InitialPosition = PositionTest.realizedPositionAfterThirdHalfMovement
+                             |> PositionTest.unrealizedPosition
+      Game.Moves = Seq.ofArray [| PositionTest.forthHalfMove
+                                  PositionTest.fifthHalfMove
+                                  PositionTest.sixthHalfMove
+                                  PositionTest.seventhHalfMove
+                                  PositionTest.eighthHalfMove
+                                  PositionTest.ninthHalfMove |]
+      Game.Result = Some Game.Draw }
+    |> gameText
+    |> should equal
+    <|String.concat "\n"
+        [| """[FEN "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"]"""
+           """[Black "you"]"""
+           """[White "me"]"""
+           ""
+           "1... Nf6 2. Be2 Ba3 3. bxa3 0-0 4. Kf1 1/2-1/2" |]
+        

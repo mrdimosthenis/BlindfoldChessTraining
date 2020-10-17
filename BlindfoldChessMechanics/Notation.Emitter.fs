@@ -4,8 +4,6 @@ open BlindfoldChessMechanics.Logic
 
 open System
 
-exception InvalidColumn
-
 // functions
 
 let rowText(r: int): string =
@@ -21,7 +19,7 @@ let columnText(c: int): string =
     | 5 -> "f"
     | 6 -> "g"
     | 7 -> "h"
-    | _ -> raise InvalidColumn
+    | _ -> raise Parser.InvalidColumn
 
 let coordinatesText (coords: Board.Coordinates): string =
     let (r, c) = coords
@@ -130,19 +128,22 @@ let positionText (position: Position.Position): string =
     let fullMove = string position.Fullmove
     sprintf "%s %s %s %s %s %s" board color castling enPassant halfMove fullMove
 
-let metaTagsText(metaTags: Map<string,string>): string =
+let metaTagsText(fen: string, metaTags: Map<string,string>): string =
+    let fenKVs = if fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" then Array.empty
+                 else [| ("FEN", fen) |]
+                 |> Seq.ofArray
     let lines = metaTags
                 |> Map.toSeq
+                |> Seq.append fenKVs
                 |> Seq.map (fun (k, v) ->
                              sprintf """[%s "%s"]""" k v
                            )
-    String.Join("/n", lines)
+    String.Join("\n", lines)
 
 let gameText (game: Game.Game): string =
-    let metaTags = metaTagsText(game.MetaTags)
-    let isWhiteToMove = match game.MetaTags.TryFind("FEN") with
-                        | None -> true
-                        | Some fen -> Parser.textOfFen(fen).IsWhiteToMove
+    let fen = positionText(game.InitialPosition)
+    let metaTags = metaTagsText(fen, game.MetaTags)
+    let isWhiteToMove = game.InitialPosition.IsWhiteToMove
     let indices = Seq.initInfinite (fun i -> [| i + 1; i + 1 |])
                   |> Seq.map Seq.ofArray
                   |> Seq.concat
@@ -154,10 +155,12 @@ let gameText (game: Game.Game): string =
                              |> Seq.map Seq.ofArray
                              |> Seq.concat
     let moves = Seq.map3 (fun i b m ->
-                            sprintf "%i%s %s"
-                                    i
-                                    (if b then "." else "...")
-                                    (moveText true false m)
+                            let d = match (b, i) with
+                                    | (true, _) -> sprintf "%i. " i
+                                    | (false, 1) -> sprintf "%i... " i
+                                    | (false, _) -> ""
+                            let m = moveText true false m
+                            d + m
                          )
                          indices
                          isWhiteToMoveBools
@@ -167,7 +170,7 @@ let gameText (game: Game.Game): string =
                  | Some Game.White -> "1-0"
                  | Some Game.Black -> "0-1"
                  | Some Game.Draw -> "1/2-1/2"
-    sprintf "%s/n/n%s %s"
+    sprintf "%s\n\n%s %s"
             metaTags
             (String.Join(" ", moves))
             result

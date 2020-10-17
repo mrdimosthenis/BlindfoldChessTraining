@@ -217,7 +217,7 @@ let ``Fen of position after nineth half move`` () =
     |> textOfFen
     |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterNinenthHalfMove
+        PositionTest.realizedPositionAfterEighthHalfMove
 
 [<Fact>]
 let ``Fen of position after tenth half move`` () =
@@ -225,4 +225,4 @@ let ``Fen of position after tenth half move`` () =
     |> textOfFen
     |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterTenthHalfMove
+        PositionTest.realizedPositionAfterNinthHalfMove

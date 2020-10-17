@@ -4,6 +4,10 @@ open BlindfoldChessMechanics.Logic
 
 open System.Text.RegularExpressions
 
+exception InvalidColumn
+
+// functions
+
 let textOfRow(r: string): int =
     int r - 1
 
@@ -17,7 +21,7 @@ let textOfColumn(c: string): int =
     | "f" -> 5
     | "g" -> 6
     | "h" -> 7
-    | _ -> raise Emitter.InvalidColumn
+    | _ -> raise InvalidColumn
 
 let textOfcoordinates(coords: string): Board.Coordinates =
     let r = textOfRow coords.[1..1]
