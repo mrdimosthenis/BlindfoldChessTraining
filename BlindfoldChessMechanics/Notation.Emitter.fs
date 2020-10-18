@@ -158,10 +158,10 @@ let gameText (game: Game.Game): string =
                              |> Seq.map Seq.ofArray
                              |> Seq.concat
     let moves = Seq.map3 (fun i b m ->
-                            let d = match (b, i) with
-                                    | (true, _) -> sprintf "%i. " i
-                                    | (false, 1) -> sprintf "%i... " i
-                                    | (false, _) -> ""
+                            let d = match (b, i, isWhiteToMove) with
+                                    | (true, _, _) -> sprintf "%i. " i
+                                    | (false, 1, false) -> sprintf "%i... " i
+                                    | (false, _, _) -> ""
                             let m = moveText true false m
                             d + m
                          )
@@ -173,7 +173,7 @@ let gameText (game: Game.Game): string =
                  | Some Game.White -> "1-0"
                  | Some Game.Black -> "0-1"
                  | Some Game.Draw -> "1/2-1/2"
-    sprintf "%s\n\n%s %s"
+    sprintf "%s\n\n%s  %s"
             metaTags
             (String.Join(" ", moves))
             result

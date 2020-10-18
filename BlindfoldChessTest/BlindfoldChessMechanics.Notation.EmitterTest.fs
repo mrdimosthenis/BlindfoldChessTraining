@@ -213,5 +213,5 @@ let ``Game text`` () =
            """[Black "you"]"""
            """[White "me"]"""
            ""
-           "1... Nf6 2. Be2 e6 3. h4 Ba3 4. bxa3 O-O 5. Kf1 1/2-1/2" |]
+           "1... Nf6 2. Be2 e6 3. h4 Ba3 4. bxa3 O-O 5. Kf1  1/2-1/2" |]
         
