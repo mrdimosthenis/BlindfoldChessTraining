@@ -286,3 +286,10 @@ let ``Text of game`` () =
                      PositionTest.tenthHalfMove
                      PositionTest.eleventHalfMove |]
           Result = (Some Game.Draw) }
+
+[<Fact>]
+let ``File of games`` () =
+    @"C:\Users\MrDIM\Source\Repos\BlindfoldChessTraining\BlindfoldChessTest\resources\GameCollection.pgn"
+    |> fileOfGames
+    |> should equal
+        Seq.empty

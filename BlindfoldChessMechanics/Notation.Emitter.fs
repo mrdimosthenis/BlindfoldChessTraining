@@ -3,6 +3,7 @@
 open BlindfoldChessMechanics.Logic
 
 open System
+open System.IO
 
 exception InvalidColumn of string
 
@@ -56,8 +57,8 @@ let pieceText (isWhite: bool) (areFigures: bool) (p: Board.Piece): string =
 
 let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
     match (m.Piece, snd m.FromCoords, snd m.ToCoords) with
-    | (Board.King, 4, 6) -> "0-0"
-    | (Board.King, 4, 2) -> "0-0-0"
+    | (Board.King, 4, 6) -> "O-O"
+    | (Board.King, 4, 2) -> "O-O-O"
     | _ -> let piece = match m.Piece with
                        | Board.Pawn -> ""
                        | _ -> m.Piece
@@ -176,3 +177,13 @@ let gameText (game: Game.Game): string =
             metaTags
             (String.Join(" ", moves))
             result
+
+let gamesFile(filePath: string, games: Game.Game seq): unit =
+    let w = File.AppendText(filePath)
+    Seq.iter (fun g->
+                w.WriteLine()
+                w.WriteLine(gameText g)
+                w.WriteLine()
+             )
+             games
+    w.Close()
