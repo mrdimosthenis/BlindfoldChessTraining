@@ -9,8 +9,8 @@
     <Compile Include="Logic.Board.fs" />
 	<Compile Include="Logic.Position.fs" />
 	<Compile Include="Logic.Game.fs" />
-	<Compile Include="Notation.Parser.fs" />
 	<Compile Include="Notation.Emitter.fs" />
+	<Compile Include="Notation.Parser.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 

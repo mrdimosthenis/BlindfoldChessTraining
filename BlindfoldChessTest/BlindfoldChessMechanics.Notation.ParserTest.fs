@@ -6,6 +6,23 @@ open FsUnit.Xunit
 open BlindfoldChessMechanics.Notation.Parser
 open BlindfoldChessMechanics.Logic
 
+// types
+
+type RealizedGame = { MetaTags: (string * string) array
+                      InitialPosition: PositionTest.RealizedPosition
+                      Moves: Position.Move array
+                      Result: Game.NotedResult option }
+
+// functions
+
+let realizedGame (game: Game.Game): RealizedGame =
+    { MetaTags = Map.toArray game.MetaTags
+      InitialPosition = PositionTest.realizedPosition game.InitialPosition
+      Moves = Seq.toArray game.Moves
+      Result = game.Result }
+
+// tests
+
 [<Fact>]
 let ``Parse text of meta tags`` () =
     """[Event "Rated Blitz game"]
@@ -229,3 +246,25 @@ let ``Fen of position after tenth half move`` () =
     |> PositionTest.realizedPosition
     |> should equal
         PositionTest.realizedPositionAfterNinthHalfMove
+
+[<Fact>]
+let ``Text of game`` () =
+    """[FEN "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"]
+[Black "you"]
+[White "me"]
+
+1... Nf6 2. Be2 Ba3 3. bxa3 0-0 4. Kf1 1/2-1/2"""
+    |> textOfGame
+    |> realizedGame
+    |> should equal
+        { MetaTags = [| ("Black", "you")
+                        ("FEN", "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2")
+                        ("White", "me") |]
+          InitialPosition = PositionTest.realizedPositionAfterThirdHalfMovement
+          Moves = [| PositionTest.forthHalfMove
+                     PositionTest.fifthHalfMove
+                     PositionTest.sixthHalfMove
+                     PositionTest.seventhHalfMove
+                     PositionTest.eighthHalfMove
+                     PositionTest.ninthHalfMove |]
+          Result = (Some Game.Draw) }

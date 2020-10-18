@@ -4,6 +4,8 @@ open BlindfoldChessMechanics.Logic
 
 open System
 
+exception InvalidColumn of string
+
 // functions
 
 let rowText(r: int): string =
@@ -19,7 +21,7 @@ let columnText(c: int): string =
     | 5 -> "f"
     | 6 -> "g"
     | 7 -> "h"
-    | _ -> c |> string |> Parser.InvalidColumn |> raise
+    | _ -> c |> string |> InvalidColumn |> raise
 
 let coordinatesText (coords: Board.Coordinates): string =
     let (r, c) = coords

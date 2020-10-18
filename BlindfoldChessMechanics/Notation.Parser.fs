@@ -1,10 +1,11 @@
 ﻿module BlindfoldChessMechanics.Notation.Parser
 
 open BlindfoldChessMechanics.Logic
+open BlindfoldChessMechanics
 
 open System.Text.RegularExpressions
 
-exception InvalidColumn of string
+exception InvalidMove of string
 
 // functions
 
@@ -21,7 +22,7 @@ let textOfColumn(c: string): int =
     | "f" -> 5
     | "g" -> 6
     | "h" -> 7
-    | _ -> raise (InvalidColumn c)
+    | _ -> raise (Emitter.InvalidColumn c)
 
 let textOfcoordinates(coords: string): Board.Coordinates =
     let r = textOfRow coords.[1..1]
@@ -102,3 +103,29 @@ let textOfFen (text: string): Position.Position =
       EnPassant = enPassant
       Halfmove = halfMove
       Fullmove = fullMove }
+
+let textOfGame (text: string): Game.Game =
+    let metaTags = textOfMetaTags text
+    let initialPosition = metaTags.TryFind("FEN")
+                          |> Option.map textOfFen
+                          |> Option.defaultValue Position.init
+    let (moves, result) = textOfMovesWithResult text
+    let validatedMoves =
+            moves
+            |> Seq.fold (fun (accPos, accMvs) m ->
+                            let validMoves = Position.moves accPos
+                            match Seq.tryFind (fun vm -> Emitter.moveText true false vm = m) validMoves with
+                            | Some vm ->
+                                let nextAccPos = Position.positionAfterMove vm accPos
+                                let nextAccMvs = Utils.prependedSeq vm accMvs
+                                (nextAccPos, nextAccMvs)
+                            | None ->
+                                raise (InvalidMove m)
+                        )
+                        (initialPosition, Seq.empty)
+            |> snd
+            |> Seq.rev
+    { MetaTags = metaTags
+      InitialPosition = initialPosition
+      Moves = validatedMoves
+      Result = result }

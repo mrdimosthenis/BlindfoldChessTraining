@@ -702,7 +702,7 @@ let fifthHalfMove = { Piece = Bishop
                       IsCheck = false
                       IsMate = false
                       IsStalemate = false
-                      SamePieceCoords = None } 
+                      SamePieceCoords = None }
 
 let realizedPositionAfterFifthHalfMove =
     { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
