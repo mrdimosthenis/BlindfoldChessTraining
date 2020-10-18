@@ -38,15 +38,21 @@ let textOfMetaTags (text: string): Map<string,string> =
     |> Seq.map (fun g -> (groupVal 1 g, groupVal 2 g))
     |> Map.ofSeq
     
-let textOfMoves (text: string): string seq =
-    let justMoves = Regex.Replace(text, "\([^)]+\)|\[[^\]]+\]|\{[^}]+\}|\d+\.+", "")
-    Regex.Split(justMoves, "\s+")
-    |> Seq.ofArray
-    |> Seq.filter (fun m ->
-                        match m with
-                        | "" | "1-0" | "0-1" | "1/2-1/2" -> false
-                        | _ -> true
-                  )
+let textOfMovesWithResult (text: string): string seq * Game.NotedResult option =
+    let justMovesAndResult = Regex.Replace(text, "\([^)]+\)|\[[^\]]+\]|\{[^}]+\}|\d+\.+", "")
+    let movesAndResultRev = Regex.Split(justMovesAndResult, "\s+")
+                             |> Seq.ofArray
+                             |> Seq.filter ((<>) "")
+                             |> Seq.rev
+    let result = match Seq.head movesAndResultRev with
+                 | "1-0" -> Some Game.White
+                 | "0-1" -> Some Game.Black
+                 | "1/2-1/2" -> Some Game.Draw
+                 | _ -> None
+    let moves = match result with
+                | Some _ -> movesAndResultRev |> Seq.tail |> Seq.rev
+                | _ -> movesAndResultRev |> Seq.rev
+    (moves, result)
 
 let fenRow(row: string): Board.Resident seq =
     Seq.foldBack (fun c acc ->

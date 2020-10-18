@@ -49,8 +49,8 @@ let ``Parse text of meta tags`` () =
            ("WhiteTitle", "NM") |]
 
 [<Fact>]
-let ``Parse text of moves`` () =
-    """[Event "Rated Blitz game"]
+let ``Parse text of moves with result`` () =
+    let text = """[Event "Rated Blitz game"]
     [Site "https://lichess.org/H7z1mmv9"]
     [Date "2020.09.24"]
     [White "geordie"]
@@ -106,46 +106,49 @@ let ``Parse text of moves`` () =
     36. Rxa5 { [%eval -66.66] [%clk 0:00:08] } 36... Kf3 { [%eval -62.08] [%clk 0:00:21] } 
     37. Rxc5 { [%eval #-3] [%clk 0:00:08] } 37... Rc2 { [%eval #-2] [%clk 0:00:19] } 0-1
     """
-    |> textOfMoves
-    |> Seq.toArray
-    |> should equal
-        [| "e4"; "c5"
-           "Nf3"; "e6"
-           "d3"; "Nc6"
-           "g3"; "g6"
-           "Bg5"; "Qc7"
-           "Nbd2"; "Bg7"
-           "Bf4"; "d6"
-           "Nc4"; "Bf8"
-           "a4"; "Na5"
-           "e5"; "Nxc4"
-           "dxc4"; "Qa5+"
-           "c3"; "dxe5"
-           "Nxe5"; "Bg7"
-           "Qd6"; "Qb6"
-           "Qxb6"; "axb6"
-           "Bd3"; "Nf6"
-           "Ke2"; "Nh5"
-           "Be4"; "g5"
-           "Nxf7"; "Nxf4+"
-           "gxf4"; "Kxf7"
-           "fxg5"; "Bd7"
-           "b3"; "Bc6"
-           "Bxc6"; "bxc6"
-           "Rac1"; "Rhd8"
-           "h4"; "Kg6"
-           "f4"; "Kf5"
-           "Ke3"; "Rd7";
-           "Rhd1"; "Rad8"
-           "Rxd7"; "Rxd7"
-           "Ra1"; "Bxc3"
-           "Rf1"; "Bd2+"
-           "Ke2"; "Bxf4"
-           "a5"; "bxa5"
-           "Ra1"; "Rd2+"
-           "Ke1"; "Ke4"
-           "Rxa5"; "Kf3"
-           "Rxc5"; "Rc2" |]
+    let (moves, result) = textOfMovesWithResult text
+    let movesArr = Seq.toArray moves
+    should equal (movesArr, result)
+        (
+            [| "e4"; "c5";
+                "Nf3"; "e6";
+                "d3"; "Nc6";
+                "g3"; "g6";
+                "Bg5"; "Qc7";
+                "Nbd2"; "Bg7";
+                "Bf4"; "d6";
+                "Nc4"; "Bf8";
+                "a4"; "Na5";
+                "e5"; "Nxc4";
+                "dxc4"; "Qa5+";
+                "c3"; "dxe5";
+                "Nxe5"; "Bg7";
+                "Qd6"; "Qb6";
+                "Qxb6"; "axb6";
+                "Bd3"; "Nf6";
+                "Ke2"; "Nh5";
+                "Be4"; "g5";
+                "Nxf7"; "Nxf4+";
+                "gxf4"; "Kxf7";
+                "fxg5"; "Bd7";
+                "b3"; "Bc6";
+                "Bxc6"; "bxc6";
+                "Rac1"; "Rhd8";
+                "h4"; "Kg6";
+                "f4"; "Kf5";
+                "Ke3"; "Rd7";
+                "Rhd1"; "Rad8";
+                "Rxd7"; "Rxd7";
+                "Ra1"; "Bxc3";
+                "Rf1"; "Bd2+";
+                "Ke2"; "Bxf4";
+                "a5"; "bxa5";
+                "Ra1"; "Rd2+";
+                "Ke1"; "Ke4";
+                "Rxa5"; "Kf3";
+                "Rxc5"; "Rc2" |],
+            Some Game.Black
+        )
 
 [<Fact>]
 let ``Fen of initial position`` () =
