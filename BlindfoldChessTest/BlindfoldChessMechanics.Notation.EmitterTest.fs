@@ -9,7 +9,7 @@ open BlindfoldChessMechanics.Logic.Position
 open BlindfoldChessMechanics.Logic
 
 [<Fact>]
-let ``0-0 move text`` () =
+let ``O-O move text`` () =
     { Piece = King
       FromCoords = (0, 4)
       ToCoords = (0, 6)
@@ -21,10 +21,10 @@ let ``0-0 move text`` () =
       SamePieceCoords = None }    
     |> moveText true false
     |> should equal
-        "0-0"
+        "O-O"
 
 [<Fact>]
-let ``0-0-0 move text`` () =
+let ``O-O-O move text`` () =
     { Piece = King
       FromCoords = (7, 4)
       ToCoords = (7, 2)
@@ -36,7 +36,7 @@ let ``0-0-0 move text`` () =
       SamePieceCoords = None }    
     |> moveText false true
     |> should equal
-        "0-0-0"
+        "O-O-O"
 
 [<Fact>]
 let ``bxc3 move text`` () =
@@ -213,5 +213,5 @@ let ``Game text`` () =
            """[Black "you"]"""
            """[White "me"]"""
            ""
-           "1... Nf6 2. Be2 e6 3. h4 Ba3 4. bxa3 0-0 5. Kf1 1/2-1/2" |]
+           "1... Nf6 2. Be2 e6 3. h4 Ba3 4. bxa3 O-O 5. Kf1 1/2-1/2" |]
         

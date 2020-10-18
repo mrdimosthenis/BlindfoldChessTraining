@@ -130,18 +130,3 @@ let textOfGame (text: string): Game.Game =
       InitialPosition = initialPosition
       Moves = validatedMoves
       Result = result }
-
-let fileOfGames(filePath: string): Game.Game seq =
-    let (lastLines, _, gameStringsWithoutLast) =
-        File.ReadLines(filePath)
-        |> Seq.fold (fun (accLines, prevLine, accGameStrings) s ->
-                        match (prevLine, s.StartsWith("[")) with
-                        | ("", true) -> ("", s, Utils.prependedSeq accLines accGameStrings)
-                        | _ -> (accLines + "\n" + s, s, accGameStrings)
-                    )
-                    ("", "", Seq.empty)
-    let gameStringsRev = Utils.prependedSeq lastLines gameStringsWithoutLast
-    gameStringsRev
-    |> Seq.rev
-    |> Seq.filter (fun s -> s.Replace("\n", "").Trim() <> "")
-    |> Seq.map textOfGame

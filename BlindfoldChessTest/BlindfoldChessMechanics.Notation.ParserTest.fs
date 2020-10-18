@@ -269,7 +269,7 @@ let ``Text of game`` () =
 [Black "you"]
 [White "me"]
 
-1... Nf6 2. Be2 e6 3. h4 Ba3 4. bxa3 0-0 5. Kf1 1/2-1/2"""
+1... Nf6 2. Be2 e6 3. h4 Ba3 4. bxa3 O-O 5. Kf1 1/2-1/2"""
     |> textOfGame
     |> realizedGame
     |> should equal
@@ -286,10 +286,3 @@ let ``Text of game`` () =
                      PositionTest.tenthHalfMove
                      PositionTest.eleventHalfMove |]
           Result = (Some Game.Draw) }
-
-[<Fact>]
-let ``File of games`` () =
-    @"C:\Users\MrDIM\Source\Repos\BlindfoldChessTraining\BlindfoldChessTest\resources\GameCollection.pgn"
-    |> fileOfGames
-    |> should equal
-        Seq.empty
