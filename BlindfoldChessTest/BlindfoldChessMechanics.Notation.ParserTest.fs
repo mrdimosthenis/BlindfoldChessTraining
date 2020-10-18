@@ -217,35 +217,51 @@ let ``Fen of position after fifth half move`` () =
 
 [<Fact>]
 let ``Fen of position after sixth half move`` () =
-    "rnbqk2r/ppp1pppp/5n2/3P4/8/b7/PPPPBPPP/RNBQK1NR w KQkq - 3 4"
+   "rnbqkb1r/ppp2ppp/4pn2/3P4/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 4"
     |> textOfFen
     |> PositionTest.realizedPosition
     |> should equal
         PositionTest.realizedPositionAfterSixthHalfMove
 
 [<Fact>]
-let ``Fen of position after sevent half move`` () =
-    "rnbqk2r/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQK1NR b KQkq - 0 4"
+let ``Fen of position after seventh half move`` () =
+    "rnbqkb1r/ppp2ppp/4pn2/3P4/7P/8/PPPPBPP1/RNBQK1NR b KQkq h3 0 4"
     |> textOfFen
     |> PositionTest.realizedPosition
     |> should equal
         PositionTest.realizedPositionAfterSeventhHalfMove
 
 [<Fact>]
-let ``Fen of position after nineth half move`` () =
-    "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQK1NR w KQ - 1 5"
+let ``Fen of position after eighth half move`` () =
+    "rnbqk2r/ppp2ppp/4pn2/3P4/7P/b7/PPPPBPP1/RNBQK1NR w KQkq - 1 5"
     |> textOfFen
     |> PositionTest.realizedPosition
     |> should equal
         PositionTest.realizedPositionAfterEighthHalfMove
 
 [<Fact>]
-let ``Fen of position after tenth half move`` () =
-    "rnbq1rk1/ppp1pppp/5n2/3P4/8/P7/P1PPBPPP/RNBQ1KNR b - - 2 5"
+let ``Fen of position after ninth half move`` () =
+    "rnbqk2r/ppp2ppp/4pn2/3P4/7P/P7/P1PPBPP1/RNBQK1NR b KQkq - 0 5"
     |> textOfFen
     |> PositionTest.realizedPosition
     |> should equal
         PositionTest.realizedPositionAfterNinthHalfMove
+
+[<Fact>]
+let ``Fen of position after tenth half move`` () =
+    "rnbq1rk1/ppp2ppp/4pn2/3P4/7P/P7/P1PPBPP1/RNBQK1NR w KQ - 1 6"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterTentHalfMove
+
+[<Fact>]
+let ``Fen of position after eleventh half move`` () =
+    "rnbq1rk1/ppp2ppp/4pn2/3P4/7P/P7/P1PPBPP1/RNBQ1KNR b - - 2 6"
+    |> textOfFen
+    |> PositionTest.realizedPosition
+    |> should equal
+        PositionTest.realizedPositionAfterEleventhHalfMove
 
 [<Fact>]
 let ``Text of game`` () =
@@ -253,7 +269,7 @@ let ``Text of game`` () =
 [Black "you"]
 [White "me"]
 
-1... Nf6 2. Be2 Ba3 3. bxa3 0-0 4. Kf1 1/2-1/2"""
+1... Nf6 2. Be2 e6 3. h4 Ba3 4. bxa3 0-0 5. Kf1 1/2-1/2"""
     |> textOfGame
     |> realizedGame
     |> should equal
@@ -266,5 +282,7 @@ let ``Text of game`` () =
                      PositionTest.sixthHalfMove
                      PositionTest.seventhHalfMove
                      PositionTest.eighthHalfMove
-                     PositionTest.ninthHalfMove |]
+                     PositionTest.ninthHalfMove
+                     PositionTest.tenthHalfMove
+                     PositionTest.eleventHalfMove |]
           Result = (Some Game.Draw) }

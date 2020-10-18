@@ -64,16 +64,16 @@ let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
                               |> pieceText isWhite areFigures
                               |> String.map Char.ToUpper
            let clarification =
-               match (m.Piece, m.SamePieceCoords) with
-               | (Board.Pawn, _) -> m.FromCoords
-                                    |> snd
-                                    |> columnText
-               | (_, Some (_, c)) when c = (snd m.FromCoords) -> m.FromCoords
-                                                                 |> fst
-                                                                 |> rowText
-               | (_, Some _) -> m.FromCoords
-                                |> snd
-                                |> columnText
+               match (m.Piece, m.SamePieceCoords, m.IsCapture) with
+               | (Board.Pawn, _, true) -> m.FromCoords
+                                          |> snd
+                                          |> columnText
+               | (_, Some (_, c), _) when c = (snd m.FromCoords) -> m.FromCoords
+                                                                    |> fst
+                                                                    |> rowText
+               | (_, Some _, _) -> m.FromCoords
+                                   |> snd
+                                   |> columnText
                | _ -> ""
            let takes = if m.IsCapture then "x" else ""
            let targetSquare = coordinatesText m.ToCoords
