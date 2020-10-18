@@ -40,7 +40,7 @@ let ``Coordinates cotrolled by rook`` () =
 [<Fact>]
 let ``Coordinates cotrolled by ghost rook`` () =
     (fun () -> coordinatesControlledByRook (4, 2) emptyBoard |> Seq.toArray |> ignore)
-    |> should throw typeof<NoPieceInBoard>
+    |> should throw typeof<NoPiece>
 
 [<Fact>]
 let ``Coordinates cotrolled by bishop`` () =
@@ -65,7 +65,7 @@ let ``Coordinates cotrolled by bishop`` () =
 [<Fact>]
 let ``Coordinates cotrolled by ghost bishop`` () =
     (fun () -> coordinatesControlledByBishop (4, 2) emptyBoard |> Seq.toArray |> ignore)
-    |> should throw typeof<NoPieceInBoard>
+    |> should throw typeof<NoPiece>
 
 [<Fact>]
 let ``Coordinates cotrolled by queen`` () =
@@ -94,7 +94,7 @@ let ``Coordinates cotrolled by queen`` () =
 [<Fact>]
 let ``Coordinates cotrolled by ghost queen`` () =
     (fun () -> coordinatesControlledByQueen (4, 2) emptyBoard |> Seq.toArray |> ignore)
-    |> should throw typeof<NoPieceInBoard>
+    |> should throw typeof<NoPiece>
 
 [<Fact>]
 let ``Coordinates cotrolled by knight in the middle`` () =
@@ -133,7 +133,7 @@ let ``Coordinates cotrolled by knight in the corner`` () =
 [<Fact>]
 let ``Coordinates cotrolled by ghost knight`` () =
     (fun () -> coordinatesControlledByKnight (4, 2) emptyBoard |> ignore)
-    |> should throw typeof<NoPieceInBoard>
+    |> should throw typeof<WrongPiece>
 
 [<Fact>]
 let ``Coordinates cotrolled by king in the middle`` () =
@@ -172,7 +172,7 @@ let ``Coordinates cotrolled by king in the corner`` () =
 [<Fact>]
 let ``Coordinates cotrolled by ghost king`` () =
     (fun () -> coordinatesControlledByKing (4, 2) emptyBoard |> ignore)
-    |> should throw typeof<NoPieceInBoard>
+    |> should throw typeof<WrongPiece>
 
 [<Fact>]
 let ``Coordinates cotrolled by white init pawn in the edge`` () =
@@ -245,7 +245,7 @@ let ``Coordinates cotrolled by black init pawn in the edge`` () =
 [<Fact>]
 let ``Coordinates cotrolled by ghost pawn`` () =
     (fun () -> coordinatesControlledByKing (4, 2) emptyBoard |> ignore)
-    |> should throw typeof<NoPieceInBoard>
+    |> should throw typeof<WrongPiece>
 
 [<Fact>]
 let ``Coordinates cotrolled by white color`` () =

@@ -2,7 +2,8 @@
 
 open BlindfoldChessMechanics
 
-exception NoPieceInBoard
+exception NoPiece of int * int
+exception WrongPiece of string * int * int
 
 // types
 
@@ -127,7 +128,7 @@ let collectControlledCoordinates (directionF: Coordinates -> Coordinates seq)
                                  (board: Board)
                              : Coordinates seq =
     match resident coordinates board with
-    | None -> raise NoPieceInBoard
+    | None -> raise (NoPiece coordinates)
     | Some piece ->
         coordinates
         |> directionF
@@ -185,7 +186,7 @@ let coordinatesControlledByKnight (coordinates: Coordinates) (board: Board): Coo
             match resident coord board with
             | Some { IsWhite = w } when w = isWhite -> false
             | _ -> true)
-    | _ -> raise NoPieceInBoard
+    | _ -> raise (WrongPiece ("NoKnight", rowIndex, columnIndex))
 
 let coordinatesControlledByKing (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
@@ -206,7 +207,7 @@ let coordinatesControlledByKing (coordinates: Coordinates) (board: Board): Coord
             match resident coord board with
             | Some { IsWhite = w } when w = isWhite -> false
             | _ -> true)
-    | _ -> raise NoPieceInBoard
+    | _ -> raise (WrongPiece ("NoKing", rowIndex, columnIndex))
 
 let coordinatesControlledByPawn (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
@@ -238,7 +239,7 @@ let coordinatesControlledByPawn (coordinates: Coordinates) (board: Board): Coord
             | (None, false) -> true
             | _ -> false)
         |> Seq.map fst
-    | _ -> raise NoPieceInBoard
+    | _ -> raise (WrongPiece ("NoPawn", rowIndex, columnIndex))
 
 let coordinatesControlledByPiece (coordinates: Coordinates) (board: Board): Coordinates seq =
     let coordsF =
@@ -249,7 +250,7 @@ let coordinatesControlledByPiece (coordinates: Coordinates) (board: Board): Coor
         | Some { PieceType = Knight } -> coordinatesControlledByKnight
         | Some { PieceType = King } -> coordinatesControlledByKing
         | Some { PieceType = Pawn } -> coordinatesControlledByPawn
-        | _ -> raise NoPieceInBoard
+        | _ -> raise (NoPiece coordinates)
 
     coordsF coordinates board
 

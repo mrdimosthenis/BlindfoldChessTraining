@@ -3,8 +3,6 @@
 open BlindfoldChessMechanics.Logic
 open BlindfoldChessMechanics
 
-exception WrongPiece
-
 // types
 
 type Movement = { Piece: Board.Piece
@@ -80,7 +78,7 @@ let specialKingMovements (coordinates: Board.Coordinates) (position: Position): 
                           IsCapture = false
                           Promotion = None }
                    )
-    | _ -> raise WrongPiece
+    | _ -> raise (Board.WrongPiece ("NoKing", rowIndex, columnIndex))
 
 let pawnMovements (coordinates: Board.Coordinates) (position: Position): Movement seq =
     let (rowIndex, columnIndex) = coordinates
@@ -122,7 +120,7 @@ let pawnMovements (coordinates: Board.Coordinates) (position: Position): Movemen
                           IsCapture = isCapture
                           Promotion = promotion }
                    )
-    | _ -> raise WrongPiece
+    | _ -> raise (Board.WrongPiece ("NoPawn", rowIndex, columnIndex))
 
 let simplePieceMovement (fromCoords: Board.Coordinates) (toCoords: Board.Coordinates) (position: Position): Movement =
     match Board.resident fromCoords position.Board with
@@ -135,7 +133,7 @@ let simplePieceMovement (fromCoords: Board.Coordinates) (toCoords: Board.Coordin
                       ToCoords = toCoords
                       IsCapture = isCapture
                       Promotion = None }
-    | _ -> raise Board.NoPieceInBoard
+    | _ -> raise (Board.NoPiece fromCoords)
 
 let pieceMovements (coordinates: Board.Coordinates) (position: Position): Movement seq =
     match Board.resident coordinates position.Board with
@@ -149,7 +147,7 @@ let pieceMovements (coordinates: Board.Coordinates) (position: Position): Moveme
         Board.coordinatesControlledByPiece coordinates position.Board
         |> Seq.map (fun toCoords -> simplePieceMovement coordinates toCoords position)
     | None ->
-        raise Board.NoPieceInBoard
+        raise (Board.NoPiece coordinates)
 
 let positionAfterMovement (movement: Movement) (position: Position): Position =
     let newIsWhiteToMove = not position.IsWhiteToMove

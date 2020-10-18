@@ -19,7 +19,7 @@ let columnText(c: int): string =
     | 5 -> "f"
     | 6 -> "g"
     | 7 -> "h"
-    | _ -> raise Parser.InvalidColumn
+    | _ -> c |> string |> Parser.InvalidColumn |> raise
 
 let coordinatesText (coords: Board.Coordinates): string =
     let (r, c) = coords
