@@ -75,6 +75,7 @@ let init: Board =
     |> Seq.ofArray
     |> Seq.map Seq.ofArray
     |> Seq.rev
+    |> Seq.cache
 
 // functions
 
@@ -86,38 +87,46 @@ let areValidCoordinates(coordinates: Coordinates): bool =
 let upCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init (7 - rowIndex) (fun i -> (rowIndex + i + 1, columnIndex))
+    |> Seq.cache
 
 let downCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init rowIndex (fun i -> (rowIndex - i - 1, columnIndex))
+    |> Seq.cache
 
 let leftCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init columnIndex (fun i -> (rowIndex, columnIndex - i - 1))
+    |> Seq.cache
 
 let rightCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     Seq.init (7 - columnIndex) (fun i -> (rowIndex, columnIndex + i + 1))
+    |> Seq.cache
 
 let upRightDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min (7 - rowIndex) (7 - columnIndex)
     Seq.init minDist (fun i -> (rowIndex + i + 1, columnIndex + i + 1))
+    |> Seq.cache
 
 let downRightDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min rowIndex (7 - columnIndex)
     Seq.init minDist (fun i -> (rowIndex - i - 1, columnIndex + i + 1))
+    |> Seq.cache
 
 let upLeftDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min (7 - rowIndex) columnIndex
     Seq.init minDist (fun i -> (rowIndex + i + 1, columnIndex - i - 1))
+    |> Seq.cache
 
 let downLeftDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min rowIndex columnIndex
     Seq.init minDist (fun i -> (rowIndex - i - 1, columnIndex - i - 1))
+    |> Seq.cache
 
 let resident (coordinates: Coordinates) (board: Board): Resident =
     let (rowIndex, columnIndex) = coordinates
@@ -150,6 +159,7 @@ let coordinatesControlledByRook (coordinates: Coordinates) (board: Board): Coord
     |> Seq.ofArray
     |> Seq.map (fun dirF -> collectControlledCoordinates dirF coordinates board)
     |> Seq.concat
+    |> Seq.cache
 
 let coordinatesControlledByBishop (coordinates: Coordinates) (board: Board): Coordinates seq =
     [| upRightDiagonal
@@ -159,12 +169,14 @@ let coordinatesControlledByBishop (coordinates: Coordinates) (board: Board): Coo
     |> Seq.ofArray
     |> Seq.map (fun dirF -> collectControlledCoordinates dirF coordinates board)
     |> Seq.concat
+    |> Seq.cache
 
 let coordinatesControlledByQueen (coordinates: Coordinates) (board: Board): Coordinates seq =
     [| coordinatesControlledByRook coordinates board
        coordinatesControlledByBishop coordinates board |]
     |> Seq.ofArray
     |> Seq.concat
+    |> Seq.cache
 
 let coordinatesControlledByKnight (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
@@ -186,6 +198,7 @@ let coordinatesControlledByKnight (coordinates: Coordinates) (board: Board): Coo
             match resident coord board with
             | Some { IsWhite = w } when w = isWhite -> false
             | _ -> true)
+        |> Seq.cache
     | _ -> raise (WrongPiece ("NoKnight", rowIndex, columnIndex))
 
 let coordinatesControlledByKing (coordinates: Coordinates) (board: Board): Coordinates seq =
@@ -207,6 +220,7 @@ let coordinatesControlledByKing (coordinates: Coordinates) (board: Board): Coord
             match resident coord board with
             | Some { IsWhite = w } when w = isWhite -> false
             | _ -> true)
+        |> Seq.cache
     | _ -> raise (WrongPiece ("NoKing", rowIndex, columnIndex))
 
 let coordinatesControlledByPawn (coordinates: Coordinates) (board: Board): Coordinates seq =
@@ -224,12 +238,14 @@ let coordinatesControlledByPawn (coordinates: Coordinates) (board: Board): Coord
             | (false, 6, None) -> [| ((nextRowIndex + rowIncrease, columnIndex), false) |]
             | _ -> [||]
             |> Seq.ofArray
+            |> Seq.cache
 
         let diagCoordsWithCapt =
             [| ((nextRowIndex, columnIndex - 1), true)
                ((nextRowIndex, columnIndex + 1), true) |]
             |> Seq.ofArray
             |> Seq.filter (fun (coords, _) -> areValidCoordinates coords)
+            |> Seq.cache
 
         Seq.append twoSquaresForward diagCoordsWithCapt
         |> Utils.prependedSeq (forwardCoords, false)
@@ -239,6 +255,7 @@ let coordinatesControlledByPawn (coordinates: Coordinates) (board: Board): Coord
             | (None, false) -> true
             | _ -> false)
         |> Seq.map fst
+        |> Seq.cache
     | _ -> raise (WrongPiece ("NoPawn", rowIndex, columnIndex))
 
 let coordinatesControlledByPiece (coordinates: Coordinates) (board: Board): Coordinates seq =
@@ -253,6 +270,7 @@ let coordinatesControlledByPiece (coordinates: Coordinates) (board: Board): Coor
         | _ -> raise (NoPiece coordinates)
 
     coordsF coordinates board
+    |> Seq.cache
 
 let coordinatesControlledByColor (isWhite: bool) (board: Board): Coordinates seq =
     seq {
@@ -267,6 +285,7 @@ let coordinatesControlledByColor (isWhite: bool) (board: Board): Coordinates seq
     |> Seq.map (fun coords -> coordinatesControlledByPiece coords board)
     |> Seq.concat
     |> Seq.distinct
+    |> Seq.cache
 
 let isKingInDanger (isWhite: bool) (board: Board): bool =
     board

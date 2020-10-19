@@ -78,6 +78,7 @@ let specialKingMovements (coordinates: Board.Coordinates) (position: Position): 
                           IsCapture = false
                           Promotion = None }
                    )
+        |> Seq.cache
     | _ -> raise (Board.WrongPiece ("NoKing", rowIndex, columnIndex))
 
 let pawnMovements (coordinates: Board.Coordinates) (position: Position): Movement seq =
@@ -94,6 +95,7 @@ let pawnMovements (coordinates: Board.Coordinates) (position: Position): Movemen
                 [|(toCoords, isCapture, promotion)|]
             | _ -> [||]
             |> Seq.ofArray
+            |> Seq.cache
         let otherMoveTuples = Board.coordinatesControlledByPawn coordinates position.Board
                               |> Seq.map (fun toCoords ->
                                             let (toRowIndex, _) = toCoords
@@ -112,6 +114,7 @@ let pawnMovements (coordinates: Board.Coordinates) (position: Position): Movemen
                                             |> Seq.ofArray
                                          )
                               |> Seq.concat
+                              |> Seq.cache
         Seq.append enPassantMoveTuples otherMoveTuples
         |> Seq.map (fun (toCoords, isCapture, promotion) ->
                         { Piece = Board.Pawn
@@ -120,6 +123,7 @@ let pawnMovements (coordinates: Board.Coordinates) (position: Position): Movemen
                           IsCapture = isCapture
                           Promotion = promotion }
                    )
+        |> Seq.cache
     | _ -> raise (Board.WrongPiece ("NoPawn", rowIndex, columnIndex))
 
 let simplePieceMovement (fromCoords: Board.Coordinates) (toCoords: Board.Coordinates) (position: Position): Movement =
@@ -148,6 +152,7 @@ let pieceMovements (coordinates: Board.Coordinates) (position: Position): Moveme
         |> Seq.map (fun toCoords -> simplePieceMovement coordinates toCoords position)
     | None ->
         raise (Board.NoPiece coordinates)
+    |> Seq.cache
 
 let positionAfterMovement (movement: Movement) (position: Position): Position =
     let newIsWhiteToMove = not position.IsWhiteToMove
@@ -215,6 +220,7 @@ let validMovements (position: Position): Movement seq =
                         Board.isKingInDanger position.IsWhiteToMove newPos.Board
                         |> not
                   )
+    |> Seq.cache
 
 let moves (position: Position): Move seq =
     position
@@ -245,6 +251,7 @@ let moves (position: Position): Move seq =
                       IsStalemate = isStalemate
                       SamePieceCoords= samePieceCoords }
                 )
+    |> Seq.cache
 
 let positionAfterMove (move: Move) (position: Position): Position =
     let move = { Piece = move.Piece

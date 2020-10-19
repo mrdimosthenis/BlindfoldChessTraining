@@ -46,6 +46,7 @@ let textOfMovesWithResult (text: string): string seq * Game.NotedResult option =
                              |> Seq.ofArray
                              |> Seq.filter ((<>) "")
                              |> Seq.rev
+                             |> Seq.cache
     let result = match Seq.head movesAndResultRev with
                  | "1-0" -> Some Game.White
                  | "0-1" -> Some Game.Black
@@ -83,6 +84,7 @@ let textOfFen (text: string): Position.Position =
                 |> Seq.ofArray
                 |> Seq.map fenRow
                 |> Seq.rev
+                |> Seq.cache
     let isWhiteToMove = (fenParts.[1] = "w")
     let castling = match fenParts.[2] with
                    | "-" -> { Position.WhiteKingSideCastle = false
@@ -126,6 +128,7 @@ let textOfGame (text: string): Game.Game =
                         (initialPosition, Seq.empty)
             |> snd
             |> Seq.rev
+            |> Seq.cache
     { MetaTags = metaTags
       InitialPosition = initialPosition
       Moves = validatedMoves

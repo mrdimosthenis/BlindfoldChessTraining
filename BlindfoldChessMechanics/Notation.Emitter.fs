@@ -135,12 +135,14 @@ let metaTagsText(fen: string, metaTags: Map<string,string>): string =
     let fenKVs = if fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" then Array.empty
                  else [| ("FEN", fen) |]
                  |> Seq.ofArray
+                 |> Seq.cache
     let lines = metaTags
                 |> Map.toSeq
                 |> Seq.append fenKVs
                 |> Seq.map (fun (k, v) ->
                              sprintf """[%s "%s"]""" k v
                            )
+                |> Seq.cache
     String.Join("\n", lines)
 
 let gameText (game: Game.Game): string =
@@ -151,12 +153,14 @@ let gameText (game: Game.Game): string =
                   |> Seq.map Seq.ofArray
                   |> Seq.concat
                   |> (if isWhiteToMove then id else Seq.tail)
+                  |> Seq.cache
     let isWhiteToMoveBools = Seq.initInfinite (fun _ ->
                                                 if isWhiteToMove then [| true; false |]
                                                 else [| false; true |]
                                               )
                              |> Seq.map Seq.ofArray
                              |> Seq.concat
+                             |> Seq.cache
     let moves = Seq.map3 (fun i b m ->
                             let d = match (b, i, isWhiteToMove) with
                                     | (true, _, _) -> sprintf "%i. " i
@@ -168,6 +172,7 @@ let gameText (game: Game.Game): string =
                          indices
                          isWhiteToMoveBools
                          game.Moves
+                 |> Seq.cache
     let result = match game.Result with
                  | None -> ""
                  | Some Game.White -> "1-0"
