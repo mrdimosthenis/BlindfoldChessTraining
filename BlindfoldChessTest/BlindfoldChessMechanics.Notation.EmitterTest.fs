@@ -7,6 +7,7 @@ open BlindfoldChessMechanics.Notation.Emitter
 open BlindfoldChessMechanics.Logic.Board
 open BlindfoldChessMechanics.Logic.Position
 open BlindfoldChessMechanics.Logic
+open FSharpx.Collections
 
 [<Fact>]
 let ``O-O move text`` () =
@@ -197,14 +198,14 @@ let ``Game text`` () =
     { Game.MetaTags = Map.ofArray [| ("White", "me"); ("Black", "you") |]
       Game.InitialPosition = PositionTest.realizedPositionAfterThirdHalfMovement
                              |> PositionTest.unrealizedPosition
-      Game.Moves = Seq.ofArray [| PositionTest.forthHalfMove
-                                  PositionTest.fifthHalfMove
-                                  PositionTest.sixthHalfMove
-                                  PositionTest.seventhHalfMove
-                                  PositionTest.eighthHalfMove
-                                  PositionTest.ninthHalfMove
-                                  PositionTest.tenthHalfMove
-                                  PositionTest.eleventHalfMove |]
+      Game.Moves = LazyList.ofArray [| PositionTest.forthHalfMove
+                                       PositionTest.fifthHalfMove
+                                       PositionTest.sixthHalfMove
+                                       PositionTest.seventhHalfMove
+                                       PositionTest.eighthHalfMove
+                                       PositionTest.ninthHalfMove
+                                       PositionTest.tenthHalfMove
+                                       PositionTest.eleventHalfMove |]
       Game.Result = Some Game.Draw }
     |> gameText
     |> should equal

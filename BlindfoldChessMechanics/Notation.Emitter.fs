@@ -1,9 +1,11 @@
 ﻿module BlindfoldChessMechanics.Notation.Emitter
 
 open BlindfoldChessMechanics.Logic
+open BlindfoldChessMechanics
 
 open System
 open System.IO
+open FSharpx.Collections
 
 exception InvalidColumn of string
 
@@ -89,29 +91,29 @@ let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
                              | _ -> ""
            piece + clarification + takes + targetSquare + promotion + checkOrMate
 
-let rowFEN (row: Board.Resident seq): string =
+let rowFEN (row: LazyList<Board.Resident>): string =
     let remaining (opt: int option): string =
         match opt with
         | Some i -> string i
         | None -> ""
     let (lastAccStr, lastAccNumOpt) =
-        Seq.fold (fun (accStr, accNumOpt) resident ->
-                       match (resident, accNumOpt) with
-                       | (None, None) ->
-                            (accStr, Some 1)
-                       | (None, Some i) ->
-                            (accStr, Some (i + 1))
-                       | (Some p: Board.Resident, _) ->
-                            (accStr + remaining accNumOpt + pieceText p.IsWhite false p.PieceType, None)
-                 )
-                 ("", None)
-                 row
+        LazyList.fold (fun (accStr, accNumOpt) resident ->
+                            match (resident, accNumOpt) with
+                            | (None, None) ->
+                                 (accStr, Some 1)
+                            | (None, Some i) ->
+                                 (accStr, Some (i + 1))
+                            | (Some p: Board.Resident, _) ->
+                                 (accStr + remaining accNumOpt + pieceText p.IsWhite false p.PieceType, None)
+                      )
+                      ("", None)
+                      row
     lastAccStr + remaining lastAccNumOpt
 
 let positionText (position: Position.Position): string =
     let board = position.Board
-                |> Seq.rev
-                |> Seq.map rowFEN
+                |> LazyList.rev
+                |> LazyList.map rowFEN
                 |> String.concat "/"
     let color = if position.IsWhiteToMove then "w"
                 else "b"
@@ -119,9 +121,9 @@ let positionText (position: Position.Position): string =
                       (position.Castling.WhiteQueenSideCastle, "Q")
                       (position.Castling.BlackKingSideCastle, "k")
                       (position.Castling.BlackQueenSideCastle, "q") |]
-                   |> Seq.ofArray
-                   |> Seq.filter fst
-                   |> Seq.map snd
+                   |> LazyList.ofArray
+                   |> LazyList.filter fst
+                   |> LazyList.map snd
                    |> String.concat ""
                    |> (fun s -> if s = "" then "-" else s)
     let enPassant = match position.EnPassant with
@@ -134,40 +136,42 @@ let positionText (position: Position.Position): string =
 let metaTagsText(fen: string, metaTags: Map<string,string>): string =
     let fenKVs = if fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" then Array.empty
                  else [| ("FEN", fen) |]
-                 |> Seq.ofArray
+                 |> LazyList.ofArray
     let lines = metaTags
-                |> Map.toSeq
-                |> Seq.append fenKVs
-                |> Seq.map (fun (k, v) ->
-                             sprintf """[%s "%s"]""" k v
-                           )
+                |> Utils.lazyListOfMap
+                |> LazyList.append fenKVs
+                |> LazyList.map (fun (k, v) ->
+                                  sprintf """[%s "%s"]""" k v
+                                )
     String.Join("\n", lines)
 
 let gameText (game: Game.Game): string =
     let fen = positionText(game.InitialPosition)
     let metaTags = metaTagsText(fen, game.MetaTags)
     let isWhiteToMove = game.InitialPosition.IsWhiteToMove
-    let indices = Seq.initInfinite (fun i -> [| i + 1; i + 1 |])
-                  |> Seq.map Seq.ofArray
-                  |> Seq.concat
-                  |> (if isWhiteToMove then id else Seq.tail)
-    let isWhiteToMoveBools = Seq.initInfinite (fun _ ->
+    let indices = Utils.lazyListInfiniteIndices()
+                  |> LazyList.map (fun i -> [| i + 1; i + 1 |])
+                  |> LazyList.map LazyList.ofArray
+                  |> LazyList.concat
+                  |> (if isWhiteToMove then id else LazyList.tail)
+    let isWhiteToMoveBools = Utils.lazyListInfiniteIndices()
+                             |> LazyList.map (fun _ ->
                                                 if isWhiteToMove then [| true; false |]
                                                 else [| false; true |]
                                               )
-                             |> Seq.map Seq.ofArray
-                             |> Seq.concat
-    let moves = Seq.map3 (fun i b m ->
-                            let d = match (b, i, isWhiteToMove) with
-                                    | (true, _, _) -> sprintf "%i. " i
-                                    | (false, 1, false) -> sprintf "%i... " i
-                                    | (false, _, _) -> ""
-                            let m = moveText true false m
-                            d + m
-                         )
+                             |> LazyList.map LazyList.ofArray
+                             |> LazyList.concat
+    let moves = game.Moves
+                |> LazyList.zip isWhiteToMoveBools
+                |> LazyList.map2 (fun i (b, m) ->
+                                    let d = match (b, i, isWhiteToMove) with
+                                            | (true, _, _) -> sprintf "%i. " i
+                                            | (false, 1, false) -> sprintf "%i... " i
+                                            | (false, _, _) -> ""
+                                    let m = moveText true false m
+                                    d + m
+                                 )
                          indices
-                         isWhiteToMoveBools
-                         game.Moves
     let result = match game.Result with
                  | None -> ""
                  | Some Game.White -> "1-0"

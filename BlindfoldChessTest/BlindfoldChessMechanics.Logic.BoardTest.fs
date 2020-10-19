@@ -5,6 +5,7 @@ open FsUnit.Xunit
 
 open BlindfoldChessMechanics
 open BlindfoldChessMechanics.Logic.Board
+open FSharpx.Collections
 
 let emptyBoard =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -28,9 +29,9 @@ let ``Coordinates cotrolled by rook`` () =
       [|emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByRook (4, 2)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [|(7, 2); (6, 2); (5, 2)
           (1, 2); (2, 2); (3, 2)
@@ -39,7 +40,7 @@ let ``Coordinates cotrolled by rook`` () =
 
 [<Fact>]
 let ``Coordinates cotrolled by ghost rook`` () =
-    (fun () -> coordinatesControlledByRook (4, 2) emptyBoard |> Seq.toArray |> ignore)
+    (fun () -> coordinatesControlledByRook (4, 2) emptyBoard |> LazyList.toArray |> ignore)
     |> should throw typeof<NoPiece>
 
 [<Fact>]
@@ -53,9 +54,9 @@ let ``Coordinates cotrolled by bishop`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByBishop (4, 2)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [|(7, 5); (6, 4); (5, 3)
           (0, 6); (1, 5); (2, 4); (3, 3)
@@ -64,7 +65,7 @@ let ``Coordinates cotrolled by bishop`` () =
 
 [<Fact>]
 let ``Coordinates cotrolled by ghost bishop`` () =
-    (fun () -> coordinatesControlledByBishop (4, 2) emptyBoard |> Seq.toArray |> ignore)
+    (fun () -> coordinatesControlledByBishop (4, 2) emptyBoard |> LazyList.toArray |> ignore)
     |> should throw typeof<NoPiece>
 
 [<Fact>]
@@ -78,9 +79,9 @@ let ``Coordinates cotrolled by queen`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
       [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByQueen (4, 4)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [|(7, 4); (6, 4); (5, 4)
           (2, 4); (3, 4)
@@ -93,7 +94,7 @@ let ``Coordinates cotrolled by queen`` () =
 
 [<Fact>]
 let ``Coordinates cotrolled by ghost queen`` () =
-    (fun () -> coordinatesControlledByQueen (4, 2) emptyBoard |> Seq.toArray |> ignore)
+    (fun () -> coordinatesControlledByQueen (4, 2) emptyBoard |> LazyList.toArray |> ignore)
     |> should throw typeof<NoPiece>
 
 [<Fact>]
@@ -107,9 +108,9 @@ let ``Coordinates cotrolled by knight in the middle`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByKnight (2, 5)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [|(0, 4); (1, 3); (3, 3); (0, 6); (1, 7); (4, 6); (3, 7)|]
 
@@ -124,9 +125,9 @@ let ``Coordinates cotrolled by knight in the corner`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByKnight (6, 0)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [|(5, 2); (7, 2)|]
 
@@ -146,9 +147,9 @@ let ``Coordinates cotrolled by king in the middle`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByKing (2, 3)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [|(1, 2); (1, 3); (1, 4); (2, 4); (3, 2); (3, 3); (3, 4)|]
 
@@ -163,9 +164,9 @@ let ``Coordinates cotrolled by king in the corner`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByKing (7, 0)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [|(6, 0); (7, 1)|]
 
@@ -185,9 +186,9 @@ let ``Coordinates cotrolled by white init pawn in the edge`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByPawn (1, 7)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [|(2, 7); (3, 7); (2, 6)|]
 
@@ -202,9 +203,9 @@ let ``Coordinates cotrolled by white init blocked pawn`` () =
       [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByPawn (1, 3)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [|(2, 3)|]
 
@@ -219,9 +220,9 @@ let ``Coordinates cotrolled by black blocked pawn`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByPawn (4, 3)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [|(3, 2); (3, 4)|]
 
@@ -236,9 +237,9 @@ let ``Coordinates cotrolled by black init pawn in the edge`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByPawn (6, 0)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [||]
 
@@ -258,9 +259,9 @@ let ``Coordinates cotrolled by white color`` () =
       [|blackPawn;   emptySquare; blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; blackKing;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByColor true
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [| (3, 4)
            (7, 7); (6, 6); (5, 5); (4, 4); (5, 1); (4, 2); (0, 0); (1, 1); (2, 2)
@@ -277,9 +278,9 @@ let ``Coordinates cotrolled by black color`` () =
       [|emptySquare; emptySquare; emptySquare; whiteQueen;  emptySquare; whitePawn;   whitePawn;   whitePawn|]
       [|emptySquare; emptySquare; whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> coordinatesControlledByColor false
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [| (2, 2)
            (4, 0)
@@ -314,7 +315,7 @@ let ``Is white king in danger`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> isKingInDanger true
     |> should equal
         false
@@ -330,7 +331,7 @@ let ``Is black king in danger`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
     |> Utils.seqOfArrays
-    |> Seq.rev
+    |> LazyList.rev
     |> isKingInDanger false
     |> should equal
         true

@@ -6,6 +6,7 @@ open FsUnit.Xunit
 open BlindfoldChessMechanics.Logic.Position
 open BlindfoldChessMechanics.Logic.Board
 open BlindfoldChessMechanics
+open FSharpx.Collections
 
 // types
 
@@ -20,7 +21,7 @@ type RealizedPosition = { Board: Board.Resident array array
 
 let realizedPosition (position: Position): RealizedPosition =
     { Board = position.Board
-                     |> Seq.rev
+                     |> LazyList.rev
                      |> Utils.seqToArrays
       IsWhiteToMove = position.IsWhiteToMove
       Castling = position.Castling 
@@ -31,7 +32,7 @@ let realizedPosition (position: Position): RealizedPosition =
 let unrealizedPosition (realizedPosition: RealizedPosition): Position =
     { Board = realizedPosition.Board
                      |> Utils.seqOfArrays
-                     |> Seq.rev
+                     |> LazyList.rev
       IsWhiteToMove = realizedPosition.IsWhiteToMove
       Castling = realizedPosition.Castling 
       EnPassant = realizedPosition.EnPassant
@@ -60,7 +61,7 @@ let ``Special white king movements with castling ability`` () =
       Fullmove = 20 }
     |> unrealizedPosition
     |> specialKingMovements (0, 4)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [| { Piece = King
              FromCoords = (0, 4)
@@ -93,7 +94,7 @@ let ``Special white king movements without castling ability`` () =
       Fullmove = 20 }
     |> unrealizedPosition
     |> specialKingMovements (0, 4)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [||]
 
@@ -117,7 +118,7 @@ let ``Special black king movements with castling ability`` () =
       Fullmove = 20 }
     |> unrealizedPosition
     |> specialKingMovements (7, 4)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [| { Piece = King
              FromCoords = (7, 4)
@@ -150,7 +151,7 @@ let ``Special black king movements without castling ability`` () =
       Fullmove = 20 }
     |> unrealizedPosition
     |> specialKingMovements (7, 4)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [||]
 
@@ -174,7 +175,7 @@ let ``White pawn movements with en-passant ability`` () =
       Fullmove = 20 }
     |> unrealizedPosition
     |> pawnMovements (4, 1)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [| { Piece = Pawn
              FromCoords = (4, 1)
@@ -212,7 +213,7 @@ let ``White pawn movements without en-passant ability`` () =
       Fullmove = 20 }
     |> unrealizedPosition
     |> pawnMovements (4, 1)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [| { Piece = Pawn
              FromCoords = (4, 1)
@@ -245,7 +246,7 @@ let ``Black pawn movements with promotion ability`` () =
       Fullmove = 20 }
     |> unrealizedPosition
     |> pawnMovements (1, 6)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [| { Piece = Pawn
              FromCoords = (1, 6)
@@ -292,7 +293,7 @@ let ``Black pawn movements with promotion ability`` () =
 let ``White rook piece movements in initial position`` () =
     Position.init
     |> pieceMovements (0, 0)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [||]
 
@@ -300,7 +301,7 @@ let ``White rook piece movements in initial position`` () =
 let ``White knight piece movements in initial position`` () =
     Position.init
     |> pieceMovements (0, 6)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [| { Piece = Knight
              FromCoords = (0, 6)
@@ -317,7 +318,7 @@ let ``White knight piece movements in initial position`` () =
 let ``White pawn piece movements in initial position`` () =
     Position.init
     |> pieceMovements (1, 5)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [| { Piece = Pawn
              FromCoords = (1, 5)
@@ -350,7 +351,7 @@ let ``Black king piece movements`` () =
       Fullmove = 20 }
     |> unrealizedPosition
     |> pieceMovements (7, 4)
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal
         [| { Piece = King
              FromCoords = (7, 4)
@@ -476,7 +477,7 @@ let ``Position after third half movement`` () =
 let ``Moves in initial position`` () =
     Position.init
     |> moves
-    |> Seq.toArray
+    |> LazyList.toArray
     |> should equal [| { Piece = Knight
                          FromCoords = (0, 1)
                          ToCoords = (2, 0)
