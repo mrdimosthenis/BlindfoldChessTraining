@@ -5,7 +5,6 @@ open BlindfoldChessMechanics
 
 open System.Text.RegularExpressions
 open System.IO
-open FSharpx.Collections
 
 exception InvalidMove of string
 
@@ -39,54 +38,51 @@ let textOfMetaTags (text: string): Map<string,string> =
     |> Seq.map (fun (x:Match) -> x.Groups)
     |> Seq.map Seq.cast<Group>
     |> Seq.map (fun g -> (groupVal 1 g, groupVal 2 g))
-    |> LazyList.ofSeq
-    |> Utils.lazyListToMap
+    |> Map.ofSeq
     
-let textOfMovesWithResult (text: string): LazyList<string> * Game.NotedResult option =
+let textOfMovesWithResult (text: string): string seq * Game.NotedResult option =
     let justMovesAndResult = Regex.Replace(text, "\([^)]+\)|\[[^\]]+\]|\{[^}]+\}|\d+\.+", "")
     let movesAndResultRev = Regex.Split(justMovesAndResult, "\s+")
-                             |> LazyList.ofArray
-                             |> LazyList.filter ((<>) "")
-                             |> LazyList.rev
-    let result = match LazyList.head movesAndResultRev with
+                             |> Seq.ofArray
+                             |> Seq.filter ((<>) "")
+                             |> Seq.rev
+    let result = match Seq.head movesAndResultRev with
                  | "1-0" -> Some Game.White
                  | "0-1" -> Some Game.Black
                  | "1/2-1/2" -> Some Game.Draw
                  | _ -> None
     let moves = match result with
-                | Some _ -> movesAndResultRev |> LazyList.tail |> LazyList.rev
-                | _ -> movesAndResultRev |> LazyList.rev
+                | Some _ -> movesAndResultRev |> Seq.tail |> Seq.rev
+                | _ -> movesAndResultRev |> Seq.rev
     (moves, result)
 
-let fenRow(row: string): LazyList<Board.Resident> =
-    row.ToCharArray()
-    |> LazyList.ofArray
-    |> LazyList.fold (fun acc c ->
-                        let residents = match c with
-                                        | 'K' -> [| Some { Board.PieceType = Board.King; Board.IsWhite = true } |]
-                                        | 'Q' -> [| Some { Board.PieceType = Board.Queen; Board.IsWhite = true } |]
-                                        | 'R' -> [| Some { Board.PieceType = Board.Rook; Board.IsWhite = true } |]
-                                        | 'B' -> [| Some { Board.PieceType = Board.Bishop; Board.IsWhite = true } |]
-                                        | 'N' -> [| Some { Board.PieceType = Board.Knight; Board.IsWhite = true } |]
-                                        | 'P' -> [| Some { Board.PieceType = Board.Pawn; Board.IsWhite = true } |]
-                                        | 'k' -> [| Some { Board.PieceType = Board.King; Board.IsWhite = false } |]
-                                        | 'q' -> [| Some { Board.PieceType = Board.Queen; Board.IsWhite = false } |]
-                                        | 'r' -> [| Some { Board.PieceType = Board.Rook; Board.IsWhite = false } |]
-                                        | 'b' -> [| Some { Board.PieceType = Board.Bishop; Board.IsWhite = false } |]
-                                        | 'n' -> [| Some { Board.PieceType = Board.Knight; Board.IsWhite = false } |]
-                                        | 'p' -> [| Some { Board.PieceType = Board.Pawn; Board.IsWhite = false } |]
-                                        | d -> Array.create (int d - int '0') None
-                        LazyList.append (LazyList.ofArray residents) acc
-                     )
-                     LazyList.empty
-    |> LazyList.rev
+let fenRow(row: string): Board.Resident seq =
+    Seq.foldBack (fun c acc ->
+                    let residents = match c with
+                                    | 'K' -> [| Some { Board.PieceType = Board.King; Board.IsWhite = true } |]
+                                    | 'Q' -> [| Some { Board.PieceType = Board.Queen; Board.IsWhite = true } |]
+                                    | 'R' -> [| Some { Board.PieceType = Board.Rook; Board.IsWhite = true } |]
+                                    | 'B' -> [| Some { Board.PieceType = Board.Bishop; Board.IsWhite = true } |]
+                                    | 'N' -> [| Some { Board.PieceType = Board.Knight; Board.IsWhite = true } |]
+                                    | 'P' -> [| Some { Board.PieceType = Board.Pawn; Board.IsWhite = true } |]
+                                    | 'k' -> [| Some { Board.PieceType = Board.King; Board.IsWhite = false } |]
+                                    | 'q' -> [| Some { Board.PieceType = Board.Queen; Board.IsWhite = false } |]
+                                    | 'r' -> [| Some { Board.PieceType = Board.Rook; Board.IsWhite = false } |]
+                                    | 'b' -> [| Some { Board.PieceType = Board.Bishop; Board.IsWhite = false } |]
+                                    | 'n' -> [| Some { Board.PieceType = Board.Knight; Board.IsWhite = false } |]
+                                    | 'p' -> [| Some { Board.PieceType = Board.Pawn; Board.IsWhite = false } |]
+                                    | d -> Array.create (int d - int '0') None
+                    Seq.append (Seq.ofArray residents) acc
+                 )
+                 row
+                 Seq.empty
 
 let textOfFen (text: string): Position.Position =
     let fenParts = text.Split(' ')
     let board = fenParts.[0].Split('/')
-                |> LazyList.ofArray
-                |> LazyList.map fenRow
-                |> LazyList.rev
+                |> Seq.ofArray
+                |> Seq.map fenRow
+                |> Seq.rev
     let isWhiteToMove = (fenParts.[1] = "w")
     let castling = match fenParts.[2] with
                    | "-" -> { Position.WhiteKingSideCastle = false
@@ -117,19 +113,19 @@ let textOfGame (text: string): Game.Game =
     let (moves, result) = textOfMovesWithResult text
     let validatedMoves =
             moves
-            |> LazyList.fold (fun (accPos, accMvs) m ->
+            |> Seq.fold (fun (accPos, accMvs) m ->
                             let validMoves = Position.moves accPos
-                            match LazyList.tryFind (fun vm -> Emitter.moveText true false vm = m) validMoves with
+                            match Seq.tryFind (fun vm -> Emitter.moveText true false vm = m) validMoves with
                             | Some vm ->
                                 let nextAccPos = Position.positionAfterMove vm accPos
-                                let nextAccMvs = Utils.prependedLazyList vm accMvs
+                                let nextAccMvs = Utils.prependedSeq vm accMvs
                                 (nextAccPos, nextAccMvs)
                             | None ->
                                 raise (InvalidMove m)
                         )
-                        (initialPosition, LazyList.empty)
+                        (initialPosition, Seq.empty)
             |> snd
-            |> LazyList.rev
+            |> Seq.rev
     { MetaTags = metaTags
       InitialPosition = initialPosition
       Moves = validatedMoves

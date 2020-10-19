@@ -5,7 +5,6 @@ open FsUnit.Xunit
 
 open BlindfoldChessMechanics.Notation.Parser
 open BlindfoldChessMechanics.Logic
-open FSharpx.Collections
 
 // types
 
@@ -19,7 +18,7 @@ type RealizedGame = { MetaTags: (string * string) array
 let realizedGame (game: Game.Game): RealizedGame =
     { MetaTags = Map.toArray game.MetaTags
       InitialPosition = PositionTest.realizedPosition game.InitialPosition
-      Moves = LazyList.toArray game.Moves
+      Moves = Seq.toArray game.Moves
       Result = game.Result }
 
 // tests
@@ -125,7 +124,7 @@ let ``Parse text of moves with result`` () =
     37. Rxc5 { [%eval #-3] [%clk 0:00:08] } 37... Rc2 { [%eval #-2] [%clk 0:00:19] } 0-1
     """
     let (moves, result) = textOfMovesWithResult text
-    let movesArr = LazyList.toArray moves
+    let movesArr = Seq.toArray moves
     should equal (movesArr, result)
         (
             [| "e4"; "c5";

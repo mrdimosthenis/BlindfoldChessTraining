@@ -1,7 +1,6 @@
 ﻿module BlindfoldChessMechanics.Logic.Board
 
 open BlindfoldChessMechanics
-open FSharpx.Collections
 
 exception NoPiece of int * int
 exception WrongPiece of string * int * int
@@ -22,7 +21,7 @@ type ColoredPiece = { PieceType: Piece; IsWhite: bool }
 
 type Resident = ColoredPiece Option
 
-type Board = LazyList<LazyList<Resident>>
+type Board = Resident seq seq
 
 // constants
 
@@ -73,9 +72,9 @@ let init: Board =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn|]
       [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
-    |> LazyList.ofArray
-    |> LazyList.map LazyList.ofArray
-    |> LazyList.rev
+    |> Seq.ofArray
+    |> Seq.map Seq.ofArray
+    |> Seq.rev
 
 // functions
 
@@ -84,90 +83,90 @@ let areValidCoordinates(coordinates: Coordinates): bool =
 
     rowIndex >= 0 && rowIndex <= 7 && columnIndex >= 0 && columnIndex <= 7
 
-let upCoordinates (coordinates: Coordinates): LazyList<Coordinates> =
+let upCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
-    Utils.lazyListInit (7 - rowIndex) (fun i -> (rowIndex + i + 1, columnIndex))
+    Seq.init (7 - rowIndex) (fun i -> (rowIndex + i + 1, columnIndex))
 
-let downCoordinates (coordinates: Coordinates): LazyList<Coordinates> =
+let downCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
-    Utils.lazyListInit rowIndex (fun i -> (rowIndex - i - 1, columnIndex))
+    Seq.init rowIndex (fun i -> (rowIndex - i - 1, columnIndex))
 
-let leftCoordinates (coordinates: Coordinates): LazyList<Coordinates> =
+let leftCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
-    Utils.lazyListInit columnIndex (fun i -> (rowIndex, columnIndex - i - 1))
+    Seq.init columnIndex (fun i -> (rowIndex, columnIndex - i - 1))
 
-let rightCoordinates (coordinates: Coordinates): LazyList<Coordinates> =
+let rightCoordinates (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
-    Utils.lazyListInit (7 - columnIndex) (fun i -> (rowIndex, columnIndex + i + 1))
+    Seq.init (7 - columnIndex) (fun i -> (rowIndex, columnIndex + i + 1))
 
-let upRightDiagonal (coordinates: Coordinates): LazyList<Coordinates> =
+let upRightDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min (7 - rowIndex) (7 - columnIndex)
-    Utils.lazyListInit minDist (fun i -> (rowIndex + i + 1, columnIndex + i + 1))
+    Seq.init minDist (fun i -> (rowIndex + i + 1, columnIndex + i + 1))
 
-let downRightDiagonal (coordinates: Coordinates): LazyList<Coordinates> =
+let downRightDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min rowIndex (7 - columnIndex)
-    Utils.lazyListInit minDist (fun i -> (rowIndex - i - 1, columnIndex + i + 1))
+    Seq.init minDist (fun i -> (rowIndex - i - 1, columnIndex + i + 1))
 
-let upLeftDiagonal (coordinates: Coordinates): LazyList<Coordinates> =
+let upLeftDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min (7 - rowIndex) columnIndex
-    Utils.lazyListInit minDist (fun i -> (rowIndex + i + 1, columnIndex - i - 1))
+    Seq.init minDist (fun i -> (rowIndex + i + 1, columnIndex - i - 1))
 
-let downLeftDiagonal (coordinates: Coordinates): LazyList<Coordinates> =
+let downLeftDiagonal (coordinates: Coordinates): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min rowIndex columnIndex
-    Utils.lazyListInit minDist (fun i -> (rowIndex - i - 1, columnIndex - i - 1))
+    Seq.init minDist (fun i -> (rowIndex - i - 1, columnIndex - i - 1))
 
 let resident (coordinates: Coordinates) (board: Board): Resident =
     let (rowIndex, columnIndex) = coordinates
-    board |> Utils.lazyListItem rowIndex |> Utils.lazyListItem columnIndex
+    board |> Seq.item rowIndex |> Seq.item columnIndex
 
-let collectControlledCoordinates (directionF: Coordinates -> LazyList<Coordinates>)
+let collectControlledCoordinates (directionF: Coordinates -> Coordinates seq)
                                  (coordinates: Coordinates)
                                  (board: Board)
-                             : LazyList<Coordinates> =
+                             : Coordinates seq =
     match resident coordinates board with
     | None -> raise (NoPiece coordinates)
     | Some piece ->
         coordinates
         |> directionF
-        |> LazyList.fold (fun (accCoords, accMetPiece) coord ->
+        |> Seq.fold (fun (accCoords, accMetPiece) coord ->
             if accMetPiece then
                 (accCoords, accMetPiece)
             else
                 match resident coord board with
                 | Some { IsWhite = w } when w = piece.IsWhite -> (accCoords, true)
-                | Some _ -> (Utils.prependedLazyList coord accCoords, true)
-                | _ -> (Utils.prependedLazyList coord accCoords, false)) (LazyList.empty, false)
+                | Some _ -> (Utils.prependedSeq coord accCoords, true)
+                | _ -> (Utils.prependedSeq coord accCoords, false)) (Seq.empty, false)
         |> fst
 
-let coordinatesControlledByRook (coordinates: Coordinates) (board: Board): LazyList<Coordinates> =
+let coordinatesControlledByRook (coordinates: Coordinates) (board: Board): Coordinates seq =
     [| upCoordinates
        downCoordinates
        rightCoordinates
        leftCoordinates |]
-    |> LazyList.ofArray
-    |> LazyList.map (fun dirF -> collectControlledCoordinates dirF coordinates board)
-    |> LazyList.concat
+    |> Seq.ofArray
+    |> Seq.map (fun dirF -> collectControlledCoordinates dirF coordinates board)
+    |> Seq.concat
 
-let coordinatesControlledByBishop (coordinates: Coordinates) (board: Board): LazyList<Coordinates> =
+let coordinatesControlledByBishop (coordinates: Coordinates) (board: Board): Coordinates seq =
     [| upRightDiagonal
        downRightDiagonal
        upLeftDiagonal
        downLeftDiagonal |]
-    |> LazyList.ofArray
-    |> LazyList.map (fun dirF -> collectControlledCoordinates dirF coordinates board)
-    |> LazyList.concat
+    |> Seq.ofArray
+    |> Seq.map (fun dirF -> collectControlledCoordinates dirF coordinates board)
+    |> Seq.concat
 
-let coordinatesControlledByQueen (coordinates: Coordinates) (board: Board): LazyList<Coordinates> =
+let coordinatesControlledByQueen (coordinates: Coordinates) (board: Board): Coordinates seq =
     [| coordinatesControlledByRook coordinates board
        coordinatesControlledByBishop coordinates board |]
-    |> LazyList.ofArray
-    |> LazyList.concat
+    |> Seq.ofArray
+    |> Seq.concat
 
-let coordinatesControlledByKnight (coordinates: Coordinates) (board: Board): LazyList<Coordinates> =
+let coordinatesControlledByKnight (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
 
     match resident coordinates board with
@@ -181,15 +180,15 @@ let coordinatesControlledByKnight (coordinates: Coordinates) (board: Board): Laz
            (rowIndex - 1, columnIndex + 2)
            (rowIndex + 2, columnIndex + 1)
            (rowIndex + 1, columnIndex + 2) |]
-        |> LazyList.ofArray
-        |> LazyList.filter areValidCoordinates
-        |> LazyList.filter (fun coord ->
+        |> Seq.ofArray
+        |> Seq.filter areValidCoordinates
+        |> Seq.filter (fun coord ->
             match resident coord board with
             | Some { IsWhite = w } when w = isWhite -> false
             | _ -> true)
     | _ -> raise (WrongPiece ("NoKnight", rowIndex, columnIndex))
 
-let coordinatesControlledByKing (coordinates: Coordinates) (board: Board): LazyList<Coordinates> =
+let coordinatesControlledByKing (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
 
     match resident coordinates board with
@@ -202,15 +201,15 @@ let coordinatesControlledByKing (coordinates: Coordinates) (board: Board): LazyL
            (rowIndex + 1, columnIndex - 1)
            (rowIndex + 1, columnIndex)
            (rowIndex + 1, columnIndex + 1) |]
-        |> LazyList.ofArray
-        |> LazyList.filter areValidCoordinates
-        |> LazyList.filter (fun coord ->
+        |> Seq.ofArray
+        |> Seq.filter areValidCoordinates
+        |> Seq.filter (fun coord ->
             match resident coord board with
             | Some { IsWhite = w } when w = isWhite -> false
             | _ -> true)
     | _ -> raise (WrongPiece ("NoKing", rowIndex, columnIndex))
 
-let coordinatesControlledByPawn (coordinates: Coordinates) (board: Board): LazyList<Coordinates> =
+let coordinatesControlledByPawn (coordinates: Coordinates) (board: Board): Coordinates seq =
     let (rowIndex, columnIndex) = coordinates
 
     match resident coordinates board with
@@ -224,25 +223,25 @@ let coordinatesControlledByPawn (coordinates: Coordinates) (board: Board): LazyL
             | (true, 1, None)
             | (false, 6, None) -> [| ((nextRowIndex + rowIncrease, columnIndex), false) |]
             | _ -> [||]
-            |> LazyList.ofArray
+            |> Seq.ofArray
 
         let diagCoordsWithCapt =
             [| ((nextRowIndex, columnIndex - 1), true)
                ((nextRowIndex, columnIndex + 1), true) |]
-            |> LazyList.ofArray
-            |> LazyList.filter (fun (coords, _) -> areValidCoordinates coords)
+            |> Seq.ofArray
+            |> Seq.filter (fun (coords, _) -> areValidCoordinates coords)
 
-        LazyList.append twoSquaresForward diagCoordsWithCapt
-        |> Utils.prependedLazyList (forwardCoords, false)
-        |> LazyList.filter (fun (coords, isCapt) ->
+        Seq.append twoSquaresForward diagCoordsWithCapt
+        |> Utils.prependedSeq (forwardCoords, false)
+        |> Seq.filter (fun (coords, isCapt) ->
             match (resident coords board, isCapt) with
             | (Some piece, true) -> piece.IsWhite <> isWhite
             | (None, false) -> true
             | _ -> false)
-        |> LazyList.map fst
+        |> Seq.map fst
     | _ -> raise (WrongPiece ("NoPawn", rowIndex, columnIndex))
 
-let coordinatesControlledByPiece (coordinates: Coordinates) (board: Board): LazyList<Coordinates> =
+let coordinatesControlledByPiece (coordinates: Coordinates) (board: Board): Coordinates seq =
     let coordsF =
         match resident coordinates board with
         | Some { PieceType = Rook } -> coordinatesControlledByRook
@@ -255,28 +254,25 @@ let coordinatesControlledByPiece (coordinates: Coordinates) (board: Board): Lazy
 
     coordsF coordinates board
 
-let coordinatesControlledByColor (isWhite: bool) (board: Board): LazyList<Coordinates> =
+let coordinatesControlledByColor (isWhite: bool) (board: Board): Coordinates seq =
     seq {
         for rowIndex in 0 .. 7 do
             for columnIndex in 0 .. 7 ->
                 (rowIndex, columnIndex)
     }
-    |> LazyList.ofSeq
-    |> LazyList.filter (fun coords ->
-                            match resident coords board with
-                            | Some { IsWhite = isWh } when isWh = isWhite -> true
-                            | _ -> false
-                        )
-    |> LazyList.map (fun coords -> coordinatesControlledByPiece coords board)
-    |> LazyList.concat
-    |> Utils.lazyListDistinct
+    |> Seq.filter (fun coords ->
+        match resident coords board with
+        | Some { IsWhite = isWh } when isWh = isWhite -> true
+        | _ -> false)
+    |> Seq.map (fun coords -> coordinatesControlledByPiece coords board)
+    |> Seq.concat
+    |> Seq.distinct
 
 let isKingInDanger (isWhite: bool) (board: Board): bool =
     board
     |> coordinatesControlledByColor (not isWhite)
-    |> LazyList.tryFind (fun coords ->
-                            match resident coords board with
-                            | Some { PieceType = King; IsWhite = isWh } when isWh = isWhite -> true
-                            | _ -> false
-                         )
-    |> Option.isSome
+    |> Seq.exists (fun coords ->
+                    match resident coords board with
+                    | Some { PieceType = King; IsWhite = isWh } when isWh = isWhite -> true
+                    | _ -> false
+                  )
