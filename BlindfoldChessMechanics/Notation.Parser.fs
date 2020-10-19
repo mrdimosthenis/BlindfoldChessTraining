@@ -84,7 +84,7 @@ let textOfFen (text: string): Position.Position =
                 |> Seq.ofArray
                 |> Seq.map fenRow
                 |> Seq.rev
-                |> Seq.cache
+                |> Utils.seqToArrays
     let isWhiteToMove = (fenParts.[1] = "w")
     let castling = match fenParts.[2] with
                    | "-" -> { Position.WhiteKingSideCastle = false

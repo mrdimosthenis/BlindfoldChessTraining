@@ -21,7 +21,7 @@ type ColoredPiece = { PieceType: Piece; IsWhite: bool }
 
 type Resident = ColoredPiece Option
 
-type Board = Resident seq seq
+type Board = Resident array array
 
 // constants
 
@@ -72,10 +72,7 @@ let init: Board =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn;   whitePawn|]
       [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
-    |> Seq.ofArray
-    |> Seq.map Seq.ofArray
-    |> Seq.rev
-    |> Seq.cache
+    |> Array.rev
 
 // functions
 

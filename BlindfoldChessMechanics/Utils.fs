@@ -1,5 +1,15 @@
 ﻿module BlindfoldChessMechanics.Utils
 
+// Array
+
+let updatedArrays<'a> (indices: int * int) (newItem: 'a) (arr: 'a array array): 'a array array =
+    let (i, j) = indices
+    let newInnerArr = Array.copy arr.[i]
+    newInnerArr.[j] <- newItem
+    let newArr = Array.copy arr
+    newArr.[i] <- newInnerArr
+    newArr
+
 // Seq
 
 let seqToArrays<'a> (s: 'a seq seq): 'a array array = s |> Seq.map Seq.toArray |> Seq.toArray

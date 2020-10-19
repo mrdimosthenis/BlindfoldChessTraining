@@ -20,8 +20,7 @@ type RealizedPosition = { Board: Board.Resident array array
 
 let realizedPosition (position: Position): RealizedPosition =
     { Board = position.Board
-                     |> Seq.rev
-                     |> Utils.seqToArrays
+                     |> Array.rev
       IsWhiteToMove = position.IsWhiteToMove
       Castling = position.Castling 
       EnPassant = position.EnPassant
@@ -30,8 +29,7 @@ let realizedPosition (position: Position): RealizedPosition =
 
 let unrealizedPosition (realizedPosition: RealizedPosition): Position =
     { Board = realizedPosition.Board
-                     |> Utils.seqOfArrays
-                     |> Seq.rev
+                     |> Array.rev
       IsWhiteToMove = realizedPosition.IsWhiteToMove
       Castling = realizedPosition.Castling 
       EnPassant = realizedPosition.EnPassant

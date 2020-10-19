@@ -15,7 +15,6 @@ let emptyBoard =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
 
 [<Fact>]
 let ``Coordinates cotrolled by rook`` () =
@@ -27,8 +26,7 @@ let ``Coordinates cotrolled by rook`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByRook (4, 2)
     |> Seq.toArray
     |> should equal
@@ -52,8 +50,7 @@ let ``Coordinates cotrolled by bishop`` () =
       [|blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByBishop (4, 2)
     |> Seq.toArray
     |> should equal
@@ -77,8 +74,7 @@ let ``Coordinates cotrolled by queen`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
       [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByQueen (4, 4)
     |> Seq.toArray
     |> should equal
@@ -106,8 +102,7 @@ let ``Coordinates cotrolled by knight in the middle`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByKnight (2, 5)
     |> Seq.toArray
     |> should equal
@@ -123,8 +118,7 @@ let ``Coordinates cotrolled by knight in the corner`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByKnight (6, 0)
     |> Seq.toArray
     |> should equal
@@ -145,8 +139,7 @@ let ``Coordinates cotrolled by king in the middle`` () =
       [|emptySquare; emptySquare; whiteRook;   whiteKing;   emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; blackBishop; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByKing (2, 3)
     |> Seq.toArray
     |> should equal
@@ -162,8 +155,7 @@ let ``Coordinates cotrolled by king in the corner`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByKing (7, 0)
     |> Seq.toArray
     |> should equal
@@ -184,8 +176,7 @@ let ``Coordinates cotrolled by white init pawn in the edge`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackBishop; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByPawn (1, 7)
     |> Seq.toArray
     |> should equal
@@ -201,8 +192,7 @@ let ``Coordinates cotrolled by white init blocked pawn`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; whiteRook;   emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByPawn (1, 3)
     |> Seq.toArray
     |> should equal
@@ -218,8 +208,7 @@ let ``Coordinates cotrolled by black blocked pawn`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByPawn (4, 3)
     |> Seq.toArray
     |> should equal
@@ -235,8 +224,7 @@ let ``Coordinates cotrolled by black init pawn in the edge`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByPawn (6, 0)
     |> Seq.toArray
     |> should equal
@@ -257,8 +245,7 @@ let ``Coordinates cotrolled by white color`` () =
       [|emptySquare; blackPawn;   emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare|]
       [|blackPawn;   emptySquare; blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; blackKing;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByColor true
     |> Seq.toArray
     |> should equal
@@ -276,8 +263,7 @@ let ``Coordinates cotrolled by black color`` () =
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; whiteQueen;  emptySquare; whitePawn;   whitePawn;   whitePawn|]
       [|emptySquare; emptySquare; whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> coordinatesControlledByColor false
     |> Seq.toArray
     |> should equal
@@ -313,8 +299,7 @@ let ``Is white king in danger`` () =
       [|emptySquare; whiteKing;   emptySquare; whitePawn;   emptySquare; blackRook;   emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> isKingInDanger true
     |> should equal
         false
@@ -329,8 +314,7 @@ let ``Is black king in danger`` () =
       [|emptySquare; blackKing;   emptySquare; emptySquare; emptySquare; whiteRook;   emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
       [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-    |> Utils.seqOfArrays
-    |> Seq.rev
+    |> Array.rev
     |> isKingInDanger false
     |> should equal
         true

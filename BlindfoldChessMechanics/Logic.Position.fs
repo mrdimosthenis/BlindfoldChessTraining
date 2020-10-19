@@ -172,25 +172,25 @@ let positionAfterMovement (movement: Movement) (position: Position): Position =
     let newBlackQueenSideCastle = position.Castling.BlackQueenSideCastle && movement.FromCoords <> (7, 4) && movement.FromCoords <> (7, 0)
     let enPassUpdatedBoard (board: Board.Board): Board.Board =
         match (movement.Piece, position.EnPassant) with
-        | (Board.Pawn, Some enPassCoords) when enPassCoords = movement.ToCoords -> Utils.updatedSequences enPassCoords None board
+        | (Board.Pawn, Some enPassCoords) when enPassCoords = movement.ToCoords -> Utils.updatedArrays enPassCoords None board
         | _ -> board
     let castleUpdatedBoard (board: Board.Board): Board.Board =
         let rook = Some {Board.PieceType = Board.Rook; Board.IsWhite = position.IsWhiteToMove}
         match (movement.Piece, snd movement.FromCoords, snd movement.ToCoords) with
         | (Board.King, 4, 6) -> board
-                                |> Utils.updatedSequences (fst movement.FromCoords, 7) None
-                                |> Utils.updatedSequences (fst movement.FromCoords, 5) rook
+                                |> Utils.updatedArrays (fst movement.FromCoords, 7) None
+                                |> Utils.updatedArrays (fst movement.FromCoords, 5) rook
         | (Board.King, 4, 2) -> board
-                                |> Utils.updatedSequences (fst movement.FromCoords, 0) None
-                                |> Utils.updatedSequences (fst movement.FromCoords, 3) rook
+                                |> Utils.updatedArrays (fst movement.FromCoords, 0) None
+                                |> Utils.updatedArrays (fst movement.FromCoords, 3) rook
         | _ -> board
     let pieceInNewCoords =
         match movement.Promotion with
         | Some piece -> Some { Board.PieceType = piece; Board.IsWhite = position.IsWhiteToMove }
         | _ -> Some { Board.PieceType = movement.Piece; Board.IsWhite = position.IsWhiteToMove }
     let newBoard = position.Board
-                   |> Utils.updatedSequences movement.FromCoords None
-                   |> Utils.updatedSequences movement.ToCoords pieceInNewCoords
+                   |> Utils.updatedArrays movement.FromCoords None
+                   |> Utils.updatedArrays movement.ToCoords pieceInNewCoords
                    |> enPassUpdatedBoard
                    |> castleUpdatedBoard
     { Board = newBoard
