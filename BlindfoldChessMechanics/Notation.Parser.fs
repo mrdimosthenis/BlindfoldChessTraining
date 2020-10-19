@@ -133,3 +133,26 @@ let textOfGame (text: string): Game.Game =
       InitialPosition = initialPosition
       Moves = validatedMoves
       Result = result }
+
+let fileOfGames(filePath: string): Game.Game seq =
+    filePath
+    |> File.ReadLines
+    |> Seq.scan (fun (accLines, prevLine, accGameStrOpt) s ->
+                    match (prevLine, s.StartsWith("[")) with
+                    | ("", true) -> ("", s, Some accLines)
+                    | _ -> (accLines + "\n" + s, s, None)
+                )
+                ("", "", None)
+    |> Seq.rev
+    |> Seq.indexed
+    |> Seq.map (fun (i, (accLines, _, accGameStrOpt)) ->
+                        match (i, accGameStrOpt) with
+                        | (0, _) -> Seq.ofArray [| accLines |]
+                        | (_, Some s) -> Seq.ofArray [| s |]
+                        | _ -> Seq.ofArray [||]
+               )
+    |> Seq.concat
+    |> Seq.rev
+    |> Seq.filter (fun s -> s.Replace("\n", "").Trim() <> "")
+    |> Seq.map textOfGame
+    |> Seq.cache

@@ -182,3 +182,13 @@ let gameText (game: Game.Game): string =
             metaTags
             (String.Join(" ", moves))
             result
+
+let gamesFile(filePath: string) (games: Game.Game seq): unit =
+    let w = File.AppendText filePath
+    Seq.iter (fun g->
+                w.WriteLine()
+                w.WriteLine(gameText g)
+                w.WriteLine()
+             )
+             games
+    w.Close()

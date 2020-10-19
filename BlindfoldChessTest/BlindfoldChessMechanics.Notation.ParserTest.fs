@@ -5,6 +5,7 @@ open FsUnit.Xunit
 
 open BlindfoldChessMechanics.Notation.Parser
 open BlindfoldChessMechanics.Logic
+open System.IO
 
 // tests
 
