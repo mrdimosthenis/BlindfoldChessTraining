@@ -475,7 +475,7 @@ let ``Position after third half movement`` () =
 [<Fact>]
 let ``Moves in initial position`` () =
     Position.init
-    |> movesWithResPos
+    |> movesWithResultedPosition
     |> Seq.map fst
     |> Seq.toArray
     |> should equal [| { Piece = Knight

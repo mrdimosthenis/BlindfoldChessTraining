@@ -2,6 +2,7 @@
 
 open BlindfoldChessMechanics.Logic
 open BlindfoldChessMechanics
+open System
 
 // types
 
@@ -222,7 +223,7 @@ let validMovements (position: Position): Movement seq =
                   )
     |> Seq.cache
 
-let movesWithResPos (position: Position): (Move * Position) seq =
+let movesWithResultedPosition (position: Position): (Move * Position) seq =
     let valMovements = validMovements position
     valMovements
     |> Seq.map (fun move ->
@@ -254,7 +255,7 @@ let movesWithResPos (position: Position): (Move * Position) seq =
                 )
     |> Seq.cache
 
-// prefer to use `movesWithResPos` instead of `positionAfterMove`
+[<Obsolete("Do not use. Use movesWithResultedPosition instead.")>]
 let positionAfterMove (move: Move) (position: Position): Position =
     let move = { Piece = move.Piece
                  FromCoords = move.FromCoords

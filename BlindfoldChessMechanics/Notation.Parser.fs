@@ -116,7 +116,7 @@ let textOfGame (text: string): Game.Game =
     let validatedMoves =
             moves
             |> Seq.fold (fun (accPos, accMvs) m ->
-                            let validMovesWithResPos = Position.movesWithResPos accPos
+                            let validMovesWithResPos = Position.movesWithResultedPosition accPos
                             match Seq.tryFind (fun (vm, _) -> Emitter.moveText true false vm = m) validMovesWithResPos with
                             | Some (vm, resPos) ->
                                 let nextAccPos = resPos
