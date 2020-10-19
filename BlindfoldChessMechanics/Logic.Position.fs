@@ -222,7 +222,7 @@ let validMovements (position: Position): Movement seq =
                   )
     |> Seq.cache
 
-let moves (position: Position): Move seq =
+let movesWithResPos (position: Position): (Move * Position) seq =
     let valMovements = validMovements position
     valMovements
     |> Seq.map (fun move ->
@@ -240,18 +240,21 @@ let moves (position: Position): Move seq =
                         |> Seq.filter (fun m -> m <> move && m.Piece = move.Piece && m.ToCoords = move.ToCoords)
                         |> Seq.map (fun m -> m.FromCoords)
                         |> Seq.tryHead
-                    { Piece = move.Piece
-                      FromCoords = move.FromCoords
-                      ToCoords = move.ToCoords
-                      IsCapture = move.IsCapture
-                      Promotion = move.Promotion
-                      IsCheck = isCheck
-                      IsMate = isMate
-                      IsStalemate = isStalemate
-                      SamePieceCoords= samePieceCoords }
+                    let m = 
+                        { Piece = move.Piece
+                          FromCoords = move.FromCoords
+                          ToCoords = move.ToCoords
+                          IsCapture = move.IsCapture
+                          Promotion = move.Promotion
+                          IsCheck = isCheck
+                          IsMate = isMate
+                          IsStalemate = isStalemate
+                          SamePieceCoords= samePieceCoords }
+                    (m, newPos)
                 )
     |> Seq.cache
 
+// prefer to use `movesWithResPos` instead of `positionAfterMove`
 let positionAfterMove (move: Move) (position: Position): Position =
     let move = { Piece = move.Piece
                  FromCoords = move.FromCoords

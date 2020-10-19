@@ -116,10 +116,10 @@ let textOfGame (text: string): Game.Game =
     let validatedMoves =
             moves
             |> Seq.fold (fun (accPos, accMvs) m ->
-                            let validMoves = Position.moves accPos
-                            match Seq.tryFind (fun vm -> Emitter.moveText true false vm = m) validMoves with
-                            | Some vm ->
-                                let nextAccPos = Position.positionAfterMove vm accPos
+                            let validMovesWithResPos = Position.movesWithResPos accPos
+                            match Seq.tryFind (fun (vm, _) -> Emitter.moveText true false vm = m) validMovesWithResPos with
+                            | Some (vm, resPos) ->
+                                let nextAccPos = resPos
                                 let nextAccMvs = Utils.prependedSeq vm accMvs
                                 (nextAccPos, nextAccMvs)
                             | None ->
