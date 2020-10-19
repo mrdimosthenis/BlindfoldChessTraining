@@ -223,8 +223,8 @@ let validMovements (position: Position): Movement seq =
     |> Seq.cache
 
 let moves (position: Position): Move seq =
-    position
-    |> validMovements
+    let valMovements = validMovements position
+    valMovements
     |> Seq.map (fun move ->
                     let newPos = positionAfterMovement move position
                     let isCheck =
@@ -236,8 +236,7 @@ let moves (position: Position): Move seq =
                     let isMate = isCheck && (not canMove)
                     let isStalemate = (not isCheck) && (not canMove)
                     let samePieceCoords =
-                        position
-                        |> validMovements
+                        valMovements
                         |> Seq.filter (fun m -> m <> move && m.Piece = move.Piece && m.ToCoords = move.ToCoords)
                         |> Seq.map (fun m -> m.FromCoords)
                         |> Seq.tryHead
