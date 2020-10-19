@@ -128,7 +128,7 @@ let textOfGame (text: string): Game.Game =
                         (initialPosition, Seq.empty)
             |> snd
             |> Seq.rev
-            |> Seq.cache
+            |> Seq.toArray
     { MetaTags = metaTags
       InitialPosition = initialPosition
       Moves = validatedMoves

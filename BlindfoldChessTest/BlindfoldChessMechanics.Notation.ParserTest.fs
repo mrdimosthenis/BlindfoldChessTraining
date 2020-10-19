@@ -6,21 +6,6 @@ open FsUnit.Xunit
 open BlindfoldChessMechanics.Notation.Parser
 open BlindfoldChessMechanics.Logic
 
-// types
-
-type RealizedGame = { MetaTags: (string * string) array
-                      InitialPosition: PositionTest.RealizedPosition
-                      Moves: Position.Move array
-                      Result: Game.NotedResult option }
-
-// functions
-
-let realizedGame (game: Game.Game): RealizedGame =
-    { MetaTags = Map.toArray game.MetaTags
-      InitialPosition = PositionTest.realizedPosition game.InitialPosition
-      Moves = Seq.toArray game.Moves
-      Result = game.Result }
-
 // tests
 
 [<Fact>]
@@ -171,97 +156,84 @@ let ``Parse text of moves with result`` () =
 let ``Fen of initial position`` () =
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     |> textOfFen
-    |> PositionTest.realizedPosition
-    |> should equal
-        (PositionTest.realizedPosition Position.init)
+    |> should equal Position.init
 
 [<Fact>]
 let ``Fen of position after first half movement`` () =
     "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterFirstHalfMovement
+        PositionTest.positionAfterFirstHalfMovement
 
 [<Fact>]
 let ``Fen of position after second half movement`` () =
     "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterSecondHalfMovement
+        PositionTest.positionAfterSecondHalfMovement
 
 [<Fact>]
 let ``Fen of position after third half movement`` () =
     "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterThirdHalfMovement
+        PositionTest.positionAfterThirdHalfMovement
 
 [<Fact>]
 let ``Fen of position after forth half move`` () =
     "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterForthHalfMove
+        PositionTest.positionAfterForthHalfMove
 
 [<Fact>]
 let ``Fen of position after fifth half move`` () =
     "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 2 3"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterFifthHalfMove
+        PositionTest.positionAfterFifthHalfMove
 
 [<Fact>]
 let ``Fen of position after sixth half move`` () =
    "rnbqkb1r/ppp2ppp/4pn2/3P4/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 4"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterSixthHalfMove
+        PositionTest.positionAfterSixthHalfMove
 
 [<Fact>]
 let ``Fen of position after seventh half move`` () =
     "rnbqkb1r/ppp2ppp/4pn2/3P4/7P/8/PPPPBPP1/RNBQK1NR b KQkq h3 0 4"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterSeventhHalfMove
+        PositionTest.positionAfterSeventhHalfMove
 
 [<Fact>]
 let ``Fen of position after eighth half move`` () =
     "rnbqk2r/ppp2ppp/4pn2/3P4/7P/b7/PPPPBPP1/RNBQK1NR w KQkq - 1 5"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterEighthHalfMove
+        PositionTest.positionAfterEighthHalfMove
 
 [<Fact>]
 let ``Fen of position after ninth half move`` () =
     "rnbqk2r/ppp2ppp/4pn2/3P4/7P/P7/P1PPBPP1/RNBQK1NR b KQkq - 0 5"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterNinthHalfMove
+        PositionTest.positionAfterNinthHalfMove
 
 [<Fact>]
 let ``Fen of position after tenth half move`` () =
     "rnbq1rk1/ppp2ppp/4pn2/3P4/7P/P7/P1PPBPP1/RNBQK1NR w KQ - 1 6"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterTentHalfMove
+        PositionTest.positionAfterTentHalfMove
 
 [<Fact>]
 let ``Fen of position after eleventh half move`` () =
     "rnbq1rk1/ppp2ppp/4pn2/3P4/7P/P7/P1PPBPP1/RNBQ1KNR b - - 2 6"
     |> textOfFen
-    |> PositionTest.realizedPosition
     |> should equal
-        PositionTest.realizedPositionAfterEleventhHalfMove
+        PositionTest.positionAfterEleventhHalfMove
 
 [<Fact>]
 let ``Text of game`` () =
@@ -271,18 +243,18 @@ let ``Text of game`` () =
 
 1... Nf6 2. Be2 e6 3. h4 Ba3 4. bxa3 O-O 5. Kf1  1/2-1/2"""
     |> textOfGame
-    |> realizedGame
     |> should equal
-        { MetaTags = [| ("Black", "you")
-                        ("FEN", "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2")
-                        ("White", "me") |]
-          InitialPosition = PositionTest.realizedPositionAfterThirdHalfMovement
-          Moves = [| PositionTest.forthHalfMove
-                     PositionTest.fifthHalfMove
-                     PositionTest.sixthHalfMove
-                     PositionTest.seventhHalfMove
-                     PositionTest.eighthHalfMove
-                     PositionTest.ninthHalfMove
-                     PositionTest.tenthHalfMove
-                     PositionTest.eleventHalfMove |]
-          Result = (Some Game.Draw) }
+        { Game.MetaTags = Map.ofArray
+                            [| ("Black", "you")
+                               ("FEN", "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2")
+                               ("White", "me") |]
+          Game.InitialPosition = PositionTest.positionAfterThirdHalfMovement
+          Game.Moves = [| PositionTest.forthHalfMove
+                          PositionTest.fifthHalfMove
+                          PositionTest.sixthHalfMove
+                          PositionTest.seventhHalfMove
+                          PositionTest.eighthHalfMove
+                          PositionTest.ninthHalfMove
+                          PositionTest.tenthHalfMove
+                          PositionTest.eleventHalfMove |]
+          Game.Result = (Some Game.Draw) }

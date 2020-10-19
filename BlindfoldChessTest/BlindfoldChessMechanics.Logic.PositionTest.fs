@@ -7,47 +7,19 @@ open BlindfoldChessMechanics.Logic.Position
 open BlindfoldChessMechanics.Logic.Board
 open BlindfoldChessMechanics
 
-// types
-
-type RealizedPosition = { Board: Board.Resident array array
-                          IsWhiteToMove: bool
-                          Castling: Castling 
-                          EnPassant: Board.Coordinates Option
-                          Halfmove: int
-                          Fullmove: int }
-
-// functions
-
-let realizedPosition (position: Position): RealizedPosition =
-    { Board = position.Board
-                     |> Array.rev
-      IsWhiteToMove = position.IsWhiteToMove
-      Castling = position.Castling 
-      EnPassant = position.EnPassant
-      Halfmove = position.Halfmove
-      Fullmove = position.Fullmove }
-
-let unrealizedPosition (realizedPosition: RealizedPosition): Position =
-    { Board = realizedPosition.Board
-                     |> Array.rev
-      IsWhiteToMove = realizedPosition.IsWhiteToMove
-      Castling = realizedPosition.Castling 
-      EnPassant = realizedPosition.EnPassant
-      Halfmove = realizedPosition.Halfmove
-      Fullmove = realizedPosition.Fullmove }
-
 // tests
 
 [<Fact>]
 let ``Special white king movements with castling ability`` () =
-    { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; whiteRook|]|]
+    { Board = Array.rev
+                  [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                    [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                    [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                    [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                    [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                    [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                    [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                    [|whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; whiteRook|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -56,7 +28,6 @@ let ``Special white king movements with castling ability`` () =
       EnPassant = None
       Halfmove = 12
       Fullmove = 20 }
-    |> unrealizedPosition
     |> specialKingMovements (0, 4)
     |> Seq.toArray
     |> should equal
@@ -73,14 +44,15 @@ let ``Special white king movements with castling ability`` () =
 
 [<Fact>]
 let ``Special white king movements without castling ability`` () =
-    { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; whiteRook|]|]
+    { Board = Array.rev
+                [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; whiteRook|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = false
                    WhiteQueenSideCastle = false
@@ -89,7 +61,6 @@ let ``Special white king movements without castling ability`` () =
       EnPassant = None
       Halfmove = 12
       Fullmove = 20 }
-    |> unrealizedPosition
     |> specialKingMovements (0, 4)
     |> Seq.toArray
     |> should equal
@@ -97,14 +68,15 @@ let ``Special white king movements without castling ability`` () =
 
 [<Fact>]
 let ``Special black king movements with castling ability`` () =
-    { Board = [|[|blackRook;   emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; blackRook|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; whiteRook|]|]
+    { Board = Array.rev
+                [|[|blackRook;   emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; blackRook|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whiteRook;   emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; whiteRook|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -113,7 +85,6 @@ let ``Special black king movements with castling ability`` () =
       EnPassant = None
       Halfmove = 12
       Fullmove = 20 }
-    |> unrealizedPosition
     |> specialKingMovements (7, 4)
     |> Seq.toArray
     |> should equal
@@ -130,14 +101,15 @@ let ``Special black king movements with castling ability`` () =
 
 [<Fact>]
 let ``Special black king movements without castling ability`` () =
-    { Board = [|[|blackRook;   emptySquare; emptySquare; emptySquare; blackKing;   blackBishop; emptySquare; blackRook|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; whiteRook;   emptySquare; whiteKing;   emptySquare; emptySquare; whiteRook|]|]
+    { Board = Array.rev
+                [|[|blackRook;   emptySquare; emptySquare; emptySquare; blackKing;   blackBishop; emptySquare; blackRook|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; whiteRook;   emptySquare; whiteKing;   emptySquare; emptySquare; whiteRook|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -146,7 +118,6 @@ let ``Special black king movements without castling ability`` () =
       EnPassant = None
       Halfmove = 12
       Fullmove = 20 }
-    |> unrealizedPosition
     |> specialKingMovements (7, 4)
     |> Seq.toArray
     |> should equal
@@ -154,14 +125,15 @@ let ``Special black king movements without castling ability`` () =
 
 [<Fact>]
 let ``White pawn movements with en-passant ability`` () =
-    { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; whitePawn;   blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; emptySquare|]|]
+    { Board = Array.rev
+                [|[|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; whitePawn;   blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; emptySquare|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -170,7 +142,6 @@ let ``White pawn movements with en-passant ability`` () =
       EnPassant = Some (4, 2)
       Halfmove = 12
       Fullmove = 20 }
-    |> unrealizedPosition
     |> pawnMovements (4, 1)
     |> Seq.toArray
     |> should equal
@@ -192,14 +163,15 @@ let ``White pawn movements with en-passant ability`` () =
 
 [<Fact>]
 let ``White pawn movements without en-passant ability`` () =
-    { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; whitePawn;   blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; emptySquare|]|]
+    { Board = Array.rev
+                [|[|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; whitePawn;   blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; emptySquare|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -208,7 +180,6 @@ let ``White pawn movements without en-passant ability`` () =
       EnPassant = None
       Halfmove = 12
       Fullmove = 20 }
-    |> unrealizedPosition
     |> pawnMovements (4, 1)
     |> Seq.toArray
     |> should equal
@@ -225,14 +196,15 @@ let ``White pawn movements without en-passant ability`` () =
 
 [<Fact>]
 let ``Black pawn movements with promotion ability`` () =
-    { Board = [|[|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; whitePawn;   blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; whiteRook|]|]
+    { Board = Array.rev
+                [|[|emptySquare; emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|blackQueen;  emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; whitePawn;   blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; whiteRook|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -241,7 +213,6 @@ let ``Black pawn movements with promotion ability`` () =
       EnPassant = Some (3, 1)
       Halfmove = 12
       Fullmove = 20 }
-    |> unrealizedPosition
     |> pawnMovements (1, 6)
     |> Seq.toArray
     |> should equal
@@ -330,14 +301,15 @@ let ``White pawn piece movements in initial position`` () =
 
 [<Fact>]
 let ``Black king piece movements`` () =
-    { Board = [|[|blackRook;   emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; blackRook|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; whiteRook;   emptySquare;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; emptySquare|]|]
+    { Board = Array.rev
+                [|[|blackRook;   emptySquare; emptySquare; emptySquare; blackKing;   emptySquare; emptySquare; blackRook|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whiteKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; whiteRook;   emptySquare;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; whiteKing;   emptySquare; emptySquare; emptySquare|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -346,7 +318,6 @@ let ``Black king piece movements`` () =
       EnPassant = None
       Halfmove = 12
       Fullmove = 20 }
-    |> unrealizedPosition
     |> pieceMovements (7, 4)
     |> Seq.toArray
     |> should equal
@@ -381,15 +352,16 @@ let ``Black king piece movements`` () =
              IsCapture = false
              Promotion = None } |] 
 
-let realizedPositionAfterFirstHalfMovement =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
-                [|blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   emptySquare; whitePawn;   whitePawn;   whitePawn|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
+let positionAfterFirstHalfMovement =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
+                  [|blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   emptySquare; whitePawn;   whitePawn;   whitePawn|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
       IsWhiteToMove = false
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -407,18 +379,18 @@ let ``Position after first half movement`` () =
                                ToCoords = (3, 4)
                                IsCapture = false
                                Promotion = None }
-    |> realizedPosition
-    |> should equal realizedPositionAfterFirstHalfMovement
+    |> should equal positionAfterFirstHalfMovement
 
-let realizedPositionAfterSecondHalfMovement =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
-                [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   emptySquare; whitePawn;   whitePawn;   whitePawn|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
+let positionAfterSecondHalfMovement =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
+                  [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; blackPawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   emptySquare; whitePawn;   whitePawn;   whitePawn|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -430,25 +402,24 @@ let realizedPositionAfterSecondHalfMovement =
   
 [<Fact>]
 let ``Position after second half movement`` () =
-    realizedPositionAfterFirstHalfMovement
-    |> unrealizedPosition
+    positionAfterFirstHalfMovement
     |> positionAfterMovement { Piece = Pawn
                                FromCoords = (6, 3)
                                ToCoords = (4, 3)
                                IsCapture = false
                                Promotion = None }
-    |> realizedPosition
-    |> should equal realizedPositionAfterSecondHalfMovement
+    |> should equal positionAfterSecondHalfMovement
 
-let realizedPositionAfterThirdHalfMovement =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
-                [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   emptySquare; whitePawn;   whitePawn;   whitePawn|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
+let positionAfterThirdHalfMovement =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; blackKnight; blackRook|]
+                  [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   emptySquare; whitePawn;   whitePawn;   whitePawn|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
       IsWhiteToMove = false
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -460,15 +431,13 @@ let realizedPositionAfterThirdHalfMovement =
 
 [<Fact>]
 let ``Position after third half movement`` () =
-    realizedPositionAfterSecondHalfMovement
-    |> unrealizedPosition
+    positionAfterSecondHalfMovement
     |> positionAfterMovement { Piece = Pawn
                                FromCoords = (3, 4)
                                ToCoords = (4, 3)
                                IsCapture = true
                                Promotion = None }
-    |> realizedPosition
-    |> should equal realizedPositionAfterThirdHalfMovement
+    |> should equal positionAfterThirdHalfMovement
 
 [<Fact>]
 let ``Moves in initial position`` () =
@@ -667,15 +636,16 @@ let forthHalfMove = { Piece = Knight
                       IsStalemate = false
                       SamePieceCoords = None }
 
-let realizedPositionAfterForthHalfMove =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
-                [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   emptySquare; whitePawn;   whitePawn;   whitePawn|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
+let positionAfterForthHalfMove =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
+                  [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   emptySquare; whitePawn;   whitePawn;   whitePawn|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   whiteBishop; whiteKnight; whiteRook|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -687,11 +657,9 @@ let realizedPositionAfterForthHalfMove =
 
 [<Fact>]
 let ``Position after forth half move`` () =
-    realizedPositionAfterThirdHalfMovement
-    |> unrealizedPosition
-    |> positionAfterMove forthHalfMove   
-    |> realizedPosition
-    |> should equal realizedPositionAfterForthHalfMove
+    positionAfterThirdHalfMovement
+    |> positionAfterMove forthHalfMove
+    |> should equal positionAfterForthHalfMove
 
 let fifthHalfMove = { Piece = Bishop
                       FromCoords = (0, 5)
@@ -703,15 +671,16 @@ let fifthHalfMove = { Piece = Bishop
                       IsStalemate = false
                       SamePieceCoords = None }
 
-let realizedPositionAfterFifthHalfMove =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
-                [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   whitePawn|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
+let positionAfterFifthHalfMove =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
+                  [|blackPawn;   blackPawn;   blackPawn;   emptySquare; blackPawn;   blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; blackKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   whitePawn|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
       IsWhiteToMove = false
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -723,11 +692,9 @@ let realizedPositionAfterFifthHalfMove =
 
 [<Fact>]
 let ``Position after fifth half move`` () =
-    realizedPositionAfterForthHalfMove
-    |> unrealizedPosition
+    positionAfterForthHalfMove
     |> positionAfterMove fifthHalfMove
-    |> realizedPosition
-    |> should equal realizedPositionAfterFifthHalfMove
+    |> should equal positionAfterFifthHalfMove
 
 let sixthHalfMove = { Piece = Pawn
                       FromCoords = (6, 4)
@@ -739,15 +706,16 @@ let sixthHalfMove = { Piece = Pawn
                       IsStalemate = false
                       SamePieceCoords = None }
 
-let realizedPositionAfterSixthHalfMove =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
-                [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   whitePawn|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
+let positionAfterSixthHalfMove =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
+                  [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   whitePawn|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -759,11 +727,9 @@ let realizedPositionAfterSixthHalfMove =
 
 [<Fact>]
 let ``Position after sixth half move`` () =
-    realizedPositionAfterFifthHalfMove
-    |> unrealizedPosition
+    positionAfterFifthHalfMove
     |> positionAfterMove sixthHalfMove
-    |> realizedPosition
-    |> should equal realizedPositionAfterSixthHalfMove
+    |> should equal positionAfterSixthHalfMove
 
 let seventhHalfMove = { Piece = Pawn
                         FromCoords = (1, 7)
@@ -775,15 +741,16 @@ let seventhHalfMove = { Piece = Pawn
                         IsStalemate = false
                         SamePieceCoords = None }
 
-let realizedPositionAfterSeventhHalfMove =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
-                [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
+let positionAfterSeventhHalfMove =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   blackBishop; emptySquare; blackRook|]
+                  [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
       IsWhiteToMove = false
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -795,11 +762,9 @@ let realizedPositionAfterSeventhHalfMove =
 
 [<Fact>]
 let ``Position after seventh half move`` () =
-    realizedPositionAfterSixthHalfMove
-    |> unrealizedPosition
+    positionAfterSixthHalfMove
     |> positionAfterMove seventhHalfMove
-    |> realizedPosition
-    |> should equal realizedPositionAfterSeventhHalfMove
+    |> should equal positionAfterSeventhHalfMove
 
 let eighthHalfMove = { Piece = Bishop
                        FromCoords = (7, 5)
@@ -811,15 +776,16 @@ let eighthHalfMove = { Piece = Bishop
                        IsStalemate = false
                        SamePieceCoords = None }    
 
-let realizedPositionAfterEighthHalfMove =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   emptySquare; emptySquare; blackRook|]
-                [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
-                [|blackBishop; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
+let positionAfterEighthHalfMove =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   emptySquare; emptySquare; blackRook|]
+                  [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
+                  [|blackBishop; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   whitePawn;   whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -831,11 +797,9 @@ let realizedPositionAfterEighthHalfMove =
 
 [<Fact>]
 let ``Position after eighth half move`` () =
-    realizedPositionAfterSeventhHalfMove
-    |> unrealizedPosition
-    |> positionAfterMove eighthHalfMove  
-    |> realizedPosition
-    |> should equal realizedPositionAfterEighthHalfMove
+    positionAfterSeventhHalfMove
+    |> positionAfterMove eighthHalfMove
+    |> should equal positionAfterEighthHalfMove
 
 let ninthHalfMove = { Piece = Pawn
                       FromCoords = (1, 1)
@@ -847,15 +811,16 @@ let ninthHalfMove = { Piece = Pawn
                       IsStalemate = false
                       SamePieceCoords = None }
 
-let realizedPositionAfterNinthHalfMove =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   emptySquare; emptySquare; blackRook|]
-                [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
-                [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   emptySquare; whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
+let positionAfterNinthHalfMove =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  blackKing;   emptySquare; emptySquare; blackRook|]
+                  [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
+                  [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   emptySquare; whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
       IsWhiteToMove = false
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -867,11 +832,9 @@ let realizedPositionAfterNinthHalfMove =
 
 [<Fact>]
 let ``Position after ninth half move`` () =
-    realizedPositionAfterEighthHalfMove
-    |> unrealizedPosition
-    |> positionAfterMove ninthHalfMove  
-    |> realizedPosition
-    |> should equal realizedPositionAfterNinthHalfMove
+    positionAfterEighthHalfMove
+    |> positionAfterMove ninthHalfMove
+    |> should equal positionAfterNinthHalfMove
 
 let tenthHalfMove = { Piece = King
                       FromCoords = (7, 4)
@@ -883,15 +846,16 @@ let tenthHalfMove = { Piece = King
                       IsStalemate = false
                       SamePieceCoords = None }
 
-let realizedPositionAfterTentHalfMove =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  emptySquare; blackRook;   blackKing;   emptySquare|]
-                [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
-                [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   emptySquare; whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
+let positionAfterTentHalfMove =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  emptySquare; blackRook;   blackKing;   emptySquare|]
+                  [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
+                  [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   emptySquare; whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  whiteKing;   emptySquare; whiteKnight; whiteRook|]|]
       IsWhiteToMove = true
       Castling = { WhiteKingSideCastle = true
                    WhiteQueenSideCastle = true
@@ -903,11 +867,9 @@ let realizedPositionAfterTentHalfMove =
 
 [<Fact>]
 let ``Position after tenth half move`` () =
-    realizedPositionAfterNinthHalfMove
-    |> unrealizedPosition
+    positionAfterNinthHalfMove
     |> positionAfterMove tenthHalfMove
-    |> realizedPosition
-    |> should equal realizedPositionAfterTentHalfMove
+    |> should equal positionAfterTentHalfMove
 
 let eleventHalfMove = { Piece = King
                         FromCoords = (0, 4)
@@ -919,15 +881,16 @@ let eleventHalfMove = { Piece = King
                         IsStalemate = false
                         SamePieceCoords = None } 
 
-let realizedPositionAfterEleventhHalfMove =
-    { Board = [|[|blackRook;   blackKnight; blackBishop; blackQueen;  emptySquare; blackRook;   blackKing;   emptySquare|]
-                [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare;   blackPawn;   blackPawn;   blackPawn|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
-                [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-                [|whitePawn;   emptySquare; whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
-                [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  emptySquare; whiteKing;   whiteKnight; whiteRook|]|]
+let positionAfterEleventhHalfMove =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  emptySquare; blackRook;   blackKing;   emptySquare|]
+                  [|blackPawn;   blackPawn;   blackPawn;   emptySquare; emptySquare;   blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
+                  [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   emptySquare; whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  emptySquare; whiteKing;   whiteKnight; whiteRook|]|]
       IsWhiteToMove = false
       Castling = { WhiteKingSideCastle = false
                    WhiteQueenSideCastle = false
@@ -939,8 +902,6 @@ let realizedPositionAfterEleventhHalfMove =
 
 [<Fact>]
 let ``Position after eleventh half move`` () =
-    realizedPositionAfterTentHalfMove
-    |> unrealizedPosition
+    positionAfterTentHalfMove
     |> positionAfterMove eleventHalfMove
-    |> realizedPosition
-    |> should equal realizedPositionAfterEleventhHalfMove
+    |> should equal positionAfterEleventhHalfMove

@@ -107,87 +107,76 @@ let ``Position text of initial one`` () =
 
 [<Fact>]
 let ``Position text after first half movement`` () =
-    PositionTest.realizedPositionAfterFirstHalfMovement
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterFirstHalfMovement
     |> positionText
     |> should equal
         "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
 
 [<Fact>]
 let ``Position text after second half movement`` () =
-    PositionTest.realizedPositionAfterSecondHalfMovement
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterSecondHalfMovement
     |> positionText
     |> should equal
         "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2"
 
 [<Fact>]
 let ``Position text after third half movement`` () =
-    PositionTest.realizedPositionAfterThirdHalfMovement
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterThirdHalfMovement
     |> positionText
     |> should equal
         "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
 
 [<Fact>]
 let ``Position text after forth half move`` () =
-    PositionTest.realizedPositionAfterForthHalfMove
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterForthHalfMove
     |> positionText
     |> should equal
         "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3"
 
 [<Fact>]
 let ``Position text after fifth half move`` () =
-    PositionTest.realizedPositionAfterFifthHalfMove
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterFifthHalfMove
     |> positionText
     |> should equal
         "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 2 3"
 
 [<Fact>]
 let ``Position text after sixth half move`` () =
-    PositionTest.realizedPositionAfterSixthHalfMove
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterSixthHalfMove
     |> positionText
     |> should equal
         "rnbqkb1r/ppp2ppp/4pn2/3P4/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 4"
 [<Fact>]
 let ``Position text after seventh half move`` () =
-    PositionTest.realizedPositionAfterSeventhHalfMove
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterSeventhHalfMove
     |> positionText
     |> should equal
         "rnbqkb1r/ppp2ppp/4pn2/3P4/7P/8/PPPPBPP1/RNBQK1NR b KQkq h3 0 4"
 
 [<Fact>]
 let ``Position text after eighth half move`` () =
-    PositionTest.realizedPositionAfterEighthHalfMove
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterEighthHalfMove
     |> positionText
     |> should equal
         "rnbqk2r/ppp2ppp/4pn2/3P4/7P/b7/PPPPBPP1/RNBQK1NR w KQkq - 1 5"
 
 [<Fact>]
 let ``Position text after ninth half move`` () =
-    PositionTest.realizedPositionAfterNinthHalfMove
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterNinthHalfMove
     |> positionText
     |> should equal
         "rnbqk2r/ppp2ppp/4pn2/3P4/7P/P7/P1PPBPP1/RNBQK1NR b KQkq - 0 5"
 
 [<Fact>]
 let ``Position text after tenth half move`` () =
-    PositionTest.realizedPositionAfterTentHalfMove
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterTentHalfMove
     |> positionText
     |> should equal
         "rnbq1rk1/ppp2ppp/4pn2/3P4/7P/P7/P1PPBPP1/RNBQK1NR w KQ - 1 6"
 
 [<Fact>]
 let ``Position text after eleventh half move`` () =
-    PositionTest.realizedPositionAfterEleventhHalfMove
-    |> PositionTest.unrealizedPosition
+    PositionTest.positionAfterEleventhHalfMove
     |> positionText
     |> should equal
         "rnbq1rk1/ppp2ppp/4pn2/3P4/7P/P7/P1PPBPP1/RNBQ1KNR b - - 2 6"
@@ -195,16 +184,15 @@ let ``Position text after eleventh half move`` () =
 [<Fact>]
 let ``Game text`` () =
     { Game.MetaTags = Map.ofArray [| ("White", "me"); ("Black", "you") |]
-      Game.InitialPosition = PositionTest.realizedPositionAfterThirdHalfMovement
-                             |> PositionTest.unrealizedPosition
-      Game.Moves = Seq.ofArray [| PositionTest.forthHalfMove
-                                  PositionTest.fifthHalfMove
-                                  PositionTest.sixthHalfMove
-                                  PositionTest.seventhHalfMove
-                                  PositionTest.eighthHalfMove
-                                  PositionTest.ninthHalfMove
-                                  PositionTest.tenthHalfMove
-                                  PositionTest.eleventHalfMove |]
+      Game.InitialPosition = PositionTest.positionAfterThirdHalfMovement
+      Game.Moves = [| PositionTest.forthHalfMove
+                      PositionTest.fifthHalfMove
+                      PositionTest.sixthHalfMove
+                      PositionTest.seventhHalfMove
+                      PositionTest.eighthHalfMove
+                      PositionTest.ninthHalfMove
+                      PositionTest.tenthHalfMove
+                      PositionTest.eleventHalfMove |]
       Game.Result = Some Game.Draw }
     |> gameText
     |> should equal

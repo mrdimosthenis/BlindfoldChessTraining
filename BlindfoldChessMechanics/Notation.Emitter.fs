@@ -172,7 +172,7 @@ let gameText (game: Game.Game): string =
                          indices
                          isWhiteToMoveBools
                          game.Moves
-                 |> Seq.cache
+                 |> Seq.toArray
     let result = match game.Result with
                  | None -> ""
                  | Some Game.White -> "1-0"
