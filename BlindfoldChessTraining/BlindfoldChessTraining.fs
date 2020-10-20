@@ -7,6 +7,8 @@ open Fabulous.XamarinForms
 open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
+open BlindfoldChessMechanics.Logic
+
 module App = 
     type Model = 
       { Count : int
@@ -55,6 +57,7 @@ module App =
                 View.Slider(minimumMaximum = (0.0, 10.0), value = double model.Step, valueChanged = (fun args -> dispatch (SetStep (int (args.NewValue + 0.5)))), horizontalOptions = LayoutOptions.FillAndExpand)
                 View.Label(text = sprintf "Step size: %d" model.Step, horizontalOptions = LayoutOptions.Center) 
                 View.Button(text = "Reset", horizontalOptions = LayoutOptions.Center, command = (fun () -> dispatch Reset), commandCanExecute = (model <> initModel))
+                View.Label(text = (Board.init |> Array.length |> sprintf "%d"), horizontalOptions = LayoutOptions.Center, width=200.0, horizontalTextAlignment=TextAlignment.Center)
             ]))
 
     // Note, this declaration is needed if you enable LiveUpdate
