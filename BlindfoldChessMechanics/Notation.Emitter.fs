@@ -71,6 +71,7 @@ let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
                | (Board.Pawn, _, true) -> m.FromCoords
                                           |> snd
                                           |> columnText
+               | (Board.Pawn, _, false) -> ""
                | (_, Some (_, c), _) when c = (snd m.FromCoords) -> m.FromCoords
                                                                     |> fst
                                                                     |> rowText

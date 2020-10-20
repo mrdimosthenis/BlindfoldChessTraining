@@ -99,6 +99,21 @@ let ``♕axh2 move text`` () =
         "♕axh2"
 
 [<Fact>]
+let ``b8=Q move text`` () =
+    { Piece = Pawn
+      FromCoords = (6, 1)
+      ToCoords = (7, 1)
+      IsCapture = false
+      Promotion = Some Queen
+      IsCheck = false
+      IsMate = false
+      IsStalemate = false
+      SamePieceCoords = Some (6, 2) }    
+    |> moveText true false
+    |> should equal
+        "b8=Q"
+
+[<Fact>]
 let ``Position text of initial one`` () =
     Position.init
     |> positionText
