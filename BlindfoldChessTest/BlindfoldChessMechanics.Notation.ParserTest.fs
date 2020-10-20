@@ -237,12 +237,26 @@ let ``Fen of position after eleventh half move`` () =
         PositionTest.positionAfterEleventhHalfMove
 
 [<Fact>]
+let ``Fen of position after twelfth half move`` () =
+    "rnbq1rk1/pp3ppp/4pn2/2pP4/7P/P7/P1PPBPP1/RNBQ1KNR w - c6 0 7"
+    |> textOfFen
+    |> should equal
+        PositionTest.positionAfterTwelfthHalfMove
+
+[<Fact>]
+let ``Fen of position after thirteenth half move`` () =
+    "rnbq1rk1/pp3ppp/2P1pn2/8/7P/P7/P1PPBPP1/RNBQ1KNR b - - 0 7"
+    |> textOfFen
+    |> should equal
+        PositionTest.positionAfterThirteenthHalfMove
+
+[<Fact>]
 let ``Text of game`` () =
     """[FEN "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"]
 [Black "you"]
 [White "me"]
 
-1... Nf6 2. Be2 e6 3. h4 Ba3 4. bxa3 O-O 5. Kf1  1/2-1/2"""
+1... Nf6 2. Be2 e6 3. h4 Ba3 4. bxa3 O-O 5. Kf1 c5 6. dxc6  1/2-1/2"""
     |> textOfGame
     |> should equal
         { Game.MetaTags = Map.ofArray
@@ -257,5 +271,7 @@ let ``Text of game`` () =
                           PositionTest.eighthHalfMove
                           PositionTest.ninthHalfMove
                           PositionTest.tenthHalfMove
-                          PositionTest.eleventHalfMove |]
+                          PositionTest.eleventHalfMove
+                          PositionTest.twelfthHalfMove
+                          PositionTest.thirteenthHalfMove |]
           Game.Result = (Some Game.Draw) }

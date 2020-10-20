@@ -88,9 +88,9 @@ let pawnMovements (coordinates: Board.Coordinates) (position: Position): Movemen
     | Some { PieceType = Board.Pawn; IsWhite = isWhite } ->
         let enPassantMoveTuples =
             match position.EnPassant with
-            | Some (enPasRow, enPasCol) when (rowIndex = enPasRow) && ( columnIndex = enPasCol + 1 || columnIndex = enPasCol - 1 ) ->
-                let toRowIndex = if isWhite then rowIndex + 1 else rowIndex - 1
-                let toCoords = (toRowIndex, enPasCol)
+            | Some (enPassRow, enPassCol) when (rowIndex = if position.IsWhiteToMove then enPassRow - 1 else enPassRow + 1) &&
+                                                    ( columnIndex = enPassCol + 1 || columnIndex = enPassCol - 1 ) ->
+                let toCoords = (enPassRow, enPassCol)
                 let isCapture = true
                 let promotion = None
                 [|(toCoords, isCapture, promotion)|]
@@ -172,8 +172,12 @@ let positionAfterMovement (movement: Movement) (position: Position): Position =
     let newBlackQueenSideCastle = position.Castling.BlackQueenSideCastle && movement.FromCoords <> (7, 4) && movement.FromCoords <> (7, 0)
     let enPassUpdatedBoard (board: Board.Board): Board.Board =
         match (movement.Piece, position.EnPassant) with
-        | (Board.Pawn, Some enPassCoords) when enPassCoords = movement.ToCoords -> Utils.updatedArrays enPassCoords None board
-        | _ -> board
+        | (Board.Pawn, Some (enPassRow, enPassColumn)) when (enPassRow, enPassColumn) = movement.ToCoords ->
+            let takenPawnRow = if position.IsWhiteToMove then enPassRow - 1
+                               else enPassRow + 1
+            Utils.updatedArrays (takenPawnRow, enPassColumn) None board
+        | _ ->
+            board
     let castleUpdatedBoard (board: Board.Board): Board.Board =
         let rook = Some {Board.PieceType = Board.Rook; Board.IsWhite = position.IsWhiteToMove}
         match (movement.Piece, snd movement.FromCoords, snd movement.ToCoords) with

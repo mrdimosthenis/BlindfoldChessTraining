@@ -139,7 +139,7 @@ let ``White pawn movements with en-passant ability`` () =
                    WhiteQueenSideCastle = true
                    BlackKingSideCastle = true
                    BlackQueenSideCastle = true }
-      EnPassant = Some (4, 2)
+      EnPassant = Some (5, 2)
       Halfmove = 12
       Fullmove = 20 }
     |> pawnMovements (4, 1)
@@ -905,3 +905,73 @@ let ``Position after eleventh half move`` () =
     positionAfterTentHalfMove
     |> positionAfterMove eleventHalfMove
     |> should equal positionAfterEleventhHalfMove
+
+let twelfthHalfMove = { Piece = Pawn
+                        FromCoords = (6, 2)
+                        ToCoords = (4, 2)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None } 
+
+let positionAfterTwelfthHalfMove =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  emptySquare; blackRook;   blackKing;   emptySquare|]
+                  [|blackPawn;   blackPawn;   emptySquare; emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; blackPawn;   whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
+                  [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   emptySquare; whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  emptySquare; whiteKing;   whiteKnight; whiteRook|]|]
+      IsWhiteToMove = true
+      Castling = { WhiteKingSideCastle = false
+                   WhiteQueenSideCastle = false
+                   BlackKingSideCastle = false
+                   BlackQueenSideCastle = false } 
+      EnPassant = Some (5, 2)
+      Halfmove = 0
+      Fullmove = 7 }
+
+[<Fact>]
+let ``Position after twelfth half move`` () =
+    positionAfterEleventhHalfMove
+    |> positionAfterMove twelfthHalfMove
+    |> should equal positionAfterTwelfthHalfMove
+
+let thirteenthHalfMove = { Piece = Pawn
+                           FromCoords = (4, 3)
+                           ToCoords = (5, 2)
+                           IsCapture = true
+                           Promotion = None
+                           IsCheck = false
+                           IsMate = false
+                           IsStalemate = false
+                           SamePieceCoords = None } 
+
+let positionAfterThirteenthHalfMove =
+    { Board = Array.rev
+                [|[|blackRook;   blackKnight; blackBishop; blackQueen;  emptySquare; blackRook;   blackKing;   emptySquare|]
+                  [|blackPawn;   blackPawn;   emptySquare; emptySquare; emptySquare; blackPawn;   blackPawn;   blackPawn|]
+                  [|emptySquare; emptySquare; whitePawn;   emptySquare; blackPawn;   blackKnight; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; whitePawn|]
+                  [|whitePawn;   emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
+                  [|whitePawn;   emptySquare; whitePawn;   whitePawn;   whiteBishop; whitePawn;   whitePawn;   emptySquare|]
+                  [|whiteRook;   whiteKnight; whiteBishop; whiteQueen;  emptySquare; whiteKing;   whiteKnight; whiteRook|]|]
+      IsWhiteToMove = false
+      Castling = { WhiteKingSideCastle = false
+                   WhiteQueenSideCastle = false
+                   BlackKingSideCastle = false
+                   BlackQueenSideCastle = false } 
+      EnPassant = None
+      Halfmove = 0
+      Fullmove = 7 }
+
+[<Fact>]
+let ``Position after thirteenth half move`` () =
+    positionAfterTwelfthHalfMove
+    |> positionAfterMove thirteenthHalfMove
+    |> should equal positionAfterThirteenthHalfMove
