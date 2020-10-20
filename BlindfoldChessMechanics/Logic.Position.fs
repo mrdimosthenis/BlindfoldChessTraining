@@ -255,7 +255,6 @@ let movesWithResultedPosition (position: Position): (Move * Position) seq =
                 )
     |> Seq.cache
 
-[<Obsolete("Do not use. Use movesWithResultedPosition instead.")>]
 let positionAfterMove (move: Move) (position: Position): Position =
     let move = { Piece = move.Piece
                  FromCoords = move.FromCoords
