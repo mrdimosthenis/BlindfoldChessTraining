@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Model.fs" />
+    <Compile Include="Msg.fs" />
+    <Compile Include="Update.fs" />
+    <Compile Include="Page.Example.fs" />
+    <Compile Include="Page.Home.fs" />
+    <Compile Include="Page.OpeningPuzzles.fs" />
+    <Compile Include="Page.EndgamePuzzles.fs" />
+    <Compile Include="Page.Description.fs" />
+    <Compile Include="Page.Credits.fs" />
     <Compile Include="BlindfoldChessTraining.fs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,61 +7,24 @@ open Fabulous.XamarinForms
 open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
-open BlindfoldChessMechanics.Logic
+open BlindfoldChessTraining.Page
 
-module App = 
-    type Model = 
-      { Count : int
-        Step : int
-        TimerOn: bool }
+module App =
 
-    type Msg = 
-        | Increment 
-        | Decrement 
-        | Reset
-        | SetStep of int
-        | TimerToggled of bool
-        | TimedTick
-
-    let initModel = { Count = 0; Step = 1; TimerOn=false }
-
-    let init () = initModel, Cmd.none
-
-    let timerCmd =
-        async { do! Async.Sleep 200
-                return TimedTick }
-        |> Cmd.ofAsyncMsg
-
-    let update msg model =
-        match msg with
-        | Increment -> { model with Count = model.Count + model.Step }, Cmd.none
-        | Decrement -> { model with Count = model.Count - model.Step }, Cmd.none
-        | Reset -> init ()
-        | SetStep n -> { model with Step = n }, Cmd.none
-        | TimerToggled on -> { model with TimerOn = on }, (if on then timerCmd else Cmd.none)
-        | TimedTick -> 
-            if model.TimerOn then 
-                { model with Count = model.Count + model.Step }, timerCmd
-            else 
-                model, Cmd.none
-
-    let view (model: Model) dispatch =
-        View.ContentPage(
-          content = View.StackLayout(padding = Thickness 20.0, verticalOptions = LayoutOptions.Center,
-            children = [ 
-                View.Label(text = sprintf "%d" model.Count, horizontalOptions = LayoutOptions.Center, width=200.0, horizontalTextAlignment=TextAlignment.Center)
-                View.Button(text = "Increment", command = (fun () -> dispatch Increment), horizontalOptions = LayoutOptions.Center)
-                View.Button(text = "Decrement", command = (fun () -> dispatch Decrement), horizontalOptions = LayoutOptions.Center)
-                View.Label(text = "Timer", horizontalOptions = LayoutOptions.Center)
-                View.Switch(isToggled = model.TimerOn, toggled = (fun on -> dispatch (TimerToggled on.Value)), horizontalOptions = LayoutOptions.Center)
-                View.Slider(minimumMaximum = (0.0, 10.0), value = double model.Step, valueChanged = (fun args -> dispatch (SetStep (int (args.NewValue + 0.5)))), horizontalOptions = LayoutOptions.FillAndExpand)
-                View.Label(text = sprintf "Step size: %d" model.Step, horizontalOptions = LayoutOptions.Center) 
-                View.Button(text = "Reset", horizontalOptions = LayoutOptions.Center, command = (fun () -> dispatch Reset), commandCanExecute = (model <> initModel))
-                View.Label(text = (Board.init |> Array.length |> sprintf "%d"), horizontalOptions = LayoutOptions.Center, width=200.0, horizontalTextAlignment=TextAlignment.Center)
-            ]))
+    let view (model: Model.Model) (dispatch: Msg.Msg -> unit) =
+        let v =  match model.SelectedPage with
+                 | Model.HomePage -> Home.view
+                 | Model.OpeningPuzzlesPage -> OpeningPuzzles.view
+                 | Model.EndgamePuzzlesPage -> EndgamePuzzles.view
+                 | Model.DescriptionPage -> Description.view
+                 | Model.CreditsPage -> Credits.view
+        v model dispatch
 
     // Note, this declaration is needed if you enable LiveUpdate
-    let program = XamarinFormsProgram.mkProgram init update view
+    let program = XamarinFormsProgram.mkProgram
+                    (fun () -> Model.init, Cmd.none)
+                    Update.update
+                    view
 
 type App () as app = 
     inherit Application ()
