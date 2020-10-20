@@ -165,8 +165,8 @@ let gameText (game: Game.Game): string =
                              |> Seq.cache
     let moves = Seq.map3 (fun i b m ->
                             let d = match (b, i, isWhiteToMove) with
-                                    | (true, _, _) -> sprintf "%i. " i
-                                    | (false, 1, false) -> sprintf "%i... " i
+                                    | (true, _, _) -> sprintf "%i." i
+                                    | (false, 1, false) -> sprintf "%i..." i
                                     | (false, _, _) -> ""
                             let m = moveText true false m
                             d + m
