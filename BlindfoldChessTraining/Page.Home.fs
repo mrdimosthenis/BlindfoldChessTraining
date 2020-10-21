@@ -7,12 +7,17 @@ open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
 open BlindfoldChessTraining
+open BlindfoldChessTraining.UIElems
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     View.ContentPage(
         content = View.StackLayout(
+            horizontalOptions = LayoutOptions.FillAndExpand,
             verticalOptions = LayoutOptions.Center,
             children = [
+                
+                Board.emptyBoardElem
+                
                 View.Label(text = "Blindfold Chess Training", fontAttributes = FontAttributes.Bold, horizontalOptions = LayoutOptions.Center)
                 View.Button(text = "Opening Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.OpeningPuzzlesPage))
                 View.Button(text = "Endgame Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.EndgamePuzzlesPage))

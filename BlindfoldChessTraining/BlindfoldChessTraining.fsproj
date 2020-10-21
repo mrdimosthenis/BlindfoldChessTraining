@@ -6,9 +6,46 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="resources\images\board\wh.png" />
+    <EmbeddedResource Include="resources\images\board\1.png" />
+    <EmbeddedResource Include="resources\images\board\bl.png" />
+    <EmbeddedResource Include="resources\images\board\2.png" />
+    <EmbeddedResource Include="resources\images\board\3.png" />
+    <EmbeddedResource Include="resources\images\board\4.png" />
+    <EmbeddedResource Include="resources\images\board\5.png" />
+    <EmbeddedResource Include="resources\images\board\6.png" />
+    <EmbeddedResource Include="resources\images\board\7.png" />
+    <EmbeddedResource Include="resources\images\board\8.png" />
+    <EmbeddedResource Include="resources\images\board\a.png" />
+    <EmbeddedResource Include="resources\images\board\b.png" />
+    <EmbeddedResource Include="resources\images\board\bb.png" />
+    <EmbeddedResource Include="resources\images\board\bk.png" />
+    <EmbeddedResource Include="resources\images\board\bn.png" />
+    <EmbeddedResource Include="resources\images\board\bp.png" />
+    <EmbeddedResource Include="resources\images\board\bq.png" />
+    <EmbeddedResource Include="resources\images\board\br.png" />
+    <EmbeddedResource Include="resources\images\board\b_l.png" />
+    <EmbeddedResource Include="resources\images\board\b_r.png" />
+    <EmbeddedResource Include="resources\images\board\c.png" />
+    <EmbeddedResource Include="resources\images\board\d.png" />
+    <EmbeddedResource Include="resources\images\board\e.png" />
+    <EmbeddedResource Include="resources\images\board\f.png" />
+    <EmbeddedResource Include="resources\images\board\g.png" />
+    <EmbeddedResource Include="resources\images\board\h.png" />
+    <EmbeddedResource Include="resources\images\board\r.png" />
+    <EmbeddedResource Include="resources\images\board\t.png" />
+    <EmbeddedResource Include="resources\images\board\t_l.png" />
+    <EmbeddedResource Include="resources\images\board\t_r.png" />
+    <EmbeddedResource Include="resources\images\board\wb.png" />
+    <EmbeddedResource Include="resources\images\board\wk.png" />
+    <EmbeddedResource Include="resources\images\board\wn.png" />
+    <EmbeddedResource Include="resources\images\board\wp.png" />
+    <EmbeddedResource Include="resources\images\board\wq.png" />
+    <EmbeddedResource Include="resources\images\board\wr.png" />
     <Compile Include="Model.fs" />
     <Compile Include="Msg.fs" />
     <Compile Include="Update.fs" />
+    <Compile Include="UIElems.Board.fs" />
     <Compile Include="Page.Example.fs" />
     <Compile Include="Page.Home.fs" />
     <Compile Include="Page.OpeningPuzzles.fs" />
