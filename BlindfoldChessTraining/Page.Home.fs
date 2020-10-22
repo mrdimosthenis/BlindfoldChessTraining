@@ -9,6 +9,8 @@ open Xamarin.Forms
 open BlindfoldChessTraining
 open BlindfoldChessTraining.UIElems
 
+open BlindfoldChessMechanics.Logic
+
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     View.ContentPage(
         content = View.StackLayout(
@@ -16,7 +18,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
             verticalOptions = LayoutOptions.Center,
             children = [
                 
-                Board.emptyBoardElemGrid
+                Board.emptyBoardElemGrid(Board.init)
                 
                 View.Label(text = "Blindfold Chess Training", fontAttributes = FontAttributes.Bold, horizontalOptions = LayoutOptions.Center)
                 View.Button(text = "Opening Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.OpeningPuzzlesPage))

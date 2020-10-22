@@ -7,6 +7,7 @@ open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
 open BlindfoldChessMechanics
+open BlindfoldChessMechanics.Logic
 
 exception InvalidRow of int
 
@@ -71,7 +72,7 @@ let bottomRowElems: ViewElement seq =
     |> Seq.map (fun (i, v) -> v.Row(9).Column(i))
     |> Seq.cache
 
-let boardRowElems (r: int): ViewElement seq =
+let emptyBoardRowElems (r: int): ViewElement seq =
     let fstElem = match r with
                   | 0 -> img1
                   | 1 -> img2
@@ -95,14 +96,64 @@ let boardRowElems (r: int): ViewElement seq =
     |> Seq.map (fun (i, v) -> v.Row(8 - r).Column(i))
     |> Seq.cache
 
-let emptyBoardElemGrid: ViewElement =
+let emptyBoardElems: ViewElement seq =
+    let middleRowElems = Seq.init 8 id
+                         |> Seq.map emptyBoardRowElems
+                         |> Seq.concat
+    [| topRowElems; middleRowElems; bottomRowElems |]
+    |> Seq.ofArray
+    |> Seq.concat
+    |> Seq.cache
+
+let pieceElems (board: Board.Board): ViewElement seq =
+    board
+    |> Utils.seqOfArrays
+    |> Seq.indexed
+    |> Seq.map
+        (fun (rowIndex, row) ->
+            row
+            |> Seq.indexed
+            |> Seq.map
+                (fun (columnIndex, resident) ->
+                    match resident with
+                    | Some { PieceType = Board.King; IsWhite = true } ->
+                        [| imgWk |]
+                    | Some { PieceType = Board.Queen; IsWhite = true } ->
+                        [| imgWq |]
+                    | Some { PieceType = Board.Rook; IsWhite = true } ->
+                        [| imgWr |]
+                    | Some { PieceType = Board.Bishop; IsWhite = true } ->
+                        [| imgWb |]
+                    | Some { PieceType = Board.Knight; IsWhite = true } ->
+                        [| imgWn |]
+                    | Some { PieceType = Board.Pawn; IsWhite = true } ->
+                        [| imgWp |]
+                    | Some { PieceType = Board.King; IsWhite = false } ->
+                        [| imgBk |]
+                    | Some { PieceType = Board.Queen; IsWhite = false } ->
+                        [| imgBq |]
+                    | Some { PieceType = Board.Rook; IsWhite = false } ->
+                        [| imgBr |]
+                    | Some { PieceType = Board.Bishop; IsWhite = false } ->
+                        [| imgBb |]
+                    | Some { PieceType = Board.Knight; IsWhite = false } ->
+                        [| imgBn |]
+                    | Some { PieceType = Board.Pawn; IsWhite = false } ->
+                        [| imgBp |]
+                    | _ -> [||]
+                    |> Seq.ofArray
+                    |> Seq.map (fun v -> v.Row(8 - rowIndex).Column(columnIndex + 1))
+                )
+            |> Seq.concat
+        )
+    |> Seq.concat
+    |> Seq.cache
+
+let emptyBoardElemGrid (board: Board.Board): ViewElement =
     View.Grid(
+        columnSpacing = 0.0,
+        rowSpacing = 0.0,
         rowdefs = [for i in 0 .. 9 -> Dimension.Star],
         coldefs = [for i in 0 .. 9 -> Dimension.Star],
-        children = ([| topRowElems
-                       (Seq.init 8 id |> Seq.map boardRowElems |> Seq.concat)
-                       bottomRowElems |]
-                    |> Seq.ofArray
-                    |> Seq.concat
-                    |> Seq.toList)
+        children = (board |> pieceElems |> Seq.append emptyBoardElems |> Seq.toList)
     )
