@@ -11,12 +11,18 @@ open BlindfoldChessMechanics.Logic
 
 exception InvalidRow of int
 
+let squareSize = min Device.info.PixelScreenSize.Width Device.info.PixelScreenSize.Height / 10.0
+
 let imgElem (imgName: string): ViewElement =
     let pngImgSrc = imgName
                     |> sprintf "BlindfoldChessTraining.resources.images.board.%s.png"
                     |> ImageSource.FromResource
                     |> Image.fromImageSource
-    View.Image(source = pngImgSrc)
+    View.Image(
+        source = pngImgSrc,
+        width = squareSize,
+        height = squareSize
+    )
 
 let imgWh: ViewElement = imgElem "wh"
 let img1: ViewElement = imgElem "1"
@@ -153,7 +159,7 @@ let emptyBoardElemGrid (board: Board.Board): ViewElement =
     View.Grid(
         columnSpacing = 0.0,
         rowSpacing = 0.0,
-        rowdefs = [for i in 0 .. 9 -> Dimension.Star],
-        coldefs = [for i in 0 .. 9 -> Dimension.Star],
+        //rowdefs = [for i in 0 .. 9 -> Dimension.Star],
+        //coldefs = [for i in 0 .. 9 -> Dimension.Star],
         children = (board |> pieceElems |> Seq.append emptyBoardElems |> Seq.toList)
     )
