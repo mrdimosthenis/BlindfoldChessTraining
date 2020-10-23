@@ -168,13 +168,13 @@ let pieceElems (areCoordsEnabled: bool) (board: Board.Board): ViewElement seq =
     |> Seq.concat
     |> Seq.cache
 
-let squareSize (areCoordsEnabled: bool): float =
+let squareSize (boardSize: float) (areCoordsEnabled: bool): float =
     Device.info.PixelScreenSize.Width
     |> min Device.info.PixelScreenSize.Height
-    |> (*) (0.9 * if areCoordsEnabled then 0.05 else 0.0625)
+    |> (*) (boardSize * if areCoordsEnabled then 0.05 else 0.0625)
 
-let boardGrid (areCoordsEnabled: bool) (board: Board.Board): ViewElement =
-    let absSize = squareSize areCoordsEnabled
+let boardGrid (boardSize: float) (areCoordsEnabled: bool) (board: Board.Board): ViewElement =
+    let absSize = squareSize boardSize areCoordsEnabled
     let maxColumn = if areCoordsEnabled then 9 else 7
     View.Grid(
         columnSpacing = 0.0,
