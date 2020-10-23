@@ -18,7 +18,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
             verticalOptions = LayoutOptions.Center,
             children = [
                 
-                Board.grid false Board.init
+                Board.grid true Board.init
                 
                 View.Label(text = "Blindfold Chess Training", fontAttributes = FontAttributes.Bold, horizontalOptions = LayoutOptions.Center)
                 View.Button(text = "Opening Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.OpeningPuzzlesPage))

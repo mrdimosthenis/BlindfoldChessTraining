@@ -170,11 +170,14 @@ let pieces (areCoordsEnabled: bool) (board: Board.Board): ViewElement seq =
 
 let grid (areCoordsEnabled: bool) (board: Board.Board): ViewElement =
     let maxColumn = if areCoordsEnabled then 9 else 7
+    let sizeNom = min Device.info.PixelScreenSize.Width Device.info.PixelScreenSize.Height
+    let sizeDenom = 2.0 * (float maxColumn + 1.0)
+    let squareSize = sizeNom / sizeDenom
     View.Grid(
         columnSpacing = 0.0,
         rowSpacing = 0.0,
-        coldefs = [for i in 0 .. maxColumn -> Dimension.Auto],
-        rowdefs = [for i in 0 .. maxColumn -> Dimension.Auto],
+        rowdefs = [for i in 0 .. maxColumn -> Dimension.Absolute squareSize],
+        coldefs = [for i in 0 .. maxColumn -> Dimension.Absolute squareSize],
         horizontalOptions = LayoutOptions.Center,
         children = (board |> pieces areCoordsEnabled |> Seq.append (emptyBoard areCoordsEnabled) |> Seq.toList)
     )
