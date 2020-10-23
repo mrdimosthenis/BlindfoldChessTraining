@@ -72,40 +72,48 @@ let bottomRowElems: ViewElement seq =
     |> Seq.map (fun (i, v) -> v.Row(9).Column(i))
     |> Seq.cache
 
-let emptyBoardRowElems (r: int): ViewElement seq =
-    let fstElem = match r with
-                  | 0 -> img1
-                  | 1 -> img2
-                  | 2 -> img3
-                  | 3 -> img4
-                  | 4 -> img5
-                  | 5 -> img6
-                  | 6 -> img7
-                  | 7 -> img8
-                  | _ -> raise (InvalidRow r)
-    if r % 2 = 0 then [| imgBl; imgWh |]
-    else [| imgWh; imgBl |]
-    |> Seq.ofArray
-    |> Seq.replicate 4
-    |> Seq.concat
-    |> Seq.rev
-    |> Utils.prependedSeq imgR
-    |> Seq.rev
-    |> Utils.prependedSeq fstElem
-    |> Seq.indexed
-    |> Seq.map (fun (i, v) -> v.Row(8 - r).Column(i))
+let emptyBoardRowElems (areCoordsEnabled: bool) (r: int): ViewElement seq =
+    let innerRowElems = if r % 2 = 0 then [| imgBl; imgWh |]
+                        else [| imgWh; imgBl |]
+                        |> Seq.ofArray
+                        |> Seq.replicate 4
+                        |> Seq.concat
+    if areCoordsEnabled
+        then let fstElem = match r with
+                           | 0 -> img1
+                           | 1 -> img2
+                           | 2 -> img3
+                           | 3 -> img4
+                           | 4 -> img5
+                           | 5 -> img6
+                           | 6 -> img7
+                           | 7 -> img8
+                           | _ -> raise (InvalidRow r)
+             innerRowElems
+             |> Seq.rev
+             |> Utils.prependedSeq imgR
+             |> Seq.rev
+             |> Utils.prependedSeq fstElem
+             |> Seq.indexed
+             |> Seq.map (fun (i, v) -> v.Row(8 - r).Column(i))
+    else
+        innerRowElems 
+        |> Seq.indexed
+        |> Seq.map (fun (i, v) -> v.Row(7 - r).Column(i))
     |> Seq.cache
 
-let emptyBoardElems: ViewElement seq =
+let emptyBoardElems (areCoordsEnabled: bool): ViewElement seq =
     let middleRowElems = Seq.init 8 id
-                         |> Seq.map emptyBoardRowElems
+                         |> Seq.map (emptyBoardRowElems areCoordsEnabled)
                          |> Seq.concat
-    [| topRowElems; middleRowElems; bottomRowElems |]
+    if areCoordsEnabled
+        then [| topRowElems; middleRowElems; bottomRowElems |]
+    else [| middleRowElems |]
     |> Seq.ofArray
     |> Seq.concat
     |> Seq.cache
 
-let pieceElems (board: Board.Board): ViewElement seq =
+let pieceElems (areCoordsEnabled: bool) (board: Board.Board): ViewElement seq =
     board
     |> Utils.seqOfArrays
     |> Seq.indexed
@@ -140,23 +148,39 @@ let pieceElems (board: Board.Board): ViewElement seq =
                         [| imgBn |]
                     | Some { PieceType = Board.Pawn; IsWhite = false } ->
                         [| imgBp |]
-                    | _ -> [||]
+                    | None -> [||]
                     |> Seq.ofArray
-                    |> Seq.map (fun v -> v.Row(8 - rowIndex).Column(columnIndex + 1))
+                    |> Seq.map
+                        (fun v ->
+                            let r = if areCoordsEnabled
+                                        then 8 - rowIndex
+                                    else
+                                        7 - rowIndex
+                            let c = if areCoordsEnabled
+                                        then columnIndex + 1
+                                    else
+                                        columnIndex
+                            v.Row(r).Column(c)
+                        )
                 )
             |> Seq.concat
         )
     |> Seq.concat
     |> Seq.cache
 
-let squareSize = min Device.info.PixelScreenSize.Width Device.info.PixelScreenSize.Height / 20.0
+let squareSize (areCoordsEnabled: bool): float =
+    Device.info.PixelScreenSize.Width
+    |> min Device.info.PixelScreenSize.Height
+    |> (*) (0.9 * if areCoordsEnabled then 0.05 else 0.0625)
 
-let emptyBoardElemGrid (board: Board.Board): ViewElement =
+let boardGrid (areCoordsEnabled: bool) (board: Board.Board): ViewElement =
+    let absSize = squareSize areCoordsEnabled
+    let maxColumn = if areCoordsEnabled then 9 else 7
     View.Grid(
         columnSpacing = 0.0,
         rowSpacing = 0.0,
-        rowdefs = [for i in 0 .. 9 -> Dimension.Absolute squareSize],
-        coldefs = [for i in 0 .. 9 -> Dimension.Absolute squareSize],
+        rowdefs = [for i in 0 .. maxColumn -> Dimension.Absolute absSize],
+        coldefs = [for i in 0 .. maxColumn -> Dimension.Absolute absSize],
         horizontalOptions = LayoutOptions.Center,
-        children = (board |> pieceElems |> Seq.append emptyBoardElems |> Seq.toList)
+        children = (board |> pieceElems areCoordsEnabled |> Seq.append (emptyBoardElems areCoordsEnabled) |> Seq.toList)
     )
