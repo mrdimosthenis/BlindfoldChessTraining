@@ -6,16 +6,6 @@ open FsUnit.Xunit
 open BlindfoldChessMechanics
 open BlindfoldChessMechanics.Logic.Board
 
-let emptyBoard =
-    [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
-      [|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]|]
-
 [<Fact>]
 let ``Coordinates cotrolled by rook`` () =
     [|[|emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare; emptySquare|]
@@ -37,7 +27,7 @@ let ``Coordinates cotrolled by rook`` () =
 
 [<Fact>]
 let ``Coordinates cotrolled by ghost rook`` () =
-    (fun () -> coordinatesControlledByRook (4, 2) emptyBoard |> Seq.toArray |> ignore)
+    (fun () -> coordinatesControlledByRook (4, 2) empty |> Seq.toArray |> ignore)
     |> should throw typeof<NoPiece>
 
 [<Fact>]
@@ -61,7 +51,7 @@ let ``Coordinates cotrolled by bishop`` () =
 
 [<Fact>]
 let ``Coordinates cotrolled by ghost bishop`` () =
-    (fun () -> coordinatesControlledByBishop (4, 2) emptyBoard |> Seq.toArray |> ignore)
+    (fun () -> coordinatesControlledByBishop (4, 2) empty |> Seq.toArray |> ignore)
     |> should throw typeof<NoPiece>
 
 [<Fact>]
@@ -89,7 +79,7 @@ let ``Coordinates cotrolled by queen`` () =
 
 [<Fact>]
 let ``Coordinates cotrolled by ghost queen`` () =
-    (fun () -> coordinatesControlledByQueen (4, 2) emptyBoard |> Seq.toArray |> ignore)
+    (fun () -> coordinatesControlledByQueen (4, 2) empty |> Seq.toArray |> ignore)
     |> should throw typeof<NoPiece>
 
 [<Fact>]
@@ -126,7 +116,7 @@ let ``Coordinates cotrolled by knight in the corner`` () =
 
 [<Fact>]
 let ``Coordinates cotrolled by ghost knight`` () =
-    (fun () -> coordinatesControlledByKnight (4, 2) emptyBoard |> ignore)
+    (fun () -> coordinatesControlledByKnight (4, 2) empty |> ignore)
     |> should throw typeof<WrongPiece>
 
 [<Fact>]
@@ -163,7 +153,7 @@ let ``Coordinates cotrolled by king in the corner`` () =
 
 [<Fact>]
 let ``Coordinates cotrolled by ghost king`` () =
-    (fun () -> coordinatesControlledByKing (4, 2) emptyBoard |> ignore)
+    (fun () -> coordinatesControlledByKing (4, 2) empty |> ignore)
     |> should throw typeof<WrongPiece>
 
 [<Fact>]
@@ -232,7 +222,7 @@ let ``Coordinates cotrolled by black init pawn in the edge`` () =
 
 [<Fact>]
 let ``Coordinates cotrolled by ghost pawn`` () =
-    (fun () -> coordinatesControlledByKing (4, 2) emptyBoard |> ignore)
+    (fun () -> coordinatesControlledByKing (4, 2) empty |> ignore)
     |> should throw typeof<WrongPiece>
 
 [<Fact>]
