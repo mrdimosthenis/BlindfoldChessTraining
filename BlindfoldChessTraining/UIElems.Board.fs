@@ -11,51 +11,51 @@ open BlindfoldChessMechanics.Logic
 
 exception InvalidRow of int
 
-let imgElem (imgName: string): ViewElement =
-    let pngImgSrc = imgName
+let image (name: string): ViewElement =
+    let pngImgSrc = name
                     |> sprintf "BlindfoldChessTraining.resources.images.board.%s.png"
                     |> ImageSource.FromResource
                     |> Image.fromImageSource
     View.Image(source = pngImgSrc)
 
-let imgWh: ViewElement = imgElem "wh"
-let img1: ViewElement = imgElem "1"
-let imgBl: ViewElement = imgElem "bl"
-let img2: ViewElement = imgElem "2"
-let img3: ViewElement = imgElem "3"
-let img4: ViewElement = imgElem "4"
-let img5: ViewElement = imgElem "5"
-let img6: ViewElement = imgElem "6"
-let img7: ViewElement = imgElem "7"
-let img8: ViewElement = imgElem "8"
-let imgA: ViewElement = imgElem "a"
-let imgB: ViewElement = imgElem "b"
-let imgBb: ViewElement = imgElem "bb"
-let imgBk: ViewElement = imgElem "bk"
-let imgBn: ViewElement = imgElem "bn"
-let imgBp: ViewElement = imgElem "bp"
-let imgBq: ViewElement = imgElem "bq"
-let imgBr: ViewElement = imgElem "br"
-let imgBL: ViewElement = imgElem "b_l"
-let imgBR: ViewElement = imgElem "b_r"
-let imgC: ViewElement = imgElem "c"
-let imgD: ViewElement = imgElem "d"
-let imgE: ViewElement = imgElem "e"
-let imgF: ViewElement = imgElem "f"
-let imgG: ViewElement = imgElem "g"
-let imgH: ViewElement = imgElem "h"
-let imgR: ViewElement = imgElem "r"
-let imgT: ViewElement = imgElem "t"
-let imgTL: ViewElement = imgElem "t_l"
-let imgTR: ViewElement = imgElem "t_r"
-let imgWb: ViewElement = imgElem "wb"
-let imgWk: ViewElement = imgElem "wk"
-let imgWn: ViewElement = imgElem "wn"
-let imgWp: ViewElement = imgElem "wp"
-let imgWq: ViewElement = imgElem "wq"
-let imgWr: ViewElement = imgElem "wr"
+let imgWh: ViewElement = image "wh"
+let img1: ViewElement = image "1"
+let imgBl: ViewElement = image "bl"
+let img2: ViewElement = image "2"
+let img3: ViewElement = image "3"
+let img4: ViewElement = image "4"
+let img5: ViewElement = image "5"
+let img6: ViewElement = image "6"
+let img7: ViewElement = image "7"
+let img8: ViewElement = image "8"
+let imgA: ViewElement = image "a"
+let imgB: ViewElement = image "b"
+let imgBb: ViewElement = image "bb"
+let imgBk: ViewElement = image "bk"
+let imgBn: ViewElement = image "bn"
+let imgBp: ViewElement = image "bp"
+let imgBq: ViewElement = image "bq"
+let imgBr: ViewElement = image "br"
+let imgBL: ViewElement = image "b_l"
+let imgBR: ViewElement = image "b_r"
+let imgC: ViewElement = image "c"
+let imgD: ViewElement = image "d"
+let imgE: ViewElement = image "e"
+let imgF: ViewElement = image "f"
+let imgG: ViewElement = image "g"
+let imgH: ViewElement = image "h"
+let imgR: ViewElement = image "r"
+let imgT: ViewElement = image "t"
+let imgTL: ViewElement = image "t_l"
+let imgTR: ViewElement = image "t_r"
+let imgWb: ViewElement = image "wb"
+let imgWk: ViewElement = image "wk"
+let imgWn: ViewElement = image "wn"
+let imgWp: ViewElement = image "wp"
+let imgWq: ViewElement = image "wq"
+let imgWr: ViewElement = image "wr"
 
-let topRowElems: ViewElement seq =
+let topRow: ViewElement seq =
     [| [| imgTL |]
        Array.replicate 8 imgT
        [| imgTR |] |]
@@ -65,14 +65,14 @@ let topRowElems: ViewElement seq =
     |> Seq.map (fun (i, v) -> v.Row(0).Column(i))
     |> Seq.cache
 
-let bottomRowElems: ViewElement seq =
+let bottomRow: ViewElement seq =
     [| imgBL; imgA; imgB; imgC; imgD; imgE; imgF; imgG; imgH; imgBR |]
     |> Seq.ofArray
     |> Seq.indexed
     |> Seq.map (fun (i, v) -> v.Row(9).Column(i))
     |> Seq.cache
 
-let emptyBoardRowElems (areCoordsEnabled: bool) (r: int): ViewElement seq =
+let emptyRow (areCoordsEnabled: bool) (r: int): ViewElement seq =
     let innerRowElems = if r % 2 = 0 then [| imgBl; imgWh |]
                         else [| imgWh; imgBl |]
                         |> Seq.ofArray
@@ -102,18 +102,18 @@ let emptyBoardRowElems (areCoordsEnabled: bool) (r: int): ViewElement seq =
         |> Seq.map (fun (i, v) -> v.Row(7 - r).Column(i))
     |> Seq.cache
 
-let emptyBoardElems (areCoordsEnabled: bool): ViewElement seq =
+let emptyBoard (areCoordsEnabled: bool): ViewElement seq =
     let middleRowElems = Seq.init 8 id
-                         |> Seq.map (emptyBoardRowElems areCoordsEnabled)
+                         |> Seq.map (emptyRow areCoordsEnabled)
                          |> Seq.concat
     if areCoordsEnabled
-        then [| topRowElems; middleRowElems; bottomRowElems |]
+        then [| topRow; middleRowElems; bottomRow |]
     else [| middleRowElems |]
     |> Seq.ofArray
     |> Seq.concat
     |> Seq.cache
 
-let pieceElems (areCoordsEnabled: bool) (board: Board.Board): ViewElement seq =
+let pieces (areCoordsEnabled: bool) (board: Board.Board): ViewElement seq =
     board
     |> Utils.seqOfArrays
     |> Seq.indexed
@@ -168,19 +168,13 @@ let pieceElems (areCoordsEnabled: bool) (board: Board.Board): ViewElement seq =
     |> Seq.concat
     |> Seq.cache
 
-let squareSize (boardSize: float) (areCoordsEnabled: bool): float =
-    Device.info.PixelScreenSize.Width
-    |> min Device.info.PixelScreenSize.Height
-    |> (*) (boardSize * if areCoordsEnabled then 0.05 else 0.0625)
-
-let boardGrid (boardSize: float) (areCoordsEnabled: bool) (board: Board.Board): ViewElement =
-    let absSize = squareSize boardSize areCoordsEnabled
+let grid (areCoordsEnabled: bool) (board: Board.Board): ViewElement =
     let maxColumn = if areCoordsEnabled then 9 else 7
     View.Grid(
         columnSpacing = 0.0,
         rowSpacing = 0.0,
-        rowdefs = [for i in 0 .. maxColumn -> Dimension.Absolute absSize],
-        coldefs = [for i in 0 .. maxColumn -> Dimension.Absolute absSize],
+        coldefs = [for i in 0 .. maxColumn -> Dimension.Auto],
+        rowdefs = [for i in 0 .. maxColumn -> Dimension.Auto],
         horizontalOptions = LayoutOptions.Center,
-        children = (board |> pieceElems areCoordsEnabled |> Seq.append (emptyBoardElems areCoordsEnabled) |> Seq.toList)
+        children = (board |> pieces areCoordsEnabled |> Seq.append (emptyBoard areCoordsEnabled) |> Seq.toList)
     )
