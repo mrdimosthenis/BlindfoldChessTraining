@@ -20,6 +20,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
               View.Slider(minimumMaximum = (0.0, 10.0), value = double model.Step, valueChanged = (fun args -> dispatch (Msg.SetStep (int (args.NewValue + 0.5)))), horizontalOptions = LayoutOptions.FillAndExpand)
               View.Label(text = sprintf "Step size: %d" model.Step, horizontalOptions = LayoutOptions.Center) 
               View.Button(text = "Reset", horizontalOptions = LayoutOptions.Center, command = (fun () -> dispatch Msg.Reset), commandCanExecute = (1 <> 1))
+              View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
           ]
     )
 )

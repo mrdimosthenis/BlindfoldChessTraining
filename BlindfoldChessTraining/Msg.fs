@@ -12,3 +12,4 @@ type Msg =
     | SelectPage of Model.SelectedPage
     | LocalesLoaded of Locale seq
     | SelectCoordsConfig of bool
+    | SelectPitchConfig of float

@@ -4,6 +4,7 @@ open Xamarin.Essentials
 
 type SelectedPage =
     | HomePage
+    | ExamplePage
     | OpeningPuzzlesPage
     | EndgamePuzzlesPage
     | DescriptionPage

@@ -28,3 +28,6 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     | Msg.SelectCoordsConfig v ->
         let newConfigOptions = { model.ConfigOptions with AreCoordsEnabled = v }
         { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+    | Msg.SelectPitchConfig v ->
+        let newConfigOptions = { model.ConfigOptions with SpeechPitch = v }
+        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
