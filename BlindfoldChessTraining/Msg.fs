@@ -1,5 +1,7 @@
 ﻿module BlindfoldChessTraining.Msg
 
+open Xamarin.Essentials
+
 type Msg = 
     | Increment 
     | Decrement 
@@ -8,3 +10,4 @@ type Msg =
     | TimerToggled of bool
     | TimedTick
     | SelectPage of Model.SelectedPage
+    | LocalesLoaded of Locale seq

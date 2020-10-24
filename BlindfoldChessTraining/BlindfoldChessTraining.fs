@@ -22,7 +22,7 @@ module App =
 
     // Note, this declaration is needed if you enable LiveUpdate
     let program = XamarinFormsProgram.mkProgram
-                    (fun () -> Model.init, Cmd.none)
+                    (fun () -> Model.init, Speech.loadLocales())
                     Update.update
                     view
 

@@ -45,6 +45,7 @@
     <Compile Include="Model.fs" />
     <Compile Include="Msg.fs" />
     <Compile Include="Update.fs" />
+    <Compile Include="Speech.fs" />
     <Compile Include="UIElems.Board.fs" />
     <Compile Include="Page.Example.fs" />
     <Compile Include="Page.Home.fs" />
@@ -54,8 +55,6 @@
     <Compile Include="Page.Credits.fs" />
     <Compile Include="BlindfoldChessTraining.fs" />
   </ItemGroup>
-
-  <ItemGroup />
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />

@@ -24,3 +24,4 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         else 
             model, Cmd.none
     | Msg.SelectPage v -> { model with Model.SelectedPage = v }, Cmd.none
+    | Msg.LocalesLoaded v -> { model with Model.Locales = v }, Cmd.none
