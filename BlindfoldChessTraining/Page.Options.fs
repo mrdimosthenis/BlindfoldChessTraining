@@ -8,6 +8,23 @@ open Xamarin.Forms
 open BlindfoldChessTraining
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+    let accentTitle = "Speech Accent:"
+    let accentItems = model.Locales |> Speech.localeNames |> Seq.toList
+    let accentF = (fun (i, _) -> dispatch (Msg.SelectLocaleConfig i))
+    let accentPicker = match model.ConfigOptions.SelectedLocale with
+                       | Some i ->
+                            View.Picker(
+                                title = accentTitle,
+                                selectedIndex = i,
+                                items = accentItems,
+                                selectedIndexChanged = accentF
+                            )
+                       | None ->
+                           View.Picker(
+                               title = accentTitle,
+                               items = accentItems,
+                               selectedIndexChanged = accentF
+                           )
     View.ContentPage(
         content = View.StackLayout(
             horizontalOptions = LayoutOptions.Center,
@@ -32,10 +49,15 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                 )
                 View.Slider(
                     minimumMaximum = (0.1, 2.0),
-                    //horizontalOptions = LayoutOptions.FillAndExpand,
                     valueChanged = (fun args -> args.NewValue |> Msg.SelectPitchConfig |> dispatch),
                     value = model.ConfigOptions.SpeechPitch
                 )
+
+                View.Label(
+                    text = accentTitle,
+                    horizontalTextAlignment = TextAlignment.Center
+                )
+                accentPicker
                 
                 View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
             ]

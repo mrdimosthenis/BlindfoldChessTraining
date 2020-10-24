@@ -13,3 +13,4 @@ type Msg =
     | LocalesLoaded of Locale seq
     | SelectCoordsConfig of bool
     | SelectPitchConfig of float
+    | SelectLocaleConfig of int

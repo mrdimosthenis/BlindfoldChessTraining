@@ -31,3 +31,6 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     | Msg.SelectPitchConfig v ->
         let newConfigOptions = { model.ConfigOptions with SpeechPitch = v }
         { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+    | Msg.SelectLocaleConfig v ->
+        let newConfigOptions = { model.ConfigOptions with SelectedLocale = Some v }
+        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
