@@ -17,6 +17,7 @@ module App =
                  | Model.OpeningPuzzlesPage -> OpeningPuzzles.view
                  | Model.EndgamePuzzlesPage -> EndgamePuzzles.view
                  | Model.DescriptionPage -> Description.view
+                 | Model.OptionsPage -> Options.view
                  | Model.CreditsPage -> Credits.view
         v model dispatch
 

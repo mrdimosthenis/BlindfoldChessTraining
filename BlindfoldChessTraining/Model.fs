@@ -7,6 +7,7 @@ type SelectedPage =
     | OpeningPuzzlesPage
     | EndgamePuzzlesPage
     | DescriptionPage
+    | OptionsPage
     | CreditsPage
 
 type ConfigOptions = { AreCoordsEnabled : bool

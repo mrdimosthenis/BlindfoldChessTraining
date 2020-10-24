@@ -11,3 +11,4 @@ type Msg =
     | TimedTick
     | SelectPage of Model.SelectedPage
     | LocalesLoaded of Locale seq
+    | SelectCoordsConfig of bool

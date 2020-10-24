@@ -52,6 +52,7 @@
     <Compile Include="Page.OpeningPuzzles.fs" />
     <Compile Include="Page.EndgamePuzzles.fs" />
     <Compile Include="Page.Description.fs" />
+    <Compile Include="Page.Options.fs" />
     <Compile Include="Page.Credits.fs" />
     <Compile Include="BlindfoldChessTraining.fs" />
   </ItemGroup>
