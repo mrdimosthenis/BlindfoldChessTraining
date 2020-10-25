@@ -47,7 +47,6 @@
     <Compile Include="Update.fs" />
     <Compile Include="Speech.fs" />
     <Compile Include="UIElems.Board.fs" />
-    <Compile Include="Page.Example.fs" />
     <Compile Include="Page.Home.fs" />
     <Compile Include="Page.OpeningPuzzles.fs" />
     <Compile Include="Page.EndgamePuzzles.fs" />

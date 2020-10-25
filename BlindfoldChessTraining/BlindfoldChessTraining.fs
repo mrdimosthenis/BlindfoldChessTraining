@@ -14,7 +14,6 @@ module App =
     let view (model: Model.Model) (dispatch: Msg.Msg -> unit) =
         let v =  match model.SelectedPage with
                  | Model.HomePage -> Home.view
-                 | Model.ExamplePage -> Example.view
                  | Model.OpeningPuzzlesPage -> OpeningPuzzles.view
                  | Model.EndgamePuzzlesPage -> EndgamePuzzles.view
                  | Model.DescriptionPage -> Description.view

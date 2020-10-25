@@ -23,7 +23,6 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                     fontAttributes = FontAttributes.Bold,
                     horizontalOptions = LayoutOptions.Center
                 )
-                View.Button(text = "Example Page", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.ExamplePage))
                 View.Button(text = "Opening Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.OpeningPuzzlesPage))
                 View.Button(text = "Endgame Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.EndgamePuzzlesPage))
                 View.Button(text = "Description", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.DescriptionPage))
