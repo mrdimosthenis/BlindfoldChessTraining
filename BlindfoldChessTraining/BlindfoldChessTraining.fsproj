@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="resources\images\icons\options.png" />
     <EmbeddedResource Include="resources\images\board\wh.png" />
     <EmbeddedResource Include="resources\images\board\1.png" />
     <EmbeddedResource Include="resources\images\board\bl.png" />
@@ -46,6 +47,8 @@
     <Compile Include="Msg.fs" />
     <Compile Include="Update.fs" />
     <Compile Include="Speech.fs" />
+    <Compile Include="UIElems.Images.fs" />
+    <Compile Include="UIElems.Icons.fs" />
     <Compile Include="UIElems.Board.fs" />
     <Compile Include="Page.Home.fs" />
     <Compile Include="Page.OpeningPuzzles.fs" />

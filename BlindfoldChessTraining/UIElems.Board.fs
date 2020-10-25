@@ -1,9 +1,7 @@
 ﻿module BlindfoldChessTraining.UIElems.Board
 
-open System.Diagnostics
 open Fabulous
 open Fabulous.XamarinForms
-open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
 open BlindfoldChessMechanics
@@ -13,9 +11,8 @@ exception InvalidRow of int
 
 let image (name: string): ViewElement =
     let pngImgSrc = name
-                    |> sprintf "BlindfoldChessTraining.resources.images.board.%s.png"
-                    |> ImageSource.FromResource
-                    |> Image.fromImageSource
+                    |> sprintf "board.%s"
+                    |> Images.fromResourceName
     View.Image(source = pngImgSrc)
 
 let imgWh: ViewElement = image "wh"
