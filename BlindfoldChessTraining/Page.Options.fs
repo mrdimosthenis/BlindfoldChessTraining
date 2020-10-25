@@ -49,18 +49,32 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                         horizontalOptions = LayoutOptions.Center,
                         verticalOptions = LayoutOptions.Center,
                         children = [
-                            Board.grid model.ConfigOptions.AreCoordsEnabled Board.init
                             View.StackLayout(
                                 orientation = StackOrientation.Horizontal,
                                 horizontalOptions = LayoutOptions.Center,
                                 children = [
                                     View.Label(
-                                        text = "Display Board Coordinates:",
+                                        text = "Board Coordinates:",
                                         fontSize = FontSize.fromValue model.ConfigOptions.FontSize
                                     )
                                     View.CheckBox(
                                         isChecked = model.ConfigOptions.AreCoordsEnabled,
                                         checkedChanged = (fun args -> model.ConfigOptions.AreCoordsEnabled |> not |> Msg.SelectCoordsConfig |> dispatch)
+                                    )
+                                ]
+                            )
+
+                            View.StackLayout(
+                                orientation = StackOrientation.Horizontal,
+                                horizontalOptions = LayoutOptions.Center,
+                                children = [
+                                    View.Label(
+                                        text = "Piece Symbol Notation:",
+                                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize
+                                    )
+                                    View.CheckBox(
+                                        isChecked = model.ConfigOptions.AreSymbolsEnabled,
+                                        checkedChanged = (fun args -> model.ConfigOptions.AreSymbolsEnabled |> not |> Msg.SelectPieceSymbolConfig |> dispatch)
                                     )
                                 ]
                             )

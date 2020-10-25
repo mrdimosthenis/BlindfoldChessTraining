@@ -11,13 +11,15 @@ type SelectedPage =
     | OptionsPage
     | CreditsPage
 
-type ConfigOptions = { AreCoordsEnabled : bool
-                       SelectedLocale : int option
+type ConfigOptions = { AreCoordsEnabled: bool
+                       AreSymbolsEnabled: bool
+                       SelectedLocale: int option
                        SpeechPitch: float
                        FontSize: float }
 
 let initConfigOptions: ConfigOptions =
     { AreCoordsEnabled = true
+      AreSymbolsEnabled = false
       SelectedLocale = None
       SpeechPitch = 1.0
       FontSize = 17.0 }

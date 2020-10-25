@@ -12,6 +12,7 @@ type Msg =
     | LocalesLoaded of Locale seq
     | SelectPage of Model.SelectedPage
     | SelectCoordsConfig of bool
+    | SelectPieceSymbolConfig of bool
     | SelectPitchConfig of float
     | SelectLocaleConfig of int
     | SelectFontSizeConfig of float
