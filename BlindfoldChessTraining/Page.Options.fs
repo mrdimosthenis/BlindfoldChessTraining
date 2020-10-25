@@ -77,6 +77,17 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                 text = "Please make sure that the accent is actually supported by the device. By pressing the button above, you should hear an example of the accent.",
                                 horizontalTextAlignment = TextAlignment.Center
                             )
+
+                            View.Label(
+                                text = sprintf "Font Size: %.0f" model.ConfigOptions.FontSize,
+                                fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                                horizontalTextAlignment = TextAlignment.Center
+                            )
+                            View.Slider(
+                                minimumMaximum = (1.0, 100.0),
+                                valueChanged = (fun args -> args.NewValue |> Msg.SelectFontSizeConfig |> dispatch),
+                                value = model.ConfigOptions.FontSize
+                            )
                             
                             View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
                         ]

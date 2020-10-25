@@ -13,12 +13,14 @@ type SelectedPage =
 
 type ConfigOptions = { AreCoordsEnabled : bool
                        SelectedLocale : int option
-                       SpeechPitch: float }
+                       SpeechPitch: float
+                       FontSize: float }
 
 let initConfigOptions: ConfigOptions =
     { AreCoordsEnabled = true
       SelectedLocale = None
-      SpeechPitch = 1.0 }
+      SpeechPitch = 1.0
+      FontSize = 22.0 }
 
 type Model = 
     { Count : int

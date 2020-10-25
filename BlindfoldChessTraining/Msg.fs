@@ -14,3 +14,4 @@ type Msg =
     | SelectCoordsConfig of bool
     | SelectPitchConfig of float
     | SelectLocaleConfig of int
+    | SelectFontSizeConfig of float

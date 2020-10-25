@@ -34,3 +34,6 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     | Msg.SelectLocaleConfig v ->
         let newConfigOptions = { model.ConfigOptions with SelectedLocale = Some v }
         { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+    | Msg.SelectFontSizeConfig v ->
+        let newConfigOptions = { model.ConfigOptions with FontSize = v }
+        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
