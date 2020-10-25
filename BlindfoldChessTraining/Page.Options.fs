@@ -1,7 +1,10 @@
 ﻿module BlindfoldChessTraining.Page.Options
+
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
+
+open BlindfoldChessTraining.UIElems
 
 open BlindfoldChessTraining
 
@@ -38,11 +41,19 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
             horizontalOptions = LayoutOptions.Center,
             verticalOptions = LayoutOptions.Center,
             children = [
-                View.Label(
-                    text = "Options",
-                    fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                    fontAttributes = FontAttributes.Bold,
-                    horizontalOptions = LayoutOptions.Center
+                View.StackLayout(
+                    orientation = StackOrientation.Horizontal,
+                    horizontalOptions = LayoutOptions.Center,
+                    children = [
+                        View.Label(
+                            text = "Options",
+                            fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                            fontAttributes = FontAttributes.Bold,
+                            horizontalOptions = LayoutOptions.Center,
+                            verticalOptions = LayoutOptions.Center
+                        )
+                        View.Image(source = Icons.options)
+                    ]
                 )
                 separator()
                 View.ScrollView(
@@ -108,7 +119,12 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                 horizontalTextAlignment = TextAlignment.Center
                             )
                             accentPicker model dispatch
-                            View.Button(text = "Speak", horizontalOptions = LayoutOptions.Center, command = fun () -> Speech.speak model "blindfold chess training")
+                            View.Button(
+                                text = "Speak",
+                                horizontalOptions = LayoutOptions.Center,
+                                command = (fun () -> Speech.speak model "blindfold chess training"),
+                                image = Icons.speaker
+                            )
                             View.Label(
                                 text = "Please make sure that the accent is actually supported by the device. By pressing the button above, you should hear an example of the accent.",
                                 fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
