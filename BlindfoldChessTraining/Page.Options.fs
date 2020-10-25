@@ -11,27 +11,28 @@ open BlindfoldChessTraining.UIElems
 
 open BlindfoldChessMechanics.Logic
 
-let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+let accentPicker (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let accentTitle = "Speech Accent:"
     let accentItems = model.Locales |> Speech.localeNames |> Seq.toList
     let accentF = (fun (i, _) -> dispatch (Msg.SelectLocaleConfig i))
-    let accentPicker =
-        match model.ConfigOptions.SelectedLocale with
-        | Some i when i < Seq.length model.Locales ->
-             View.Picker(
-                 title = accentTitle,
-                 selectedIndex = i,
-                 items = accentItems,
-                 selectedIndexChanged = accentF,
-                 horizontalTextAlignment = TextAlignment.Center
-             )
-        | _ ->
-            View.Picker(
-                title = accentTitle,
-                items = accentItems,
-                selectedIndexChanged = accentF,
-                horizontalTextAlignment = TextAlignment.Center
-            )
+    match model.ConfigOptions.SelectedLocale with
+    | Some i when i < Seq.length model.Locales ->
+         View.Picker(
+             title = accentTitle,
+             selectedIndex = i,
+             items = accentItems,
+             selectedIndexChanged = accentF,
+             horizontalTextAlignment = TextAlignment.Center
+         )
+    | _ ->
+        View.Picker(
+            title = accentTitle,
+            items = accentItems,
+            selectedIndexChanged = accentF,
+            horizontalTextAlignment = TextAlignment.Center
+        )
+
+let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement = 
     View.ContentPage(
         content = View.StackLayout(
             horizontalOptions = LayoutOptions.Center,
@@ -67,10 +68,10 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                             )
 
                             View.Label(
-                                text = accentTitle,
+                                text = "Speech Accent:",
                                 horizontalTextAlignment = TextAlignment.Center
                             )
-                            accentPicker
+                            accentPicker model dispatch
                             View.Button(text = "Speak", horizontalOptions = LayoutOptions.Center, command = fun () -> Speech.speak model "blindfold chess training")
                             View.Label(
                                 text = "Please make sure that the accent is actually supported by the device. By pressing the button above, you should hear an example of the accent.",
