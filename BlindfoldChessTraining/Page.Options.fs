@@ -38,7 +38,12 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
             horizontalOptions = LayoutOptions.Center,
             verticalOptions = LayoutOptions.Center,
             children = [
-                View.Label(text = "Options", fontAttributes = FontAttributes.Bold, horizontalOptions = LayoutOptions.Center)
+                View.Label(
+                    text = "Options",
+                    fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                    fontAttributes = FontAttributes.Bold,
+                    horizontalOptions = LayoutOptions.Center
+                )
                 View.ScrollView(
                     content = View.StackLayout(
                         horizontalOptions = LayoutOptions.Center,
@@ -49,7 +54,10 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                 orientation = StackOrientation.Horizontal,
                                 horizontalOptions = LayoutOptions.Center,
                                 children = [
-                                    View.Label(text = "Display Board Coordinates:")
+                                    View.Label(
+                                        text = "Display Board Coordinates:",
+                                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize
+                                    )
                                     View.CheckBox(
                                         isChecked = model.ConfigOptions.AreCoordsEnabled,
                                         checkedChanged = (fun args -> model.ConfigOptions.AreCoordsEnabled |> not |> Msg.SelectCoordsConfig |> dispatch)
@@ -59,6 +67,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
 
                             View.Label(
                                 text = sprintf "Speech Pitch: %.1f" model.ConfigOptions.SpeechPitch,
+                                fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
                                 horizontalTextAlignment = TextAlignment.Center
                             )
                             View.Slider(
@@ -69,12 +78,14 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
 
                             View.Label(
                                 text = "Speech Accent:",
+                                fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
                                 horizontalTextAlignment = TextAlignment.Center
                             )
                             accentPicker model dispatch
                             View.Button(text = "Speak", horizontalOptions = LayoutOptions.Center, command = fun () -> Speech.speak model "blindfold chess training")
                             View.Label(
                                 text = "Please make sure that the accent is actually supported by the device. By pressing the button above, you should hear an example of the accent.",
+                                fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
                                 horizontalTextAlignment = TextAlignment.Center
                             )
 

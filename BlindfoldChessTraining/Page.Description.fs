@@ -22,9 +22,17 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
         content = View.StackLayout(
             verticalOptions = LayoutOptions.Center,
             children = [
-                View.Label(text = "Description", fontAttributes = FontAttributes.Bold, horizontalOptions = LayoutOptions.Center)
+                View.Label(
+                    text = "Description",
+                    fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                    fontAttributes = FontAttributes.Bold,
+                    horizontalOptions = LayoutOptions.Center
+                )
                 View.ScrollView(
-                  View.Label(text = description)
+                  View.Label(
+                    text = description,
+                    fontSize = FontSize.fromValue model.ConfigOptions.FontSize
+                  )
                 )
                 View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
             ]

@@ -13,7 +13,12 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
         content = View.StackLayout(
             verticalOptions = LayoutOptions.Center,
             children = [
-                View.Label(text = "Opening Puzzles", fontAttributes = FontAttributes.Bold, horizontalOptions = LayoutOptions.Center)
+                View.Label(
+                    text = "Opening Puzzles",
+                    fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                    fontAttributes = FontAttributes.Bold,
+                    horizontalOptions = LayoutOptions.Center
+                )
                 View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
             ]
         )

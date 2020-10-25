@@ -17,19 +17,24 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
             horizontalOptions = LayoutOptions.Center,
             verticalOptions = LayoutOptions.Center,
             children = [
-                
-                //Board.grid model.ConfigOptions.AreCoordsEnabled Board.init
-
-                View.Button(text = "Play Sound", horizontalOptions = LayoutOptions.Center, command = fun () -> Speech.speak model "play that sound")
-               
-                View.Label(text = "Blindfold Chess Training", fontAttributes = FontAttributes.Bold, horizontalOptions = LayoutOptions.Center)
+                View.Label(
+                    text = "Blindfold Chess Training",
+                    fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                    fontAttributes = FontAttributes.Bold,
+                    horizontalOptions = LayoutOptions.Center
+                )
                 View.Button(text = "Example Page", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.ExamplePage))
                 View.Button(text = "Opening Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.OpeningPuzzlesPage))
                 View.Button(text = "Endgame Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.EndgamePuzzlesPage))
                 View.Button(text = "Description", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.DescriptionPage))
                 View.Button(text = "Options", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.OptionsPage))
                 View.Button(text = "Credits", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.CreditsPage))
-                View.Label(text = "version 3.0.0", fontAttributes = FontAttributes.Italic, horizontalOptions = LayoutOptions.End)
+                View.Label(
+                    text = "version 3.0.0",
+                    fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                    fontAttributes = FontAttributes.Italic,
+                    horizontalOptions = LayoutOptions.End
+                )
             ]
         )
     )
