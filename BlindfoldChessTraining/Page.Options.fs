@@ -11,20 +11,21 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let accentTitle = "Speech Accent:"
     let accentItems = model.Locales |> Speech.localeNames |> Seq.toList
     let accentF = (fun (i, _) -> dispatch (Msg.SelectLocaleConfig i))
-    let accentPicker = match model.ConfigOptions.SelectedLocale with
-                       | Some i ->
-                            View.Picker(
-                                title = accentTitle,
-                                selectedIndex = i,
-                                items = accentItems,
-                                selectedIndexChanged = accentF
-                            )
-                       | None ->
-                           View.Picker(
-                               title = accentTitle,
-                               items = accentItems,
-                               selectedIndexChanged = accentF
-                           )
+    let accentPicker =
+        match model.ConfigOptions.SelectedLocale with
+        | Some i when i < Seq.length model.Locales ->
+             View.Picker(
+                 title = accentTitle,
+                 selectedIndex = i,
+                 items = accentItems,
+                 selectedIndexChanged = accentF
+             )
+        | _ ->
+            View.Picker(
+                title = accentTitle,
+                items = accentItems,
+                selectedIndexChanged = accentF
+            )
     View.ContentPage(
         content = View.StackLayout(
             horizontalOptions = LayoutOptions.Center,
