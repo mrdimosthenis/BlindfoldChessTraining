@@ -12,7 +12,7 @@ open BlindfoldChessTraining.UIElems
 open BlindfoldChessMechanics.Logic
 
 let accentPicker (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
-    let accentTitle = "Speech Accent:"
+    let accentTitle = "Default"
     let accentItems = model.Locales |> Speech.localeNames |> Seq.toList
     let accentF = (fun (i, _) -> dispatch (Msg.SelectLocaleConfig i))
     match model.ConfigOptions.SelectedLocale with

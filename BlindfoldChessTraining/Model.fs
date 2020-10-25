@@ -20,7 +20,7 @@ let initConfigOptions: ConfigOptions =
     { AreCoordsEnabled = true
       SelectedLocale = None
       SpeechPitch = 1.0
-      FontSize = 22.0 }
+      FontSize = 17.0 }
 
 type Model = 
     { Count : int
