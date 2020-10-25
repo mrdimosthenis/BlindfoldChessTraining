@@ -1,15 +1,15 @@
 ﻿module BlindfoldChessTraining.Page.Options
-
-open System.Diagnostics
 open Fabulous
 open Fabulous.XamarinForms
-open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
 open BlindfoldChessTraining
-open BlindfoldChessTraining.UIElems
 
-open BlindfoldChessMechanics.Logic
+let separator(): ViewElement =
+    View.BoxView(
+        height = 1.0,
+        color = Color.Accent
+    )
 
 let accentPicker (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let accentTitle = "Default"
@@ -44,6 +44,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                     fontAttributes = FontAttributes.Bold,
                     horizontalOptions = LayoutOptions.Center
                 )
+                separator()
                 View.ScrollView(
                     content = View.StackLayout(
                         horizontalOptions = LayoutOptions.Center,
@@ -63,7 +64,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                     )
                                 ]
                             )
-
+                            separator()
                             View.StackLayout(
                                 orientation = StackOrientation.Horizontal,
                                 horizontalOptions = LayoutOptions.Center,
@@ -78,7 +79,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                     )
                                 ]
                             )
-
+                            separator()
                             View.Label(
                                 text = sprintf "Font Size: %.0f" model.ConfigOptions.FontSize,
                                 fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
@@ -89,7 +90,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                 valueChanged = (fun args -> args.NewValue |> Msg.SelectFontSizeConfig |> dispatch),
                                 value = model.ConfigOptions.FontSize
                             )
-
+                            separator()
                             View.Label(
                                 text = sprintf "Speech Pitch: %.1f" model.ConfigOptions.SpeechPitch,
                                 fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
@@ -100,7 +101,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                 valueChanged = (fun args -> args.NewValue |> Msg.SelectPitchConfig |> dispatch),
                                 value = model.ConfigOptions.SpeechPitch
                             )
-
+                            separator()
                             View.Label(
                                 text = "Speech Accent:",
                                 fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
@@ -113,10 +114,23 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                 fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
                                 horizontalTextAlignment = TextAlignment.Center
                             )
-
-                            View.Button(text = "Reset ", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch Msg.ResetConfigs)
-                            
-                            View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
+                            separator()
+                            View.StackLayout(
+                                orientation = StackOrientation.Horizontal,
+                                horizontalOptions = LayoutOptions.Center,
+                                children = [
+                                    View.Button(
+                                        text = "Reset ",
+                                        horizontalOptions = LayoutOptions.Start,
+                                        command = fun () -> dispatch Msg.ResetConfigs
+                                    )
+                                    View.Button(
+                                        text = "Back",
+                                        horizontalOptions = LayoutOptions.End,
+                                        command = fun () -> dispatch (Msg.SelectPage Model.HomePage)
+                                    )
+                                ]
+                            )
                         ]
                     )
                 )
