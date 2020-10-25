@@ -18,13 +18,15 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                  title = accentTitle,
                  selectedIndex = i,
                  items = accentItems,
-                 selectedIndexChanged = accentF
+                 selectedIndexChanged = accentF,
+                 horizontalTextAlignment = TextAlignment.Center
              )
         | _ ->
             View.Picker(
                 title = accentTitle,
                 items = accentItems,
-                selectedIndexChanged = accentF
+                selectedIndexChanged = accentF,
+                horizontalTextAlignment = TextAlignment.Center
             )
     View.ContentPage(
         content = View.StackLayout(
@@ -59,6 +61,11 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                     horizontalTextAlignment = TextAlignment.Center
                 )
                 accentPicker
+                View.Button(text = "Speak", horizontalOptions = LayoutOptions.Center, command = fun () -> Speech.speak model "blindfold chess training")
+                View.Label(
+                    text = "Please make sure that the accent is actually supported by the device. By pressing the button above, you should hear an example of the accent.",
+                    horizontalTextAlignment = TextAlignment.Center
+                )
                 
                 View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
             ]

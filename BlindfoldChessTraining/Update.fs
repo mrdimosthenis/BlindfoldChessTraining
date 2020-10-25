@@ -23,8 +23,8 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
             { model with Count = model.Count + model.Step }, timerCmd
         else 
             model, Cmd.none
-    | Msg.SelectPage v -> { model with Model.SelectedPage = v }, Cmd.none
     | Msg.LocalesLoaded v -> { model with Model.Locales = v }, Cmd.none
+    | Msg.SelectPage v -> { model with Model.SelectedPage = v }, Cmd.none
     | Msg.SelectCoordsConfig v ->
         let newConfigOptions = { model.ConfigOptions with AreCoordsEnabled = v }
         { model with Model.ConfigOptions = newConfigOptions }, Cmd.none

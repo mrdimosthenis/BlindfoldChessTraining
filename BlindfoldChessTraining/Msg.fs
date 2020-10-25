@@ -9,8 +9,8 @@ type Msg =
     | SetStep of int
     | TimerToggled of bool
     | TimedTick
-    | SelectPage of Model.SelectedPage
     | LocalesLoaded of Locale seq
+    | SelectPage of Model.SelectedPage
     | SelectCoordsConfig of bool
     | SelectPitchConfig of float
     | SelectLocaleConfig of int

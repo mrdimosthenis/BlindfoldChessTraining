@@ -7,6 +7,7 @@ let loadLocales(): Cmd<Msg.Msg> =
     async {
         let! locales = TextToSpeech.GetLocalesAsync() |> Async.AwaitTask
         let localesMsg = locales
+                         |> Seq.filter (fun loc -> loc.Name <> null && loc.Name.Trim() <> "")
                          |> Seq.sortBy (fun loc -> loc.Name)
                          |> Seq.cache
                          |> Msg.LocalesLoaded
