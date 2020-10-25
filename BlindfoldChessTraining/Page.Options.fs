@@ -99,6 +99,8 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                 valueChanged = (fun args -> args.NewValue |> Msg.SelectFontSizeConfig |> dispatch),
                                 value = model.ConfigOptions.FontSize
                             )
+
+                            View.Button(text = "Reset ", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch Msg.ResetConfigs)
                             
                             View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
                         ]

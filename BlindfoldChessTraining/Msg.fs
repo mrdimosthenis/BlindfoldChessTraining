@@ -15,3 +15,4 @@ type Msg =
     | SelectPitchConfig of float
     | SelectLocaleConfig of int
     | SelectFontSizeConfig of float
+    | ResetConfigs
