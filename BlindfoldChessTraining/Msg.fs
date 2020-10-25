@@ -13,7 +13,7 @@ type Msg =
     | SelectPage of Model.SelectedPage
     | SelectCoordsConfig of bool
     | SelectPieceSymbolConfig of bool
+    | SelectFontSizeConfig of float
     | SelectPitchConfig of float
     | SelectLocaleConfig of int
-    | SelectFontSizeConfig of float
     | ResetConfigs

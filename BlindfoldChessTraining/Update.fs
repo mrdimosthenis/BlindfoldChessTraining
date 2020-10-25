@@ -31,14 +31,14 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     | Msg.SelectPieceSymbolConfig v ->
         let newConfigOptions = { model.ConfigOptions with AreSymbolsEnabled = v }
         { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+    | Msg.SelectFontSizeConfig v ->
+        let newConfigOptions = { model.ConfigOptions with FontSize = v }
+        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
     | Msg.SelectPitchConfig v ->
         let newConfigOptions = { model.ConfigOptions with SpeechPitch = v }
         { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
     | Msg.SelectLocaleConfig v ->
         let newConfigOptions = { model.ConfigOptions with SelectedLocale = Some v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
-    | Msg.SelectFontSizeConfig v ->
-        let newConfigOptions = { model.ConfigOptions with FontSize = v }
         { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
     | Msg.ResetConfigs ->
         { model with Model.ConfigOptions = Model.initConfigOptions }, Cmd.none
