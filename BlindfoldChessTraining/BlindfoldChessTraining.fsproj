@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="resources\images\icons\chip.png" />
+    <EmbeddedResource Include="resources\images\icons\home.png" />
     <EmbeddedResource Include="resources\images\icons\speaker.png" />
     <EmbeddedResource Include="resources\images\icons\options.png" />
     <EmbeddedResource Include="resources\images\board\wh.png" />

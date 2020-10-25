@@ -138,12 +138,14 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                     View.Button(
                                         text = "Reset ",
                                         horizontalOptions = LayoutOptions.Start,
-                                        command = fun () -> dispatch Msg.ResetConfigs
+                                        command = (fun () -> dispatch Msg.ResetConfigs),
+                                        image = Icons.chip
                                     )
                                     View.Button(
                                         text = "Back",
                                         horizontalOptions = LayoutOptions.End,
-                                        command = fun () -> dispatch (Msg.SelectPage Model.HomePage)
+                                        command = (fun () -> dispatch (Msg.SelectPage Model.HomePage)),
+                                        image = Icons.home
                                     )
                                 ]
                             )
