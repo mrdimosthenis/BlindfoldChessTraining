@@ -116,6 +116,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                         horizontalOptions = LayoutOptions.Center,
                         verticalOptions = LayoutOptions.Center,
                         children = [
+                            UIElems.Board.grid model.ConfigOptions.AreCoordsEnabled Board.init
                             View.StackLayout(
                                 orientation = StackOrientation.Horizontal,
                                 horizontalOptions = LayoutOptions.Center,
@@ -136,7 +137,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                 horizontalOptions = LayoutOptions.Center,
                                 children = [
                                     View.Label(
-                                        text = "Piece Symbol:",
+                                        text = "Piece Symbol Notation:",
                                         fontSize = FontSize.fromValue model.ConfigOptions.FontSize
                                     )
                                     View.CheckBox(
@@ -146,7 +147,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                 ]
                             )
                             View.Label(
-                                text = (model.ConfigOptions.AreSymbolsEnabled |> pieceNotationExample |>  sprintf "Notation Example: %s"),
+                                text = (model.ConfigOptions.AreSymbolsEnabled |> pieceNotationExample |>  sprintf "Example: %s"),
                                 fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
                                 horizontalTextAlignment = TextAlignment.Center
                             )
