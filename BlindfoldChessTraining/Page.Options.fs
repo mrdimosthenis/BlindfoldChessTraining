@@ -182,7 +182,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                             View.Button(
                                 text = "Speak",
                                 horizontalOptions = LayoutOptions.Center,
-                                command = (fun () -> Speech.speak model "blindfold chess training"),
+                                command = (fun () -> "Blindfold Chess Training" |> Msg.Speak |> dispatch),
                                 image = Icons.speaker
                             )
                             View.Label(
@@ -205,7 +205,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                     View.Button(
                                         text = "Back",
                                         horizontalOptions = LayoutOptions.End,
-                                        command = (fun () -> dispatch (Msg.SelectPage Model.HomePage)),
+                                        command = (fun () -> Model.HomePage |> Msg.SelectPage |> dispatch),
                                         image = Icons.home
                                     )
                                 ]

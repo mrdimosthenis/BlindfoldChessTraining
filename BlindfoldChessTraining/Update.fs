@@ -1,15 +1,24 @@
 ﻿module BlindfoldChessTraining.Update
 
-open System.Diagnostics
 open Fabulous
-open Fabulous.XamarinForms
-open Fabulous.XamarinForms.LiveUpdate
-open Xamarin.Forms
+
+let cmdInit(): Cmd<Msg.Msg> =
+    async {
+        let! locales = Speech.loadLocales()
+        let localesMsg = Msg.LocalesLoaded locales
+        return localesMsg
+    } |> Cmd.ofAsyncMsg
 
 let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     match msg with
     | Msg.LocalesLoaded v -> { model with Model.Locales = v }, Cmd.none
     | Msg.SelectPage v -> { model with Model.SelectedPage = v }, Cmd.none
+    | Msg.Speak v ->
+        Speech.speak model.ConfigOptions.SpeechPitch
+                     model.Locales
+                     model.ConfigOptions.SelectedLocale
+                     v
+        model, Cmd.none
     | Msg.SelectCoordsConfig v ->
         let newConfigOptions = { model.ConfigOptions with AreCoordsEnabled = v }
         { model with Model.ConfigOptions = newConfigOptions }, Cmd.none

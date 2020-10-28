@@ -47,10 +47,10 @@
     <EmbeddedResource Include="resources\images\board\wq.png" />
     <EmbeddedResource Include="resources\images\board\wr.png" />
     <Compile Include="Constants.fs" />
+    <Compile Include="Speech.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="Msg.fs" />
     <Compile Include="Update.fs" />
-    <Compile Include="Speech.fs" />
     <Compile Include="UIElems.Images.fs" />
     <Compile Include="UIElems.Icons.fs" />
     <Compile Include="UIElems.Board.fs" />
