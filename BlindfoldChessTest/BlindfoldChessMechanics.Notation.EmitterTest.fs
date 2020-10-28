@@ -69,6 +69,21 @@ let ``gxh1=♜# move text`` () =
         "gxh1=♜#"
 
 [<Fact>]
+let ``♞c6 move text`` () =
+    { Piece = Knight
+      FromCoords = (7, 1)
+      ToCoords = (5, 2)
+      IsCapture = false
+      Promotion = None
+      IsCheck = false
+      IsMate = false
+      IsStalemate = false
+      SamePieceCoords = None }
+    |> moveText false true
+    |> should equal
+        "♞c6"
+
+[<Fact>]
 let ``N1b3+ move text`` () =
     { Piece = Knight
       FromCoords = (0, 0)
@@ -124,7 +139,50 @@ let ``Multiple moves text with figures`` () =
     |> Seq.ofArray
     |> multipleMovesText true false
     |> should equal
-        "1...♘f6 2.♗e2 e6 3.h4 ♗a3 4.bxa3"
+        "1...♞f6 2.♗e2 e6 3.h4 ♝a3 4.bxa3"
+
+[<Fact>]
+let ``Multiple moves text with figures in king's pawn game`` () =
+    [| { Piece = Pawn
+         FromCoords = (1, 4)
+         ToCoords = (3, 4)
+         IsCapture = false
+         Promotion = None
+         IsCheck = false
+         IsMate = false
+         IsStalemate = false
+         SamePieceCoords = None }
+       { Piece = Pawn
+         FromCoords = (6, 4)
+         ToCoords = (4, 4)
+         IsCapture = false
+         Promotion = None
+         IsCheck = false
+         IsMate = false
+         IsStalemate = false
+         SamePieceCoords = None }
+       { Piece = Knight
+         FromCoords = (0, 6)
+         ToCoords = (2, 5)
+         IsCapture = false
+         Promotion = None
+         IsCheck = false
+         IsMate = false
+         IsStalemate = false
+         SamePieceCoords = None }
+       { Piece = Knight
+         FromCoords = (7, 1)
+         ToCoords = (5, 2)
+         IsCapture = false
+         Promotion = None
+         IsCheck = false
+         IsMate = false
+         IsStalemate = false
+         SamePieceCoords = None } |]
+    |> Seq.ofArray
+    |> multipleMovesText true true
+    |> should equal
+        "1.e4 e5 2.♘f3 ♞c6"
 
 [<Fact>]
 let ``Position text of initial one`` () =

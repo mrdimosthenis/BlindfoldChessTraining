@@ -113,7 +113,7 @@ let multipleMovesText (areFigures: bool) (isWhiteToMove: bool) (moves: Position.
                             | (true, _, _) -> sprintf "%i." i
                             | (false, 1, false) -> sprintf "%i..." i
                             | (false, _, _) -> ""
-                    let m = moveText true areFigures m
+                    let m = moveText b areFigures m
                     d + m
                  )
                  indices

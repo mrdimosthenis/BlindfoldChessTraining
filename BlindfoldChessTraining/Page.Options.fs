@@ -5,14 +5,68 @@ open Fabulous.XamarinForms
 open Xamarin.Forms
 
 open BlindfoldChessTraining.UIElems
-
 open BlindfoldChessTraining
+
+open BlindfoldChessMechanics.Logic
+open BlindfoldChessMechanics.Notation
 
 let separator(): ViewElement =
     View.BoxView(
         height = 1.0,
         color = Color.Accent
     )
+
+let firstMove: Position.Move =
+    { Piece = Board.Pawn
+      FromCoords = (1, 4)
+      ToCoords = (3, 4)
+      IsCapture = false
+      Promotion = None
+      IsCheck = false
+      IsMate = false
+      IsStalemate = false
+      SamePieceCoords = None }
+
+let secondMove: Position.Move =
+    { Piece = Board.Pawn
+      FromCoords = (6, 4)
+      ToCoords = (4, 4)
+      IsCapture = false
+      Promotion = None
+      IsCheck = false
+      IsMate = false
+      IsStalemate = false
+      SamePieceCoords = None }
+
+let thirdMove: Position.Move =
+    { Piece = Board.Knight
+      FromCoords = (0, 6)
+      ToCoords = (2, 5)
+      IsCapture = false
+      Promotion = None
+      IsCheck = false
+      IsMate = false
+      IsStalemate = false
+      SamePieceCoords = None }
+
+let forthMove: Position.Move =
+    { Piece = Board.Knight
+      FromCoords = (7, 1)
+      ToCoords = (5, 2)
+      IsCapture = false
+      Promotion = None
+      IsCheck = false
+      IsMate = false
+      IsStalemate = false
+      SamePieceCoords = None }
+
+let pieceNotationExample (areFigures: bool): string =
+    [| firstMove
+       secondMove
+       thirdMove
+       forthMove |]
+    |> Seq.ofArray
+    |> Emitter.multipleMovesText areFigures true
 
 let accentPicker (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let accentTitle = "Default"
@@ -82,7 +136,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                 horizontalOptions = LayoutOptions.Center,
                                 children = [
                                     View.Label(
-                                        text = "Piece Symbol Notation:",
+                                        text = "Piece Symbol:",
                                         fontSize = FontSize.fromValue model.ConfigOptions.FontSize
                                     )
                                     View.CheckBox(
@@ -90,6 +144,11 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                                         checkedChanged = (fun args -> model.ConfigOptions.AreSymbolsEnabled |> not |> Msg.SelectPieceSymbolConfig |> dispatch)
                                     )
                                 ]
+                            )
+                            View.Label(
+                                text = (model.ConfigOptions.AreSymbolsEnabled |> pieceNotationExample |>  sprintf "Notation Example: %s"),
+                                fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                                horizontalTextAlignment = TextAlignment.Center
                             )
                             separator()
                             View.Label(
