@@ -114,6 +114,19 @@ let ``b8=Q move text`` () =
         "b8=Q"
 
 [<Fact>]
+let ``Multiple moves text with figures`` () =
+    [| PositionTest.forthHalfMove
+       PositionTest.fifthHalfMove
+       PositionTest.sixthHalfMove
+       PositionTest.seventhHalfMove
+       PositionTest.eighthHalfMove
+       PositionTest.ninthHalfMove |]
+    |> Seq.ofArray
+    |> multipleMovesText true false
+    |> should equal
+        "1...♘f6 2.♗e2 e6 3.h4 ♗a3 4.bxa3"
+
+[<Fact>]
 let ``Position text of initial one`` () =
     Position.init
     |> positionText

@@ -92,6 +92,35 @@ let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
                              | _ -> ""
            piece + clarification + takes + targetSquare + promotion + checkOrMate
 
+let multipleMovesText (areFigures: bool) (isWhiteToMove: bool) (moves: Position.Move seq): string =
+    let indices = Seq.initInfinite (fun i -> [| i + 1; i + 1 |])
+                  |> Seq.map Seq.ofArray
+                  |> Seq.concat
+                  |> (if isWhiteToMove then id else Seq.tail)
+                  |> Seq.cache
+    let isWhiteToMoveBools =
+        Seq.initInfinite (fun _ ->
+                           if isWhiteToMove then [| true; false |]
+                           else [| false; true |]
+                         )
+        |> Seq.map Seq.ofArray
+        |> Seq.concat
+        |> Seq.cache
+    let moveStrings =
+        moves
+        |> Seq.map3 (fun i b m ->
+                    let d = match (b, i, isWhiteToMove) with
+                            | (true, _, _) -> sprintf "%i." i
+                            | (false, 1, false) -> sprintf "%i..." i
+                            | (false, _, _) -> ""
+                    let m = moveText true areFigures m
+                    d + m
+                 )
+                 indices
+                 isWhiteToMoveBools
+        |> Seq.cache
+    String.Join(" ", moveStrings)
+
 let rowFEN (row: Board.Resident seq): string =
     let remaining (opt: int option): string =
         match opt with
@@ -151,31 +180,9 @@ let metaTagsText(fen: string, metaTags: Map<string,string>): string =
 let gameText (game: Game.Game): string =
     let fen = positionText(game.InitialPosition)
     let metaTags = metaTagsText(fen, game.MetaTags)
-    let isWhiteToMove = game.InitialPosition.IsWhiteToMove
-    let indices = Seq.initInfinite (fun i -> [| i + 1; i + 1 |])
-                  |> Seq.map Seq.ofArray
-                  |> Seq.concat
-                  |> (if isWhiteToMove then id else Seq.tail)
-                  |> Seq.cache
-    let isWhiteToMoveBools = Seq.initInfinite (fun _ ->
-                                                if isWhiteToMove then [| true; false |]
-                                                else [| false; true |]
-                                              )
-                             |> Seq.map Seq.ofArray
-                             |> Seq.concat
-                             |> Seq.cache
-    let moves = Seq.map3 (fun i b m ->
-                            let d = match (b, i, isWhiteToMove) with
-                                    | (true, _, _) -> sprintf "%i." i
-                                    | (false, 1, false) -> sprintf "%i..." i
-                                    | (false, _, _) -> ""
-                            let m = moveText true false m
-                            d + m
-                         )
-                         indices
-                         isWhiteToMoveBools
-                         game.Moves
-                 |> Seq.toArray
+    let moves = game.Moves
+                |> Seq.ofArray
+                |> multipleMovesText false game.InitialPosition.IsWhiteToMove 
     let result = match game.Result with
                  | None -> ""
                  | Some Game.White -> "1-0"
@@ -183,7 +190,7 @@ let gameText (game: Game.Game): string =
                  | Some Game.Draw -> "1/2-1/2"
     sprintf "%s\n\n%s  %s"
             metaTags
-            (String.Join(" ", moves))
+            moves
             result
 
 let gamesFile(filePath: string) (games: Game.Game seq): unit =
