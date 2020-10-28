@@ -15,9 +15,10 @@ let image (name: string): ViewElement =
                     |> Images.fromResourceName
     View.Image(source = pngImgSrc)
 
-let imgWh: ViewElement = image "wh"
+let imgWh: ViewElement = View.Image(backgroundColor = Color.Default)
+let imgBl: ViewElement = View.Image(backgroundColor = Color.Accent)
+
 let img1: ViewElement = image "1"
-let imgBl: ViewElement = image "bl"
 let img2: ViewElement = image "2"
 let img3: ViewElement = image "3"
 let img4: ViewElement = image "4"

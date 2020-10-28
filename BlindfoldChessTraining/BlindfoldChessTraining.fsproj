@@ -10,9 +10,7 @@
     <EmbeddedResource Include="resources\images\icons\home.png" />
     <EmbeddedResource Include="resources\images\icons\speaker.png" />
     <EmbeddedResource Include="resources\images\icons\options.png" />
-    <EmbeddedResource Include="resources\images\board\wh.png" />
     <EmbeddedResource Include="resources\images\board\1.png" />
-    <EmbeddedResource Include="resources\images\board\bl.png" />
     <EmbeddedResource Include="resources\images\board\2.png" />
     <EmbeddedResource Include="resources\images\board\3.png" />
     <EmbeddedResource Include="resources\images\board\4.png" />
