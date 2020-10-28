@@ -7,8 +7,7 @@ open Xamarin.Forms
 open BlindfoldChessTraining.UIElems
 open BlindfoldChessTraining
 
-open BlindfoldChessMechanics.Logic
-open BlindfoldChessMechanics.Notation
+open BlindfoldChessMechanics
 
 let separator(): ViewElement =
     View.BoxView(
@@ -16,8 +15,8 @@ let separator(): ViewElement =
         color = Color.Accent
     )
 
-let firstMove: Position.Move =
-    { Piece = Board.Pawn
+let firstMove: Logic.Position.Move =
+    { Piece = Logic.Board.Pawn
       FromCoords = (1, 4)
       ToCoords = (3, 4)
       IsCapture = false
@@ -27,8 +26,8 @@ let firstMove: Position.Move =
       IsStalemate = false
       SamePieceCoords = None }
 
-let secondMove: Position.Move =
-    { Piece = Board.Pawn
+let secondMove: Logic.Position.Move =
+    { Piece = Logic.Board.Pawn
       FromCoords = (6, 4)
       ToCoords = (4, 4)
       IsCapture = false
@@ -38,8 +37,8 @@ let secondMove: Position.Move =
       IsStalemate = false
       SamePieceCoords = None }
 
-let thirdMove: Position.Move =
-    { Piece = Board.Knight
+let thirdMove: Logic.Position.Move =
+    { Piece = Logic.Board.Knight
       FromCoords = (0, 6)
       ToCoords = (2, 5)
       IsCapture = false
@@ -49,8 +48,8 @@ let thirdMove: Position.Move =
       IsStalemate = false
       SamePieceCoords = None }
 
-let forthMove: Position.Move =
-    { Piece = Board.Knight
+let forthMove: Logic.Position.Move =
+    { Piece = Logic.Board.Knight
       FromCoords = (7, 1)
       ToCoords = (5, 2)
       IsCapture = false
@@ -66,7 +65,7 @@ let pieceNotationExample (areFigures: bool): string =
        thirdMove
        forthMove |]
     |> Seq.ofArray
-    |> Emitter.multipleMovesText areFigures true
+    |> Notation.Emitter.multipleMovesText areFigures true
 
 let accentPicker (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let accentTitle = "Default"
@@ -116,7 +115,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                         horizontalOptions = LayoutOptions.Center,
                         verticalOptions = LayoutOptions.Center,
                         children = [
-                            UIElems.Board.grid model.ConfigOptions.AreCoordsEnabled Board.init
+                            Board.grid model.ConfigOptions.AreCoordsEnabled Logic.Board.init
                             View.StackLayout(
                                 orientation = StackOrientation.Horizontal,
                                 horizontalOptions = LayoutOptions.Center,
