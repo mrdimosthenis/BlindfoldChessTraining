@@ -1,9 +1,10 @@
 ﻿module BlindfoldChessTraining.Msg
 
 open Xamarin.Essentials
+open FSharpx.Collections
 
 type Msg = 
-    | LocalesLoaded of Locale seq
+    | LocalesLoaded of Locale LazyList
     | SelectPage of Model.SelectedPage
     | Speak of string
     | SelectCoordsConfig of bool

@@ -5,6 +5,7 @@ open BlindfoldChessMechanics
 
 open System.Text.RegularExpressions
 open System.IO
+open FSharpx.Collections
 
 exception InvalidMove of string
 
@@ -40,25 +41,29 @@ let textOfMetaTags (text: string): Map<string,string> =
     |> Seq.map (fun g -> (groupVal 1 g, groupVal 2 g))
     |> Map.ofSeq
     
-let textOfMovesWithResult (text: string): string seq * Game.NotedResult option =
+let textOfMovesWithResult (text: string): string LazyList * Game.NotedResult option =
     let justMovesAndResult = Regex.Replace(text, "\([^)]+\)|\[[^\]]+\]|\{[^}]+\}|\d+\.+", "")
     let movesAndResultRev = Regex.Split(justMovesAndResult, "\s+")
-                             |> Seq.ofArray
-                             |> Seq.filter ((<>) "")
-                             |> Seq.rev
-                             |> Seq.cache
-    let result = match Seq.head movesAndResultRev with
+                             |> LazyList.ofArray
+                             |> LazyList.filter ((<>) "")
+                             |> LazyList.rev
+    let result = match LazyList.head movesAndResultRev with
                  | "1-0" -> Some Game.White
                  | "0-1" -> Some Game.Black
                  | "1/2-1/2" -> Some Game.Draw
                  | _ -> None
     let moves = match result with
-                | Some _ -> movesAndResultRev |> Seq.tail |> Seq.rev
-                | _ -> movesAndResultRev |> Seq.rev
+                | Some _ -> LazyList.tail movesAndResultRev
+                | _ -> movesAndResultRev
+                |> LazyList.rev
     (moves, result)
 
-let fenRow(row: string): Board.Resident seq =
-    Seq.foldBack (fun c acc ->
+let fenRow(row: string): Board.Resident array =
+    row
+    |> LazyList.ofSeq
+    |> LazyList.rev
+    |> LazyList.fold
+            (fun acc c ->
                     let residents = match c with
                                     | 'K' -> [| Some { Board.PieceType = Board.King; Board.IsWhite = true } |]
                                     | 'Q' -> [| Some { Board.PieceType = Board.Queen; Board.IsWhite = true } |]
@@ -73,18 +78,15 @@ let fenRow(row: string): Board.Resident seq =
                                     | 'n' -> [| Some { Board.PieceType = Board.Knight; Board.IsWhite = false } |]
                                     | 'p' -> [| Some { Board.PieceType = Board.Pawn; Board.IsWhite = false } |]
                                     | d -> Array.create (int d - int '0') None
-                    Seq.append (Seq.ofArray residents) acc
-                 )
-                 row
-                 Seq.empty
+                    Array.append residents acc
+            )
+            [||]
 
 let textOfFen (text: string): Position.Position =
     let fenParts = text.Split(' ')
     let board = fenParts.[0].Split('/')
-                |> Seq.ofArray
-                |> Seq.map fenRow
-                |> Seq.rev
-                |> Utils.seqToArrays
+                |> Array.map fenRow
+                |> Array.rev
     let isWhiteToMove = (fenParts.[1] = "w")
     let castling = match fenParts.[2] with
                    | "-" -> { Position.WhiteKingSideCastle = false
@@ -115,44 +117,47 @@ let textOfGame (text: string): Game.Game =
     let (moves, result) = textOfMovesWithResult text
     let validatedMoves =
             moves
-            |> Seq.fold (fun (accPos, accMvs) m ->
+            |> LazyList.fold
+                    (fun (accPos, accMvs) m ->
                             let validMovesWithResPos = Position.movesWithResultedPosition accPos
-                            match Seq.tryFind (fun (vm, _) -> Emitter.moveText true false vm = m) validMovesWithResPos with
+                            match LazyList.tryFind (fun (vm, _) -> Emitter.moveText true false vm = m) validMovesWithResPos with
                             | Some (vm, resPos) ->
                                 let nextAccPos = resPos
-                                let nextAccMvs = Utils.prependedSeq vm accMvs
+                                let nextAccMvs = Utils.prependedLaz vm accMvs
                                 (nextAccPos, nextAccMvs)
                             | None ->
                                 raise (InvalidMove m)
-                        )
-                        (initialPosition, Seq.empty)
+                    )
+                    (initialPosition, LazyList.empty)
             |> snd
-            |> Seq.rev
-            |> Seq.toArray
+            |> LazyList.rev
+            |> LazyList.toArray
     { MetaTags = metaTags
       InitialPosition = initialPosition
       Moves = validatedMoves
       Result = result }
 
-let fileOfGames(filePath: string): Game.Game seq =
+let fileOfGames(filePath: string): Game.Game LazyList =
     filePath
     |> File.ReadLines
-    |> Seq.scan (fun (accLines, prevLine, accGameStrOpt) s ->
+    |> LazyList.ofSeq
+    |> LazyList.scan
+            (fun (accLines, prevLine, _) s ->
                     match (prevLine, s.StartsWith("[")) with
                     | ("", true) -> ("", s, Some accLines)
                     | _ -> (accLines + "\n" + s, s, None)
-                )
-                ("", "", None)
-    |> Seq.rev
-    |> Seq.indexed
-    |> Seq.map (fun (i, (accLines, _, accGameStrOpt)) ->
-                        match (i, accGameStrOpt) with
-                        | (0, _) -> Seq.ofArray [| accLines |]
-                        | (_, Some s) -> Seq.ofArray [| s |]
-                        | _ -> Seq.ofArray [||]
-               )
-    |> Seq.concat
-    |> Seq.rev
-    |> Seq.filter (fun s -> s.Replace("\n", "").Trim() <> "")
-    |> Seq.map textOfGame
-    |> Seq.cache
+            )
+            ("", "", None)
+    |> LazyList.rev
+    |> Utils.lazIndexed
+    |> LazyList.map
+            (fun (i, (accLines, _, accGameStrOpt)) ->
+                     match (i, accGameStrOpt) with
+                     | (0, _) -> LazyList.ofList [ accLines ]
+                     | (_, Some s) -> LazyList.ofList [ s ]
+                     | _ -> LazyList.empty
+            )
+    |> LazyList.concat
+    |> LazyList.rev
+    |> LazyList.filter (fun s -> s.Replace("\n", "").Trim() <> "")
+    |> LazyList.map textOfGame

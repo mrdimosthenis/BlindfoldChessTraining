@@ -126,6 +126,9 @@
     <Reference Include="FSharp.Core">
       <Private>True</Private>
     </Reference>
+    <Reference Include="FSharpx.Collections">
+      <HintPath>..\packages\FSharpx.Collections.2.1.3\lib\netstandard2.0\FSharpx.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="OpenTK-1.0" />
     <Reference Include="System" />
     <Reference Include="System.Drawing.Common.dll" />

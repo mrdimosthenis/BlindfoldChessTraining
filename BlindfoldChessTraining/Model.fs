@@ -1,6 +1,7 @@
 ﻿module BlindfoldChessTraining.Model
 
 open Xamarin.Essentials
+open FSharpx.Collections
 
 type SelectedPage =
     | HomePage
@@ -25,9 +26,9 @@ let initConfigOptions: ConfigOptions =
 
 type Model = 
     { SelectedPage: SelectedPage
-      Locales: Locale seq
+      Locales: Locale LazyList
       ConfigOptions : ConfigOptions }
 
 let init = { SelectedPage = HomePage
-             Locales = Seq.empty
+             Locales = LazyList.empty
              ConfigOptions = initConfigOptions }

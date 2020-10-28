@@ -8,6 +8,7 @@ open BlindfoldChessTraining.UIElems
 open BlindfoldChessTraining
 
 open BlindfoldChessMechanics
+open FSharpx.Collections
 
 let separator(): ViewElement =
     View.BoxView(
@@ -60,19 +61,19 @@ let forthMove: Logic.Position.Move =
       SamePieceCoords = None }
 
 let pieceNotationExample (areFigures: bool): string =
-    [| firstMove
-       secondMove
-       thirdMove
-       forthMove |]
-    |> Seq.ofArray
+    [ firstMove
+      secondMove
+      thirdMove
+      forthMove ]
+    |> LazyList.ofList
     |> Notation.Emitter.multipleMovesText areFigures true
 
 let accentPicker (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let accentTitle = "Default"
-    let accentItems = model.Locales |> Speech.localeNames |> Seq.toList
+    let accentItems = model.Locales |> Speech.localeNames |> LazyList.toList
     let accentF = (fun (i, _) -> dispatch (Msg.SelectLocaleConfig i))
     match model.ConfigOptions.SelectedLocale with
-    | Some i when i < Seq.length model.Locales ->
+    | Some i when i < LazyList.length model.Locales ->
          View.Picker(
              title = accentTitle,
              selectedIndex = i,

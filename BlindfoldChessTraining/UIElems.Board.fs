@@ -6,6 +6,7 @@ open Xamarin.Forms
 
 open BlindfoldChessMechanics
 open BlindfoldChessMechanics.Logic
+open FSharpx.Collections
 
 exception InvalidRow of int
 
@@ -53,29 +54,29 @@ let imgWp: ViewElement = image "wp"
 let imgWq: ViewElement = image "wq"
 let imgWr: ViewElement = image "wr"
 
-let topRow: ViewElement seq =
-    [| [| imgTL |]
-       Array.replicate 8 imgT
-       [| imgTR |] |]
-    |> Utils.seqOfArrays
-    |> Seq.concat
-    |> Seq.indexed
-    |> Seq.map (fun (i, v) -> v.Row(0).Column(i))
-    |> Seq.cache
+let topRow: ViewElement LazyList =
+    [ [ imgTL ]
+      List.replicate 8 imgT
+      [ imgTR ] ]
+    |> LazyList.ofList
+    |> LazyList.map LazyList.ofList
+    |> LazyList.concat
+    |> Utils.lazIndexed
+    |> LazyList.map (fun (i, v) -> v.Row(0).Column(i))
 
-let bottomRow: ViewElement seq =
-    [| imgBL; imgA; imgB; imgC; imgD; imgE; imgF; imgG; imgH; imgBR |]
-    |> Seq.ofArray
-    |> Seq.indexed
-    |> Seq.map (fun (i, v) -> v.Row(9).Column(i))
-    |> Seq.cache
+let bottomRow: ViewElement LazyList =
+    [ imgBL; imgA; imgB; imgC; imgD; imgE; imgF; imgG; imgH; imgBR ]
+    |> LazyList.ofList
+    |> Utils.lazIndexed
+    |> LazyList.map (fun (i, v) -> v.Row(9).Column(i))
 
-let emptyRow (areCoordsEnabled: bool) (r: int): ViewElement seq =
-    let innerRowElems = if r % 2 = 0 then [| imgBl; imgWh |]
-                        else [| imgWh; imgBl |]
-                        |> Seq.ofArray
-                        |> Seq.replicate 4
-                        |> Seq.concat
+let emptyRow (areCoordsEnabled: bool) (r: int): ViewElement LazyList =
+    let innerRowElems = if r % 2 = 0 then [ imgBl; imgWh ]
+                        else [ imgWh; imgBl ]
+                        |> LazyList.ofList
+                        |> LazyList.repeat
+                        |> LazyList.take 4
+                        |> LazyList.concat
     if areCoordsEnabled
         then let fstElem = match r with
                            | 0 -> img1
@@ -88,67 +89,66 @@ let emptyRow (areCoordsEnabled: bool) (r: int): ViewElement seq =
                            | 7 -> img8
                            | _ -> raise (InvalidRow r)
              innerRowElems
-             |> Seq.rev
-             |> Utils.prependedSeq imgR
-             |> Seq.rev
-             |> Utils.prependedSeq fstElem
-             |> Seq.indexed
-             |> Seq.map (fun (i, v) -> v.Row(8 - r).Column(i))
+             |> LazyList.rev
+             |> Utils.prependedLaz imgR
+             |> LazyList.rev
+             |> Utils.prependedLaz fstElem
+             |> Utils.lazIndexed
+             |> LazyList.map (fun (i, v) -> v.Row(8 - r).Column(i))
     else
-        innerRowElems 
-        |> Seq.indexed
-        |> Seq.map (fun (i, v) -> v.Row(7 - r).Column(i))
-    |> Seq.cache
+        innerRowElems
+        |> Utils.lazIndexed
+        |> LazyList.map (fun (i, v) -> v.Row(7 - r).Column(i))
 
-let emptyBoard (areCoordsEnabled: bool): ViewElement seq =
-    let middleRowElems = Seq.init 8 id
-                         |> Seq.map (emptyRow areCoordsEnabled)
-                         |> Seq.concat
+let emptyBoard (areCoordsEnabled: bool): ViewElement LazyList =
+    let middleRowElems = Utils.lazInfinite
+                         |> LazyList.take 8
+                         |> LazyList.map (emptyRow areCoordsEnabled)
+                         |> LazyList.concat
     if areCoordsEnabled
-        then [| topRow; middleRowElems; bottomRow |]
-    else [| middleRowElems |]
-    |> Seq.ofArray
-    |> Seq.concat
-    |> Seq.cache
+        then [ topRow; middleRowElems; bottomRow ]
+    else [ middleRowElems ]
+    |> LazyList.ofList
+    |> LazyList.concat
 
-let pieces (areCoordsEnabled: bool) (board: Board.Board): ViewElement seq =
+let pieces (areCoordsEnabled: bool) (board: Board.Board): ViewElement LazyList =
     board
-    |> Utils.seqOfArrays
-    |> Seq.indexed
-    |> Seq.map
+    |> Utils.lazOfArrays
+    |> Utils.lazIndexed
+    |> LazyList.map
         (fun (rowIndex, row) ->
             row
-            |> Seq.indexed
-            |> Seq.map
+            |> Utils.lazIndexed
+            |> LazyList.map
                 (fun (columnIndex, resident) ->
                     match resident with
                     | Some { PieceType = Board.King; IsWhite = true } ->
-                        [| imgWk |]
+                        [ imgWk ]
                     | Some { PieceType = Board.Queen; IsWhite = true } ->
-                        [| imgWq |]
+                        [ imgWq ]
                     | Some { PieceType = Board.Rook; IsWhite = true } ->
-                        [| imgWr |]
+                        [ imgWr ]
                     | Some { PieceType = Board.Bishop; IsWhite = true } ->
-                        [| imgWb |]
+                        [ imgWb ]
                     | Some { PieceType = Board.Knight; IsWhite = true } ->
-                        [| imgWn |]
+                        [ imgWn ]
                     | Some { PieceType = Board.Pawn; IsWhite = true } ->
-                        [| imgWp |]
+                        [ imgWp ]
                     | Some { PieceType = Board.King; IsWhite = false } ->
-                        [| imgBk |]
+                        [ imgBk ]
                     | Some { PieceType = Board.Queen; IsWhite = false } ->
-                        [| imgBq |]
+                        [ imgBq ]
                     | Some { PieceType = Board.Rook; IsWhite = false } ->
-                        [| imgBr |]
+                        [ imgBr ]
                     | Some { PieceType = Board.Bishop; IsWhite = false } ->
-                        [| imgBb |]
+                        [ imgBb ]
                     | Some { PieceType = Board.Knight; IsWhite = false } ->
-                        [| imgBn |]
+                        [ imgBn ]
                     | Some { PieceType = Board.Pawn; IsWhite = false } ->
-                        [| imgBp |]
-                    | None -> [||]
-                    |> Seq.ofArray
-                    |> Seq.map
+                        [ imgBp ]
+                    | None -> []
+                    |> LazyList.ofList
+                    |> LazyList.map
                         (fun v ->
                             let r = if areCoordsEnabled
                                         then 8 - rowIndex
@@ -161,10 +161,9 @@ let pieces (areCoordsEnabled: bool) (board: Board.Board): ViewElement seq =
                             v.Row(r).Column(c)
                         )
                 )
-            |> Seq.concat
+            |> LazyList.concat
         )
-    |> Seq.concat
-    |> Seq.cache
+    |> LazyList.concat
 
 let grid (areCoordsEnabled: bool) (board: Board.Board): ViewElement =
     let maxColumn = if areCoordsEnabled then 9 else 7
@@ -177,5 +176,5 @@ let grid (areCoordsEnabled: bool) (board: Board.Board): ViewElement =
         rowdefs = [for i in 0 .. maxColumn -> Dimension.Absolute squareSize],
         coldefs = [for i in 0 .. maxColumn -> Dimension.Absolute squareSize],
         horizontalOptions = LayoutOptions.Center,
-        children = (board |> pieces areCoordsEnabled |> Seq.append (emptyBoard areCoordsEnabled) |> Seq.toList)
+        children = (board |> pieces areCoordsEnabled |> LazyList.append (emptyBoard areCoordsEnabled) |> LazyList.toList)
     )

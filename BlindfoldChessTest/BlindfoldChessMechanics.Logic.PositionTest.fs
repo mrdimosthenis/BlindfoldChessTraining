@@ -6,6 +6,7 @@ open FsUnit.Xunit
 open BlindfoldChessMechanics.Logic.Position
 open BlindfoldChessMechanics.Logic.Board
 open BlindfoldChessMechanics
+open FSharpx.Collections
 
 // tests
 
@@ -29,18 +30,18 @@ let ``Special white king movements with castling ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> specialKingMovements (0, 4)
-    |> Seq.toArray
+    |> LazyList.toList
     |> should equal
-        [| { Piece = King
-             FromCoords = (0, 4)
-             ToCoords = (0, 6)
-             IsCapture = false
-             Promotion = None }
-           { Piece = King
-             FromCoords = (0, 4)
-             ToCoords = (0, 2)
-             IsCapture = false
-             Promotion = None } |]
+        [ { Piece = King
+            FromCoords = (0, 4)
+            ToCoords = (0, 6)
+            IsCapture = false
+            Promotion = None }
+          { Piece = King
+            FromCoords = (0, 4)
+            ToCoords = (0, 2)
+            IsCapture = false
+            Promotion = None } ]
 
 [<Fact>]
 let ``Special white king movements without castling ability`` () =
@@ -62,9 +63,8 @@ let ``Special white king movements without castling ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> specialKingMovements (0, 4)
-    |> Seq.toArray
-    |> should equal
-        [||]
+    |> LazyList.toList
+    |> should be Empty
 
 [<Fact>]
 let ``Special black king movements with castling ability`` () =
@@ -86,18 +86,18 @@ let ``Special black king movements with castling ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> specialKingMovements (7, 4)
-    |> Seq.toArray
+    |> LazyList.toList
     |> should equal
-        [| { Piece = King
-             FromCoords = (7, 4)
-             ToCoords = (7, 6)
-             IsCapture = false
-             Promotion = None }
-           { Piece = King
-             FromCoords = (7, 4)
-             ToCoords = (7, 2)
-             IsCapture = false
-             Promotion = None } |]
+        [ { Piece = King
+            FromCoords = (7, 4)
+            ToCoords = (7, 6)
+            IsCapture = false
+            Promotion = None }
+          { Piece = King
+            FromCoords = (7, 4)
+            ToCoords = (7, 2)
+            IsCapture = false
+            Promotion = None } ]
 
 [<Fact>]
 let ``Special black king movements without castling ability`` () =
@@ -119,9 +119,8 @@ let ``Special black king movements without castling ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> specialKingMovements (7, 4)
-    |> Seq.toArray
-    |> should equal
-        [||]
+    |> LazyList.toList
+    |> should be Empty
 
 [<Fact>]
 let ``White pawn movements with en-passant ability`` () =
@@ -143,23 +142,23 @@ let ``White pawn movements with en-passant ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> pawnMovements (4, 1)
-    |> Seq.toArray
+    |> LazyList.toList
     |> should equal
-        [| { Piece = Pawn
-             FromCoords = (4, 1)
-             ToCoords = (5, 2)
-             IsCapture = true
-             Promotion = None }
-           { Piece = Pawn
-             FromCoords = (4, 1)
-             ToCoords = (5, 1)
-             IsCapture = false
-             Promotion = None }
-           { Piece = Pawn
-             FromCoords = (4, 1)
-             ToCoords = (5, 0)
-             IsCapture = true
-             Promotion = None } |]
+        [ { Piece = Pawn
+            FromCoords = (4, 1)
+            ToCoords = (5, 2)
+            IsCapture = true
+            Promotion = None }
+          { Piece = Pawn
+            FromCoords = (4, 1)
+            ToCoords = (5, 1)
+            IsCapture = false
+            Promotion = None }
+          { Piece = Pawn
+            FromCoords = (4, 1)
+            ToCoords = (5, 0)
+            IsCapture = true
+            Promotion = None } ]
 
 [<Fact>]
 let ``White pawn movements without en-passant ability`` () =
@@ -181,18 +180,18 @@ let ``White pawn movements without en-passant ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> pawnMovements (4, 1)
-    |> Seq.toArray
+    |> LazyList.toList
     |> should equal
-        [| { Piece = Pawn
-             FromCoords = (4, 1)
-             ToCoords = (5, 1)
-             IsCapture = false
-             Promotion = None }
-           { Piece = Pawn
-             FromCoords = (4, 1)
-             ToCoords = (5, 0)
-             IsCapture = true
-             Promotion = None } |]
+        [ { Piece = Pawn
+            FromCoords = (4, 1)
+            ToCoords = (5, 1)
+            IsCapture = false
+            Promotion = None }
+          { Piece = Pawn
+            FromCoords = (4, 1)
+            ToCoords = (5, 0)
+            IsCapture = true
+            Promotion = None } ]
 
 [<Fact>]
 let ``Black pawn movements with promotion ability`` () =
@@ -214,90 +213,89 @@ let ``Black pawn movements with promotion ability`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> pawnMovements (1, 6)
-    |> Seq.toArray
+    |> LazyList.toList
     |> should equal
-        [| { Piece = Pawn
-             FromCoords = (1, 6)
-             ToCoords = (0, 6)
-             IsCapture = false
-             Promotion = Some Queen }
-           { Piece = Pawn
-             FromCoords = (1, 6)
-             ToCoords = (0, 6)
-             IsCapture = false
-             Promotion = Some Rook }
-           { Piece = Pawn
-             FromCoords = (1, 6)
-             ToCoords = (0, 6)
-             IsCapture = false
-             Promotion = Some Bishop }
-           { Piece = Pawn
-             FromCoords = (1, 6)
-             ToCoords = (0, 6)
-             IsCapture = false
-             Promotion = Some Knight };
-           { Piece = Pawn
-             FromCoords = (1, 6)
-             ToCoords = (0, 7)
-             IsCapture = true
-             Promotion = Some Queen }
-           { Piece = Pawn
-             FromCoords = (1, 6)
-             ToCoords = (0, 7)
-             IsCapture = true
-             Promotion = Some Rook };
-           { Piece = Pawn
-             FromCoords = (1, 6)
-             ToCoords = (0, 7)
-             IsCapture = true
-             Promotion = Some Bishop }
-           { Piece = Pawn
-             FromCoords = (1, 6)
-             ToCoords = (0, 7)
-             IsCapture = true
-             Promotion = Some Knight } |]
+        [ { Piece = Pawn
+            FromCoords = (1, 6)
+            ToCoords = (0, 6)
+            IsCapture = false
+            Promotion = Some Queen }
+          { Piece = Pawn
+            FromCoords = (1, 6)
+            ToCoords = (0, 6)
+            IsCapture = false
+            Promotion = Some Rook }
+          { Piece = Pawn
+            FromCoords = (1, 6)
+            ToCoords = (0, 6)
+            IsCapture = false
+            Promotion = Some Bishop }
+          { Piece = Pawn
+            FromCoords = (1, 6)
+            ToCoords = (0, 6)
+            IsCapture = false
+            Promotion = Some Knight };
+          { Piece = Pawn
+            FromCoords = (1, 6)
+            ToCoords = (0, 7)
+            IsCapture = true
+            Promotion = Some Queen }
+          { Piece = Pawn
+            FromCoords = (1, 6)
+            ToCoords = (0, 7)
+            IsCapture = true
+            Promotion = Some Rook };
+          { Piece = Pawn
+            FromCoords = (1, 6)
+            ToCoords = (0, 7)
+            IsCapture = true
+            Promotion = Some Bishop }
+          { Piece = Pawn
+            FromCoords = (1, 6)
+            ToCoords = (0, 7)
+            IsCapture = true
+            Promotion = Some Knight } ]
 
 [<Fact>]
 let ``White rook piece movements in initial position`` () =
     Position.init
     |> pieceMovements (0, 0)
-    |> Seq.toArray
-    |> should equal
-        [||]
+    |> LazyList.toList
+    |> should be Empty
 
 [<Fact>]
 let ``White knight piece movements in initial position`` () =
     Position.init
     |> pieceMovements (0, 6)
-    |> Seq.toArray
+    |> LazyList.toList
     |> should equal
-        [| { Piece = Knight
-             FromCoords = (0, 6)
-             ToCoords = (2, 5)
-             IsCapture = false
-             Promotion = None }
-           { Piece = Knight
-             FromCoords = (0, 6)
-             ToCoords = (2, 7)
-             IsCapture = false
-             Promotion = None } |]
+        [ { Piece = Knight
+            FromCoords = (0, 6)
+            ToCoords = (2, 5)
+            IsCapture = false
+            Promotion = None }
+          { Piece = Knight
+            FromCoords = (0, 6)
+            ToCoords = (2, 7)
+            IsCapture = false
+            Promotion = None } ]
 
 [<Fact>]
 let ``White pawn piece movements in initial position`` () =
     Position.init
     |> pieceMovements (1, 5)
-    |> Seq.toArray
+    |> LazyList.toList
     |> should equal
-        [| { Piece = Pawn
-             FromCoords = (1, 5)
-             ToCoords = (2, 5)
-             IsCapture = false
-             Promotion = None }
-           { Piece = Pawn
-             FromCoords = (1, 5)
-             ToCoords = (3, 5)
-             IsCapture = false
-             Promotion = None } |]
+        [ { Piece = Pawn
+            FromCoords = (1, 5)
+            ToCoords = (2, 5)
+            IsCapture = false
+            Promotion = None }
+          { Piece = Pawn
+            FromCoords = (1, 5)
+            ToCoords = (3, 5)
+            IsCapture = false
+            Promotion = None } ]
 
 [<Fact>]
 let ``Black king piece movements`` () =
@@ -319,38 +317,38 @@ let ``Black king piece movements`` () =
       Halfmove = 12
       Fullmove = 20 }
     |> pieceMovements (7, 4)
-    |> Seq.toArray
+    |> LazyList.toList
     |> should equal
-        [| { Piece = King
-             FromCoords = (7, 4)
-             ToCoords = (7, 6)
-             IsCapture = false
-             Promotion = None }
-           { Piece = King
-             FromCoords = (7, 4)
-             ToCoords = (6, 3)
-             IsCapture = false
-             Promotion = None }
-           { Piece = King
-             FromCoords = (7, 4)
-             ToCoords = (6, 4)
-             IsCapture = false
-             Promotion = None };
-           { Piece = King
-             FromCoords = (7, 4)
-             ToCoords = (6, 5)
-             IsCapture = true
-             Promotion = None }
-           { Piece = King
-             FromCoords = (7, 4)
-             ToCoords = (7, 3)
-             IsCapture = false
-             Promotion = None }
-           { Piece = King
-             FromCoords = (7, 4)
-             ToCoords = (7, 5)
-             IsCapture = false
-             Promotion = None } |] 
+        [ { Piece = King
+            FromCoords = (7, 4)
+            ToCoords = (7, 6)
+            IsCapture = false
+            Promotion = None }
+          { Piece = King
+            FromCoords = (7, 4)
+            ToCoords = (6, 3)
+            IsCapture = false
+            Promotion = None }
+          { Piece = King
+            FromCoords = (7, 4)
+            ToCoords = (6, 4)
+            IsCapture = false
+            Promotion = None };
+          { Piece = King
+            FromCoords = (7, 4)
+            ToCoords = (6, 5)
+            IsCapture = true
+            Promotion = None }
+          { Piece = King
+            FromCoords = (7, 4)
+            ToCoords = (7, 3)
+            IsCapture = false
+            Promotion = None }
+          { Piece = King
+            FromCoords = (7, 4)
+            ToCoords = (7, 5)
+            IsCapture = false
+            Promotion = None } ] 
 
 let positionAfterFirstHalfMovement =
     { Board = Array.rev
@@ -443,188 +441,188 @@ let ``Position after third half movement`` () =
 let ``Moves in initial position`` () =
     Position.init
     |> movesWithResultedPosition
-    |> Seq.map fst
-    |> Seq.toArray
-    |> should equal [| { Piece = Knight
-                         FromCoords = (0, 1)
-                         ToCoords = (2, 0)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Knight
-                         FromCoords = (0, 1)
-                         ToCoords = (2, 2)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Knight
-                         FromCoords = (0, 6)
-                         ToCoords = (2, 5)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Knight
-                         FromCoords = (0, 6)
-                         ToCoords = (2, 7)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 0)
-                         ToCoords = (2, 0)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 0)
-                         ToCoords = (3, 0)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 1)
-                         ToCoords = (2, 1)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 1)
-                         ToCoords = (3, 1)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 2)
-                         ToCoords = (2, 2)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 2)
-                         ToCoords = (3, 2)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 3)
-                         ToCoords = (2, 3)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 3)
-                         ToCoords = (3, 3)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 4)
-                         ToCoords = (2, 4)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 4)
-                         ToCoords = (3, 4)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 5)
-                         ToCoords = (2, 5)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 5)
-                         ToCoords = (3, 5)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 6)
-                         ToCoords = (2, 6)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 6)
-                         ToCoords = (3, 6)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 7)
-                         ToCoords = (2, 7)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None }
-                       { Piece = Pawn
-                         FromCoords = (1, 7)
-                         ToCoords = (3, 7)
-                         IsCapture = false
-                         Promotion = None
-                         IsCheck = false
-                         IsMate = false
-                         IsStalemate = false
-                         SamePieceCoords = None } |]
+    |> LazyList.map fst
+    |> LazyList.toList
+    |> should equal [ { Piece = Knight
+                        FromCoords = (0, 1)
+                        ToCoords = (2, 0)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Knight
+                        FromCoords = (0, 1)
+                        ToCoords = (2, 2)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Knight
+                        FromCoords = (0, 6)
+                        ToCoords = (2, 5)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Knight
+                        FromCoords = (0, 6)
+                        ToCoords = (2, 7)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 0)
+                        ToCoords = (2, 0)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 0)
+                        ToCoords = (3, 0)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 1)
+                        ToCoords = (2, 1)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 1)
+                        ToCoords = (3, 1)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 2)
+                        ToCoords = (2, 2)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 2)
+                        ToCoords = (3, 2)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 3)
+                        ToCoords = (2, 3)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 3)
+                        ToCoords = (3, 3)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 4)
+                        ToCoords = (2, 4)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 4)
+                        ToCoords = (3, 4)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 5)
+                        ToCoords = (2, 5)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 5)
+                        ToCoords = (3, 5)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 6)
+                        ToCoords = (2, 6)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 6)
+                        ToCoords = (3, 6)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 7)
+                        ToCoords = (2, 7)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None }
+                      { Piece = Pawn
+                        FromCoords = (1, 7)
+                        ToCoords = (3, 7)
+                        IsCapture = false
+                        Promotion = None
+                        IsCheck = false
+                        IsMate = false
+                        IsStalemate = false
+                        SamePieceCoords = None } ]
 
 let forthHalfMove = { Piece = Knight
                       FromCoords = (7, 6)

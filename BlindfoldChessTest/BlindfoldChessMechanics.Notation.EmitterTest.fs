@@ -7,6 +7,7 @@ open BlindfoldChessMechanics.Notation.Emitter
 open BlindfoldChessMechanics.Logic.Board
 open BlindfoldChessMechanics.Logic.Position
 open BlindfoldChessMechanics.Logic
+open FSharpx.Collections
 
 [<Fact>]
 let ``O-O move text`` () =
@@ -130,56 +131,56 @@ let ``b8=Q move text`` () =
 
 [<Fact>]
 let ``Multiple moves text with figures`` () =
-    [| PositionTest.forthHalfMove
-       PositionTest.fifthHalfMove
-       PositionTest.sixthHalfMove
-       PositionTest.seventhHalfMove
-       PositionTest.eighthHalfMove
-       PositionTest.ninthHalfMove |]
-    |> Seq.ofArray
+    [ PositionTest.forthHalfMove
+      PositionTest.fifthHalfMove
+      PositionTest.sixthHalfMove
+      PositionTest.seventhHalfMove
+      PositionTest.eighthHalfMove
+      PositionTest.ninthHalfMove ]
+    |> LazyList.ofList
     |> multipleMovesText true false
     |> should equal
         "1...♞f6 2.♗e2 e6 3.h4 ♝a3 4.bxa3"
 
 [<Fact>]
 let ``Multiple moves text with figures in king's pawn game`` () =
-    [| { Piece = Pawn
-         FromCoords = (1, 4)
-         ToCoords = (3, 4)
-         IsCapture = false
-         Promotion = None
-         IsCheck = false
-         IsMate = false
-         IsStalemate = false
-         SamePieceCoords = None }
-       { Piece = Pawn
-         FromCoords = (6, 4)
-         ToCoords = (4, 4)
-         IsCapture = false
-         Promotion = None
-         IsCheck = false
-         IsMate = false
-         IsStalemate = false
-         SamePieceCoords = None }
-       { Piece = Knight
-         FromCoords = (0, 6)
-         ToCoords = (2, 5)
-         IsCapture = false
-         Promotion = None
-         IsCheck = false
-         IsMate = false
-         IsStalemate = false
-         SamePieceCoords = None }
-       { Piece = Knight
-         FromCoords = (7, 1)
-         ToCoords = (5, 2)
-         IsCapture = false
-         Promotion = None
-         IsCheck = false
-         IsMate = false
-         IsStalemate = false
-         SamePieceCoords = None } |]
-    |> Seq.ofArray
+    [ { Piece = Pawn
+        FromCoords = (1, 4)
+        ToCoords = (3, 4)
+        IsCapture = false
+        Promotion = None
+        IsCheck = false
+        IsMate = false
+        IsStalemate = false
+        SamePieceCoords = None }
+      { Piece = Pawn
+        FromCoords = (6, 4)
+        ToCoords = (4, 4)
+        IsCapture = false
+        Promotion = None
+        IsCheck = false
+        IsMate = false
+        IsStalemate = false
+        SamePieceCoords = None }
+      { Piece = Knight
+        FromCoords = (0, 6)
+        ToCoords = (2, 5)
+        IsCapture = false
+        Promotion = None
+        IsCheck = false
+        IsMate = false
+        IsStalemate = false
+        SamePieceCoords = None }
+      { Piece = Knight
+        FromCoords = (7, 1)
+        ToCoords = (5, 2)
+        IsCapture = false
+        Promotion = None
+        IsCheck = false
+        IsMate = false
+        IsStalemate = false
+        SamePieceCoords = None } ]
+    |> LazyList.ofList
     |> multipleMovesText true true
     |> should equal
         "1.e4 e5 2.♘f3 ♞c6"
