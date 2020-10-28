@@ -1,15 +1,11 @@
 ﻿module BlindfoldChessTraining.Page.Home
 
-open System.Diagnostics
 open Fabulous
 open Fabulous.XamarinForms
-open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
 open BlindfoldChessTraining
 open BlindfoldChessTraining.UIElems
-
-open BlindfoldChessMechanics.Logic
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     View.ContentPage(

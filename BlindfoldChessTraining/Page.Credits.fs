@@ -1,9 +1,7 @@
 ﻿module BlindfoldChessTraining.Page.Credits
 
-open System.Diagnostics
 open Fabulous
 open Fabulous.XamarinForms
-open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
 
 open BlindfoldChessTraining
