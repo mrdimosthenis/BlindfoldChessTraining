@@ -19,9 +19,10 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
             children = [
                 View.Label(
                     text = "Blindfold Chess Training",
-                    fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                    fontSize = FontSize.fromValue (Constants.titleSizeRatio * model.ConfigOptions.FontSize),
                     fontAttributes = FontAttributes.Bold,
-                    horizontalOptions = LayoutOptions.Center
+                    horizontalOptions = LayoutOptions.Center,
+                    verticalOptions = LayoutOptions.Start
                 )
                 View.Button(text = "Opening Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.OpeningPuzzlesPage))
                 View.Button(text = "Endgame Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.EndgamePuzzlesPage))
@@ -41,7 +42,8 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                     text = "version 3.0.0",
                     fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
                     fontAttributes = FontAttributes.Italic,
-                    horizontalOptions = LayoutOptions.End
+                    horizontalOptions = LayoutOptions.End,
+                    verticalOptions = LayoutOptions.End
                 )
             ]
         )

@@ -46,6 +46,7 @@
     <EmbeddedResource Include="resources\images\board\wp.png" />
     <EmbeddedResource Include="resources\images\board\wq.png" />
     <EmbeddedResource Include="resources\images\board\wr.png" />
+    <Compile Include="Constants.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="Msg.fs" />
     <Compile Include="Update.fs" />
@@ -61,8 +62,6 @@
     <Compile Include="Page.Credits.fs" />
     <Compile Include="BlindfoldChessTraining.fs" />
   </ItemGroup>
-
-  <ItemGroup />
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />

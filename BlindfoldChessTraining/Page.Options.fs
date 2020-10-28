@@ -44,10 +44,11 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                 View.StackLayout(
                     orientation = StackOrientation.Horizontal,
                     horizontalOptions = LayoutOptions.Center,
+                    verticalOptions = LayoutOptions.Start,
                     children = [
                         View.Label(
                             text = "Options",
-                            fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                            fontSize = FontSize.fromValue (Constants.titleSizeRatio * model.ConfigOptions.FontSize),
                             fontAttributes = FontAttributes.Bold,
                             horizontalOptions = LayoutOptions.Center,
                             verticalOptions = LayoutOptions.Center
@@ -134,6 +135,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                             View.StackLayout(
                                 orientation = StackOrientation.Horizontal,
                                 horizontalOptions = LayoutOptions.Center,
+                                verticalOptions = LayoutOptions.End,
                                 children = [
                                     View.Button(
                                         text = "Reset ",
