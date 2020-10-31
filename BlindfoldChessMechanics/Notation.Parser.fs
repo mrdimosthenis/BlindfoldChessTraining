@@ -47,6 +47,7 @@ let textOfMovesWithResult (text: string): string LazyList * Game.NotedResult opt
     let movesAndResultRev = Regex.Split(justMovesAndResult, "\s+")
                              |> LazyList.ofArray
                              |> LazyList.filter ((<>) "")
+                             |> LazyList.filter ((<>) "*")
                              |> LazyList.rev
     let result = match LazyList.head movesAndResultRev with
                  | "1-0" -> Some Game.White
