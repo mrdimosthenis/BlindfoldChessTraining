@@ -331,3 +331,20 @@ let ``Json of example game`` () =
 //            )
 //    |> Emitter.gameFileJsons "C:\Users\MrDIM\Desktop\endgame_puzzles_v300.pgn"
 //    |> should equal ()
+
+[<Fact>]
+let ``Convert opening puzzles to v300`` () =
+    "C:\Users\MrDIM\Desktop\old-blindfold\opening_puzzles.pgn"
+    |> Parser.fileOfGameTexts
+    |> Utils.lazIndexed
+    |> LazyList.map
+            (fun (i, game) ->
+                //let newMetaTags = [ ("category_id", "0")
+                //                    ("level", string (i / 50))
+                //                    ("index_in_level", string (i % 50)) ]
+                //                  |> Map.ofList
+                //{ game with MetaTags = newMetaTags }
+                game
+            )
+    |> Emitter.gameFileTexts "C:\Users\MrDIM\Desktop\opening_puzzles_v300.pgn"
+    |> should equal ()
