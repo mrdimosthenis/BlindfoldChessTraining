@@ -198,7 +198,6 @@ let gameFileTexts(filePath: string) (games: Game.Game LazyList): unit =
     let w = File.AppendText filePath
     LazyList.iter
             (fun g->
-                w.WriteLine()
                 w.WriteLine(gameText g)
                 w.WriteLine()
              )
@@ -212,9 +211,7 @@ let gameFileJsons(filePath: string) (games: Game.Game LazyList): unit =
     let w = File.AppendText filePath
     LazyList.iter
             (fun g->
-                w.WriteLine()
                 w.WriteLine(gameJson g)
-                w.WriteLine()
              )
              games
     w.Close()

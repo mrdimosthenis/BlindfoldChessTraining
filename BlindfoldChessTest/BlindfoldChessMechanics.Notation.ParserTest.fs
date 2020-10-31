@@ -329,7 +329,7 @@ let ``Json of example game`` () =
 //                  Game.Moves = newMoves
 //                  Game.Result = game.Result }
 //            )
-//    |> Emitter.gameFileJsons "C:\Users\MrDIM\Desktop\endgame_puzzles_v300.pgn"
+//    |> Emitter.gameFileJsons "C:\Users\MrDIM\Desktop\endgame_puzzles_v300.jsonl"
 //    |> should equal ()
 
 //[<Fact>]
@@ -339,12 +339,11 @@ let ``Json of example game`` () =
 //    |> Utils.lazIndexed
 //    |> LazyList.map
 //            (fun (i, game) ->
-//                //let newMetaTags = [ ("category_id", "0")
-//                //                    ("level", string (i / 50))
-//                //                    ("index_in_level", string (i % 50)) ]
-//                //                  |> Map.ofList
-//                //{ game with MetaTags = newMetaTags }
-//                game
+//                let newMetaTags = [ ("category_id", "1")
+//                                    ("level", string (i / 50))
+//                                    ("index_in_level", string (i % 50)) ]
+//                                  |> Map.ofList
+//                { game with MetaTags = newMetaTags }
 //            )
-//    |> Emitter.gameFileTexts "C:\Users\MrDIM\Desktop\opening_puzzles_v300.pgn"
+//    |> Emitter.gameFileJsons "C:\Users\MrDIM\Desktop\opening_puzzles_v300.jsonl"
 //    |> should equal ()
