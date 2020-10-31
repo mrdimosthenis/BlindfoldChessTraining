@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<Compile Include="ResourcesAsCode.fs" />
+	<Content Include="example_game.json">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </Content>
 	<Compile Include="BlindfoldChessMechanics.Logic.BoardTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.Logic.PositionTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.Notation.EmitterTest.fs" />
@@ -34,6 +36,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlindfoldChessMechanics\BlindfoldChessMechanics.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="resources\" />
   </ItemGroup>
 
 </Project>

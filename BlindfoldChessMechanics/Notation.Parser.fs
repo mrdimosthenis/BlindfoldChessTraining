@@ -6,6 +6,7 @@ open BlindfoldChessMechanics
 open System.Text.RegularExpressions
 open System.IO
 open FSharpx.Collections
+open System.Text.Json
 
 exception InvalidMove of string
 
@@ -137,7 +138,7 @@ let textOfGame (text: string): Game.Game =
       Moves = validatedMoves
       Result = result }
 
-let fileOfGames(filePath: string): Game.Game LazyList =
+let fileOfGameTexts(filePath: string): Game.Game LazyList =
     filePath
     |> File.ReadLines
     |> LazyList.ofSeq
@@ -161,3 +162,12 @@ let fileOfGames(filePath: string): Game.Game LazyList =
     |> LazyList.rev
     |> LazyList.filter (fun s -> s.Replace("\n", "").Trim() <> "")
     |> LazyList.map textOfGame
+
+let jsonOfGame (json: string): Game.Game =
+    JsonSerializer.Deserialize(json, Game.jsonOptions)
+
+let fileOfGameJsons(filePath: string): Game.Game LazyList =
+    filePath
+    |> File.ReadLines
+    |> LazyList.ofSeq
+    |> LazyList.map jsonOfGame

@@ -282,8 +282,7 @@ let ``Position text after thirteenth half move`` () =
     |> should equal
         "rnbq1rk1/pp3ppp/2P1pn2/8/7P/P7/P1PPBPP1/RNBQ1KNR b - - 0 7"
 
-[<Fact>]
-let ``Game text`` () =
+let exampleGame =
     { Game.MetaTags = Map.ofArray [| ("White", "me"); ("Black", "you") |]
       Game.InitialPosition = PositionTest.positionAfterThirdHalfMovement
       Game.Moves = [| PositionTest.forthHalfMove
@@ -297,6 +296,10 @@ let ``Game text`` () =
                       PositionTest.twelfthHalfMove
                       PositionTest.thirteenthHalfMove |]
       Game.Result = Some Game.Draw }
+
+[<Fact>]
+let ``Game text`` () =
+    exampleGame
     |> gameText
     |> should equal
     <|String.concat "\n"
@@ -305,4 +308,10 @@ let ``Game text`` () =
            """[White "me"]"""
            ""
            "1...Nf6 2.Be2 e6 3.h4 Ba3 4.bxa3 O-O 5.Kf1 c5 6.dxc6  1/2-1/2" |]
-        
+
+[<Fact>]
+let ``Game json`` () =
+    exampleGame
+    |> gameJson
+    |> should equal
+        ResourcesAsCode.exampleGameJson

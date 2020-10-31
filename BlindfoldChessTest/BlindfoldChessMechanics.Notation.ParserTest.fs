@@ -302,3 +302,10 @@ Qh8+ Kg2 68.Kd3 Kg1 69.Ke2 g2 70.Qd4+ Kh1 71.Qh4+ Kg1 1-0"""
     largeGame.Moves
     |> Array.length
     |> should equal 142
+
+[<Fact>]
+let ``Json of example game`` () =
+    ResourcesAsCode.exampleGameJson
+    |> jsonOfGame
+    |> should equal
+        EmitterTest.exampleGame

@@ -6,6 +6,7 @@ open System
 open System.IO
 open FSharpx.Collections
 open BlindfoldChessMechanics
+open System.Text.Json
 
 exception InvalidColumn of string
 
@@ -193,12 +194,26 @@ let gameText (game: Game.Game): string =
             moves
             result
 
-let gamesFile(filePath: string) (games: Game.Game LazyList): unit =
+let gameFileTexts(filePath: string) (games: Game.Game LazyList): unit =
     let w = File.AppendText filePath
     LazyList.iter
             (fun g->
                 w.WriteLine()
                 w.WriteLine(gameText g)
+                w.WriteLine()
+             )
+             games
+    w.Close()
+
+let gameJson (game: Game.Game): string =
+    JsonSerializer.Serialize(game, Game.jsonOptions)
+
+let gameFileJsons(filePath: string) (games: Game.Game LazyList): unit =
+    let w = File.AppendText filePath
+    LazyList.iter
+            (fun g->
+                w.WriteLine()
+                w.WriteLine(gameJson g)
                 w.WriteLine()
              )
              games
