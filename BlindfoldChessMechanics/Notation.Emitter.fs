@@ -185,7 +185,7 @@ let gameText (game: Game.Game): string =
                 |> LazyList.ofArray
                 |> multipleMovesText false game.InitialPosition.IsWhiteToMove 
     let result = match game.Result with
-                 | None -> ""
+                 | None -> "*"
                  | Some Game.White -> "1-0"
                  | Some Game.Black -> "0-1"
                  | Some Game.Draw -> "1/2-1/2"

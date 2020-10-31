@@ -9,6 +9,7 @@ open FSharpx.Collections
 open System.Text.Json
 
 exception InvalidMove of string
+exception InvalidResult of string
 
 // functions
 
@@ -44,20 +45,18 @@ let textOfMetaTags (text: string): Map<string,string> =
     
 let textOfMovesWithResult (text: string): string LazyList * Game.NotedResult option =
     let justMovesAndResult = Regex.Replace(text, "\([^)]+\)|\[[^\]]+\]|\{[^}]+\}|\d+\.+", "")
-    let movesAndResultRev = Regex.Split(justMovesAndResult, "\s+")
-                             |> LazyList.ofArray
-                             |> LazyList.filter ((<>) "")
-                             |> LazyList.filter ((<>) "*")
-                             |> LazyList.rev
-    let result = match LazyList.head movesAndResultRev with
+    let (res, revMoves) = Regex.Split(justMovesAndResult, "\s+")
+                          |> LazyList.ofArray
+                          |> LazyList.filter ((<>) "")
+                          |> LazyList.rev
+                          |> LazyList.uncons
+    let result = match res with
                  | "1-0" -> Some Game.White
                  | "0-1" -> Some Game.Black
                  | "1/2-1/2" -> Some Game.Draw
-                 | _ -> None
-    let moves = match result with
-                | Some _ -> LazyList.tail movesAndResultRev
-                | _ -> movesAndResultRev
-                |> LazyList.rev
+                 | "*" -> None
+                 | s -> raise (InvalidResult s)
+    let moves = LazyList.rev revMoves
     (moves, result)
 
 let fenRow(row: string): Board.Resident array =
