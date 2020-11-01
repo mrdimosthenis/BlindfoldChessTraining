@@ -7,13 +7,14 @@ open Xamarin.Forms
 open BlindfoldChessMechanics
 open BlindfoldChessMechanics.Logic
 open FSharpx.Collections
+open BlindfoldChessTraining
 
 exception InvalidRow of int
 
 let image (name: string): ViewElement =
     let pngImgSrc = name
                     |> sprintf "board.%s"
-                    |> Images.fromResourceName
+                    |> Resources.image
     View.Image(source = pngImgSrc)
 
 let imgWh: ViewElement = View.Image(backgroundColor = Color.Default)

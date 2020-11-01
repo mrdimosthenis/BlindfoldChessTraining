@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="resources\puzzles\opening_puzzles.jsonl" />
+    <EmbeddedResource Include="resources\puzzles\endgame_puzzles.jsonl" />
     <EmbeddedResource Include="resources\images\icons\chip.png" />
     <EmbeddedResource Include="resources\images\icons\home.png" />
     <EmbeddedResource Include="resources\images\icons\speaker.png" />
@@ -46,11 +48,12 @@
     <EmbeddedResource Include="resources\images\board\wr.png" />
     <Compile Include="Constants.fs" />
     <Compile Include="Preferences.fs" />
+    <Compile Include="Resources.fs" />
+    <Compile Include="DB.fs" />
     <Compile Include="Speech.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="Msg.fs" />
     <Compile Include="Update.fs" />
-    <Compile Include="UIElems.Images.fs" />
     <Compile Include="UIElems.Icons.fs" />
     <Compile Include="UIElems.Board.fs" />
     <Compile Include="Page.Home.fs" />
@@ -64,6 +67,7 @@
   <ItemGroup>
     <PackageReference Include="FSharp.SystemTextJson" Version="0.14.8" />
     <PackageReference Include="FSharpx.Collections" Version="2.1.3" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Fabulous.XamarinForms" Version="0.57.0" />
