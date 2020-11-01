@@ -21,7 +21,7 @@ module App =
 
     // Note, this declaration is needed if you enable LiveUpdate
     let program = XamarinFormsProgram.mkProgram
-                    (fun () -> Model.init, Update.cmdInit())
+                    (fun () -> Model.init(), Update.cmdInit())
                     Update.update
                     view
 
