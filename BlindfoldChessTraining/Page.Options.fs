@@ -96,14 +96,21 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                 horizontalOptions = LayoutOptions.Center,
                 verticalOptions = LayoutOptions.Center,
                 children = [
-                    View.Label(
-                        text = "Options",
-                        fontSize = FontSize.fromValue (Constants.titleSizeRatio * model.ConfigOptions.FontSize),
-                        fontAttributes = FontAttributes.Bold,
+                    View.StackLayout(
+                        orientation = StackOrientation.Horizontal,
                         horizontalOptions = LayoutOptions.Center,
-                        verticalOptions = LayoutOptions.Center
+                        verticalOptions = LayoutOptions.Start,
+                        children = [
+                            View.Label(
+                                text = "Options",
+                                fontSize = FontSize.fromValue (Constants.titleSizeRatio * model.ConfigOptions.FontSize),
+                                fontAttributes = FontAttributes.Bold,
+                                horizontalOptions = LayoutOptions.Center,
+                                verticalOptions = LayoutOptions.Center
+                            )
+                            View.Image(source = Icons.options)
+                        ]
                     )
-                    View.Image(source = Icons.options)
                     separator()
                     Board.grid model.ConfigOptions.AreCoordsEnabled Logic.Board.init
                     View.StackLayout(
