@@ -36,7 +36,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                         command = (fun () -> dispatch (Msg.SelectPage Model.CreditsPage))
                     )
                     View.Label(
-                        text = sprintf "version %s" (DB.insertEndgamePuzzles()),
+                        text = sprintf "version %s" Constants.version,
                         fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
                         fontAttributes = FontAttributes.Italic,
                         horizontalOptions = LayoutOptions.End,

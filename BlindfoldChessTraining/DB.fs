@@ -4,19 +4,13 @@ open System
 open System.IO
 open SQLite
 
-open BlindfoldChessMechanics
+open BlindfoldChessMechanics.Notation
 open FSharpx.Collections
-open System.Reflection
 
 type Puzzle = { Category_id: int
                 Index_in_level: int
                 Level: int
                 Game : string }
-
-let g = { Category_id = 0
-          Index_in_level = 0
-          Level = 0
-          Game = "" }
 
 let connection: SQLiteConnection =
     let folderPath: string =
@@ -31,7 +25,7 @@ let doesTableExist(): bool =
 
 let createTable(): unit =
     """
-    CREATE TABLE IF NOT EXISTS puzzle (
+    CREATE TABLE puzzle (
        category_id INTEGER NOT NULL,
        level INTEGER NOT NULL,
        index_in_level INTEGER NOT NULL,
@@ -42,8 +36,27 @@ let createTable(): unit =
     |> connection.Execute
     |> ignore
 
-let insertEndgamePuzzles(): string =
-    "BlindfoldChessTraining.resources.puzzles.endgame_puzzles.jsonl"
+let insertPuzzles(resourceName: string): unit =
+    resourceName
     |> Resources.lines
-    |> LazyList.length
-    |> string
+    |> LazyList.filter (fun s -> s.Trim() <> "")
+    |> LazyList.iter
+            ( fun s ->
+                let game = Parser.jsonOfGame s
+                let puzzle = { Category_id = game.MetaTags.Item("category_id") |> int
+                               Index_in_level = game.MetaTags.Item("level") |> int
+                               Level = game.MetaTags.Item("index_in_level") |> int
+                               Game = s }
+                connection.Execute(
+                    "INSERT INTO puzzle VALUES (?, ?, ?, ?)",
+                    puzzle.Category_id, puzzle.Level, puzzle.Index_in_level, puzzle.Game
+                ) |> ignore
+            )
+
+if doesTableExist()
+    then ()
+else connection.BeginTransaction()
+     createTable()
+     insertPuzzles("BlindfoldChessTraining.resources.puzzles.endgame_puzzles.jsonl")
+     insertPuzzles("BlindfoldChessTraining.resources.puzzles.opening_puzzles.jsonl")
+     connection.Commit()
