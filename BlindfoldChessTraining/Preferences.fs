@@ -17,6 +17,9 @@ let speechPitchKey: string = "speechPitch"
 let clear(): unit =
     Preferences.Clear()
 
+let removeIfExists (k: string): unit =
+    if Preferences.ContainsKey(k) then Preferences.Remove(k)
+
 let setBool (k: string) (v: bool): unit =
     Preferences.Set(k, v)
 

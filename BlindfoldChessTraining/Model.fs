@@ -35,6 +35,7 @@ let initializeConfigOptions(): unit =
     Preferences.setBool Preferences.areCoordsEnabledKey true
     Preferences.setBool Preferences.areSymbolsEnabledKey false
     Preferences.setFloat Preferences.fontSizeKey 17.0
+    Preferences.removeIfExists Preferences.selectedLocaleKey
     Preferences.setFloat Preferences.speechPitchKey 1.0
     Preferences.setString Preferences.versionKey Constants.version
 
