@@ -52,18 +52,8 @@ let doesTableExist(): bool =
     connection.Query(q).Count > 0
 
 let createTable(): unit =
-    //"""
-    //CREATE TABLE puzzle (
-    //   category_id INTEGER NOT NULL,
-    //   level INTEGER NOT NULL,
-    //   index_in_level INTEGER NOT NULL,
-    //   game TEXT NOT NULL,
-    //   PRIMARY KEY (category_id, level, index_in_level)
-    //)
-    //"""
-    //|> connection.Execute
-    connection.CreateTable<PuzzleObject>()
-    |> ignore
+    connection.CreateTable<PuzzleObject>() |> ignore
+    connection.CreateIndex("puzzleobject", [| "categoryid"; "level"; "indexinlevel" |], true) |> ignore
 
 let insertPuzzles(resourceName: string): unit =
     resourceName
@@ -79,6 +69,9 @@ let insertPuzzles(resourceName: string): unit =
             )
     |> connection.InsertAll
     |> ignore
+
+let getFirstGame(): string =
+    connection.Table<PuzzleObject>().First().Game
 
 // executable statement
 
