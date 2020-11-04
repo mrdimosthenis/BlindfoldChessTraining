@@ -4,8 +4,6 @@ open Xamarin.Essentials
 
 // preferences keys
 
-let versionKey: string = "version"
-
 let areCoordsEnabledKey: string = "areCoordsEnabled"
 let areSymbolsEnabledKey: string = "areSymbolsEnabled"
 let fontSizeKey: string = "fontSize"

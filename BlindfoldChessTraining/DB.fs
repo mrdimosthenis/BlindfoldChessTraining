@@ -48,8 +48,7 @@ let puzzleOfObj (obj: PuzzleObject) : Puzzle =
 // bd functions
 
 let doesTableExist(): bool =
-    let q = "SELECT name FROM sqlite_master WHERE type='table' AND name='puzzle'"
-    connection.Query(q).Count > 0
+    connection.GetTableInfo("puzzleobject").Count > 0
 
 let createTable(): unit =
     connection.CreateTable<PuzzleObject>() |> ignore
