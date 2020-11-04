@@ -10,6 +10,9 @@ let fontSizeKey: string = "fontSize"
 let selectedLocaleKey: string = "selectedLocale"
 let speechPitchKey: string = "speechPitch"
 
+let endgameJsonStrKey: string = "endgameJsonStr"
+let openingJsonStrKey: string = "openingJsonStr"
+
 // functions
 
 let clear(): unit =

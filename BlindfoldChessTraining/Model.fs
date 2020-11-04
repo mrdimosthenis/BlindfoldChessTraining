@@ -22,7 +22,9 @@ type ConfigOptions = { AreCoordsEnabled: bool
 type Model = 
     { SelectedPage: SelectedPage
       Locales: Locale LazyList
-      ConfigOptions : ConfigOptions }
+      ConfigOptions : ConfigOptions
+      EndgameJsonStr: string
+      OpeningJsonStr: string }
 
 // default values
 
@@ -30,6 +32,9 @@ let defaultAreCoordsEnabled: bool = true
 let defaultAreSymbolsEnabled: bool = false
 let defaultFontSize: float = 17.0
 let defaultSpeechPitch: float = 1.0
+
+let defaultEndgameJsonStr: string = DB.getGameJsonStr(0, 0, 0)
+let defaultOpeningJsonStr: string = DB.getGameJsonStr(1, 0, 0)
 
 // functions
 
@@ -49,4 +54,6 @@ let initConfigOptions(): ConfigOptions =
 
 let init() = { SelectedPage = HomePage
                Locales = LazyList.empty
-               ConfigOptions = initConfigOptions() }
+               ConfigOptions = initConfigOptions()
+               EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
+               OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr }

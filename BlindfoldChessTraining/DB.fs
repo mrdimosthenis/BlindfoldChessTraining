@@ -69,13 +69,12 @@ let insertPuzzles(resourceName: string): unit =
     |> connection.InsertAll
     |> ignore
 
-let getGame(categoryId: int, level: int, indexInLevel: int): Logic.Game.Game =
+let getGameJsonStr(categoryId: int, level: int, indexInLevel: int): string =
     connection
         .Table<PuzzleObject>()
         .Where(fun obj -> obj.CategoryId = categoryId && obj.Level = level && obj.IndexInLevel = indexInLevel)
         .First()
         .Game
-    |> Notation.Parser.jsonOfGame
 
 // executable statement
 
