@@ -31,27 +31,19 @@ let defaultAreSymbolsEnabled: bool = false
 let defaultFontSize: float = 17.0
 let defaultSpeechPitch: float = 1.0
 
-let initializeConfigOptions(): unit =
-    Preferences.setBool Preferences.areCoordsEnabledKey true
-    Preferences.setBool Preferences.areSymbolsEnabledKey false
-    Preferences.setFloat Preferences.fontSizeKey 17.0
+let resetConfigOptions(): unit =
+    Preferences.removeIfExists Preferences.areCoordsEnabledKey
+    Preferences.removeIfExists Preferences.areSymbolsEnabledKey
+    Preferences.removeIfExists Preferences.fontSizeKey
     Preferences.removeIfExists Preferences.selectedLocaleKey
-    Preferences.setFloat Preferences.speechPitchKey 1.0
-    Preferences.setString Preferences.versionKey Constants.version
-
-match Preferences.tryGetString(Preferences.versionKey) with
-| Some v when v = Constants.version ->
-    ()
-| _ ->
-    Preferences.clear()
-    initializeConfigOptions()
+    Preferences.removeIfExists Preferences.speechPitchKey
 
 let initConfigOptions(): ConfigOptions =
-    { AreCoordsEnabled = Preferences.areCoordsEnabledKey |> Preferences.tryGetBool |> Option.get
-      AreSymbolsEnabled = Preferences.areSymbolsEnabledKey |> Preferences.tryGetBool |> Option.get
-      FontSize = Preferences.fontSizeKey |> Preferences.tryGetFloat |> Option.get
-      SelectedLocale = Preferences.tryGetInt Preferences.selectedLocaleKey
-      SpeechPitch = Preferences.speechPitchKey |> Preferences.tryGetFloat |> Option.get }
+    { AreCoordsEnabled = Preferences.areCoordsEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultAreCoordsEnabled
+      AreSymbolsEnabled = Preferences.areSymbolsEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultAreSymbolsEnabled
+      FontSize = Preferences.fontSizeKey |> Preferences.tryGetFloat |> Option.defaultValue defaultFontSize
+      SelectedLocale = Preferences.selectedLocaleKey |> Preferences.tryGetInt
+      SpeechPitch = Preferences.speechPitchKey |> Preferences.tryGetFloat |> Option.defaultValue defaultSpeechPitch }
 
 let init() = { SelectedPage = HomePage
                Locales = LazyList.empty

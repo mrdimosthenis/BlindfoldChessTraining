@@ -41,5 +41,5 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         let newConfigOptions = { model.ConfigOptions with SelectedLocale = Some v }
         { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
     | Msg.ResetConfigs ->
-        Model.initializeConfigOptions()
+        Model.resetConfigOptions()
         { model with Model.ConfigOptions = Model.initConfigOptions() }, Cmd.none

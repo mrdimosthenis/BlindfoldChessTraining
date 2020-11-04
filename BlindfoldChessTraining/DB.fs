@@ -7,10 +7,20 @@ open SQLite
 open BlindfoldChessMechanics.Notation
 open FSharpx.Collections
 
-type Puzzle = { Category_id: int
-                Index_in_level: int
+// types
+
+type Puzzle = { CategoryId: int
+                IndexInLevel: int
                 Level: int
                 Game : string }
+
+type PuzzleObject() =
+    member val CategoryId: int = 0 with get, set
+    member val IndexInLevel: int = 0 with get, set
+    member val Level: int = 0 with get, set
+    member val Game: string = "" with get, set
+
+// connection
 
 let connection: SQLiteConnection =
     let folderPath: string =
@@ -19,39 +29,58 @@ let connection: SQLiteConnection =
     let path: string = Path.Combine(folderPath, "BlindfoldChessTraining.db3")
     new SQLiteConnection(path)
 
+// conversions
+
+let puzzleToObj (puzzle: Puzzle): PuzzleObject =
+    let obj = PuzzleObject()
+    obj.CategoryId <- puzzle.CategoryId
+    obj.IndexInLevel <- puzzle.IndexInLevel
+    obj.Level <- puzzle.Level
+    obj.Game <- puzzle.Game
+    obj
+
+let puzzleOfObj (obj: PuzzleObject) : Puzzle =
+    { CategoryId = obj.CategoryId
+      IndexInLevel = obj.IndexInLevel
+      Level = obj.Level
+      Game  = obj.Game }
+
+// bd functions
+
 let doesTableExist(): bool =
     let q = "SELECT name FROM sqlite_master WHERE type='table' AND name='puzzle'"
     connection.Query(q).Count > 0
 
 let createTable(): unit =
-    """
-    CREATE TABLE puzzle (
-       category_id INTEGER NOT NULL,
-       level INTEGER NOT NULL,
-       index_in_level INTEGER NOT NULL,
-       game TEXT NOT NULL,
-       PRIMARY KEY (category_id, level, index_in_level)
-    )
-    """
-    |> connection.Execute
+    //"""
+    //CREATE TABLE puzzle (
+    //   category_id INTEGER NOT NULL,
+    //   level INTEGER NOT NULL,
+    //   index_in_level INTEGER NOT NULL,
+    //   game TEXT NOT NULL,
+    //   PRIMARY KEY (category_id, level, index_in_level)
+    //)
+    //"""
+    //|> connection.Execute
+    connection.CreateTable<PuzzleObject>()
     |> ignore
 
 let insertPuzzles(resourceName: string): unit =
     resourceName
     |> Resources.lines
     |> LazyList.filter (fun s -> s.Trim() <> "")
-    |> LazyList.iter
+    |> LazyList.map
             ( fun s ->
                 let game = Parser.jsonOfGame s
-                let puzzle = { Category_id = game.MetaTags.Item("category_id") |> int
-                               Index_in_level = game.MetaTags.Item("level") |> int
-                               Level = game.MetaTags.Item("index_in_level") |> int
-                               Game = s }
-                connection.Execute(
-                    "INSERT INTO puzzle VALUES (?, ?, ?, ?)",
-                    puzzle.Category_id, puzzle.Level, puzzle.Index_in_level, puzzle.Game
-                ) |> ignore
+                puzzleToObj { CategoryId = game.MetaTags.Item("category_id") |> int
+                              IndexInLevel = game.MetaTags.Item("level") |> int
+                              Level = game.MetaTags.Item("index_in_level") |> int
+                              Game = s }
             )
+    |> connection.InsertAll
+    |> ignore
+
+// executable statement
 
 if doesTableExist()
     then ()
