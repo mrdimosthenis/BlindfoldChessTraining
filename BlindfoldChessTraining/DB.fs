@@ -9,18 +9,13 @@ open FSharpx.Collections
 
 // types
 
-type Puzzle = { CategoryId: int
-                IndexInLevel: int
-                Level: int
-                Game : string }
-
 type PuzzleObject() =
     member val CategoryId: int = 0 with get, set
-    member val IndexInLevel: int = 0 with get, set
     member val Level: int = 0 with get, set
+    member val IndexInLevel: int = 0 with get, set
     member val Game: string = "" with get, set
 
-// connection
+// constants
 
 let connection: SQLiteConnection =
     let folderPath: string =
@@ -29,30 +24,18 @@ let connection: SQLiteConnection =
     let path: string = Path.Combine(folderPath, "BlindfoldChessTraining.db3")
     new SQLiteConnection(path)
 
-// conversions
+let tableName: string = "puzzleobject"
 
-let puzzleToObj (puzzle: Puzzle): PuzzleObject =
-    let obj = PuzzleObject()
-    obj.CategoryId <- puzzle.CategoryId
-    obj.IndexInLevel <- puzzle.IndexInLevel
-    obj.Level <- puzzle.Level
-    obj.Game <- puzzle.Game
-    obj
-
-let puzzleOfObj (obj: PuzzleObject) : Puzzle =
-    { CategoryId = obj.CategoryId
-      IndexInLevel = obj.IndexInLevel
-      Level = obj.Level
-      Game  = obj.Game }
+let indexedColumns : string array = [| "categoryid"; "level"; "indexinlevel" |]
 
 // bd functions
 
 let doesTableExist(): bool =
-    connection.GetTableInfo("puzzleobject").Count > 0
+    connection.GetTableInfo(tableName).Count > 0
 
 let createTable(): unit =
     connection.CreateTable<PuzzleObject>() |> ignore
-    connection.CreateIndex("puzzleobject", [| "categoryid"; "level"; "indexinlevel" |], true) |> ignore
+    connection.CreateIndex(tableName, indexedColumns, true) |> ignore
 
 let insertPuzzles(resourceName: string): unit =
     resourceName
@@ -61,10 +44,12 @@ let insertPuzzles(resourceName: string): unit =
     |> LazyList.map
             ( fun s ->
                 let game = Notation.Parser.jsonOfGame s
-                puzzleToObj { CategoryId = game.MetaTags.Item("category_id") |> int
-                              IndexInLevel = game.MetaTags.Item("level") |> int
-                              Level = game.MetaTags.Item("index_in_level") |> int
-                              Game = s }
+                let obj = PuzzleObject()
+                obj.CategoryId <- game.MetaTags.Item("category_id") |> int
+                obj.Level <- game.MetaTags.Item("level") |> int
+                obj.IndexInLevel <- game.MetaTags.Item("index_in_level") |> int
+                obj.Game <- s
+                obj
             )
     |> connection.InsertAll
     |> ignore

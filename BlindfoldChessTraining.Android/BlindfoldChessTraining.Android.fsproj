@@ -25,7 +25,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <OtherFlags>/warnon:1182</OtherFlags>
     <WarningLevel>4</WarningLevel>
-    <SelectedDevice>Xiaomi Redmi 6</SelectedDevice>
+    <SelectedDevice>Samsung SM-T580</SelectedDevice>
     <DefaultDevice>phone_l-dpi_2_7in_pie_9_0_-_api_28</DefaultDevice>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
