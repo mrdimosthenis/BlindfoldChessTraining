@@ -24,12 +24,14 @@ type Model =
       Locales: Locale LazyList
       ConfigOptions : ConfigOptions }
 
-// init values and operations and functions
+// default values
 
 let defaultAreCoordsEnabled: bool = true
 let defaultAreSymbolsEnabled: bool = false
 let defaultFontSize: float = 17.0
 let defaultSpeechPitch: float = 1.0
+
+// functions
 
 let resetConfigOptions(): unit =
     Preferences.removeIfExists Preferences.areCoordsEnabledKey

@@ -4,7 +4,7 @@ open System
 open System.IO
 open SQLite
 
-open BlindfoldChessMechanics.Notation
+open BlindfoldChessMechanics
 open FSharpx.Collections
 
 // types
@@ -60,7 +60,7 @@ let insertPuzzles(resourceName: string): unit =
     |> LazyList.filter (fun s -> s.Trim() <> "")
     |> LazyList.map
             ( fun s ->
-                let game = Parser.jsonOfGame s
+                let game = Notation.Parser.jsonOfGame s
                 puzzleToObj { CategoryId = game.MetaTags.Item("category_id") |> int
                               IndexInLevel = game.MetaTags.Item("level") |> int
                               Level = game.MetaTags.Item("index_in_level") |> int
@@ -69,8 +69,13 @@ let insertPuzzles(resourceName: string): unit =
     |> connection.InsertAll
     |> ignore
 
-let getFirstGame(): string =
-    connection.Table<PuzzleObject>().First().Game
+let getGame(categoryId: int, level: int, indexInLevel: int): Logic.Game.Game =
+    connection
+        .Table<PuzzleObject>()
+        .Where(fun obj -> obj.CategoryId = categoryId && obj.Level = level && obj.IndexInLevel = indexInLevel)
+        .First()
+        .Game
+    |> Notation.Parser.jsonOfGame
 
 // executable statement
 
