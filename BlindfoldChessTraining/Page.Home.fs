@@ -35,13 +35,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                         horizontalOptions = LayoutOptions.Center,
                         command = (fun () -> dispatch (Msg.SelectPage Model.CreditsPage))
                     )
-                    View.Label(
-                        text = model.OpeningJsonStr,
-                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                        fontAttributes = FontAttributes.Italic,
-                        horizontalOptions = LayoutOptions.End,
-                        verticalOptions = LayoutOptions.End
-                    )
+                    UIElems.GameNavigator.notation model dispatch
                 ]
             )
         )

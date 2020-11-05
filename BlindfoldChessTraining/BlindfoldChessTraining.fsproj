@@ -8,6 +8,10 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\puzzles\opening_puzzles.jsonl" />
     <EmbeddedResource Include="resources\puzzles\endgame_puzzles.jsonl" />
+    <EmbeddedResource Include="resources\images\icons\chevron_double_left.png" />
+    <EmbeddedResource Include="resources\images\icons\chevron_double_right.png" />
+    <EmbeddedResource Include="resources\images\icons\chevron_left.png" />
+    <EmbeddedResource Include="resources\images\icons\chevron_right.png" />
     <EmbeddedResource Include="resources\images\icons\chip.png" />
     <EmbeddedResource Include="resources\images\icons\home.png" />
     <EmbeddedResource Include="resources\images\icons\speaker.png" />
@@ -56,6 +60,7 @@
     <Compile Include="Update.fs" />
     <Compile Include="UIElems.Icons.fs" />
     <Compile Include="UIElems.Board.fs" />
+    <Compile Include="UIElems.GameNavigator.fs" />
     <Compile Include="Page.Home.fs" />
     <Compile Include="Page.OpeningPuzzles.fs" />
     <Compile Include="Page.EndgamePuzzles.fs" />
@@ -64,6 +69,8 @@
     <Compile Include="Page.Credits.fs" />
     <Compile Include="BlindfoldChessTraining.fs" />
   </ItemGroup>
+
+  <ItemGroup />
   <ItemGroup>
     <PackageReference Include="FSharp.SystemTextJson" Version="0.14.8" />
     <PackageReference Include="FSharpx.Collections" Version="2.1.3" />
