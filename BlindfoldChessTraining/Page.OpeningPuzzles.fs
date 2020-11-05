@@ -19,6 +19,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                     fontAttributes = FontAttributes.Bold,
                     horizontalOptions = LayoutOptions.Center
                 )
+                UIElems.GameNavigator.notation model dispatch
                 View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
             ]
         )

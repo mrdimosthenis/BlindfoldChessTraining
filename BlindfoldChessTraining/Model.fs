@@ -2,6 +2,7 @@
 
 open Xamarin.Essentials
 open FSharpx.Collections
+open BlindfoldChessMechanics
 
 // types
 
@@ -24,7 +25,9 @@ type Model =
       Locales: Locale LazyList
       ConfigOptions : ConfigOptions
       EndgameJsonStr: string
-      OpeningJsonStr: string }
+      OpeningJsonStr: string
+      CurrentGame: Logic.Game.Game option
+      CurrentMoveIndex: int option }
 
 // default values
 
@@ -52,8 +55,11 @@ let initConfigOptions(): ConfigOptions =
       SelectedLocale = Preferences.selectedLocaleKey |> Preferences.tryGetInt
       SpeechPitch = Preferences.speechPitchKey |> Preferences.tryGetFloat |> Option.defaultValue defaultSpeechPitch }
 
-let init() = { SelectedPage = HomePage
-               Locales = LazyList.empty
-               ConfigOptions = initConfigOptions()
-               EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
-               OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr }
+let init(): Model =
+    { SelectedPage = HomePage
+      Locales = LazyList.empty
+      ConfigOptions = initConfigOptions()
+      EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
+      OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr
+      CurrentGame = None
+      CurrentMoveIndex = None }

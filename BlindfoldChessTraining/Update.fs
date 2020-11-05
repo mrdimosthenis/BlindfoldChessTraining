@@ -1,6 +1,7 @@
 ﻿module BlindfoldChessTraining.Update
 
 open Fabulous
+open BlindfoldChessMechanics
 
 let cmdInit(): Cmd<Msg.Msg> =
     async {
@@ -12,7 +13,16 @@ let cmdInit(): Cmd<Msg.Msg> =
 let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     match msg with
     | Msg.LocalesLoaded v -> { model with Model.Locales = v }, Cmd.none
-    | Msg.SelectPage v -> { model with Model.SelectedPage = v }, Cmd.none
+
+    | Msg.SelectPage v ->
+        let currentGame = match v with
+                          | Model.EndgamePuzzlesPage ->
+                                model.EndgameJsonStr |> Notation.Parser.jsonOfGame |> Some
+                          | Model.OpeningPuzzlesPage ->
+                              model.OpeningJsonStr |> Notation.Parser.jsonOfGame |> Some
+                          | _ -> None
+        { model with Model.SelectedPage = v; Model.CurrentGame = currentGame }, Cmd.none
+
     | Msg.Speak v ->
         Speech.speak model.ConfigOptions.SpeechPitch
                      model.Locales

@@ -35,7 +35,6 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                         horizontalOptions = LayoutOptions.Center,
                         command = (fun () -> dispatch (Msg.SelectPage Model.CreditsPage))
                     )
-                    UIElems.GameNavigator.notation model dispatch
                 ]
             )
         )
