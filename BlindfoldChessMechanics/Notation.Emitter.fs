@@ -95,7 +95,7 @@ let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
                              | _ -> ""
            piece + clarification + takes + targetSquare + promotion + checkOrMate
 
-let multipleMovesText (areFigures: bool) (isWhiteToMove: bool) (moves: Position.Move LazyList): string =
+let moveTextsWithNumberIndicators  (areFigures: bool) (isWhiteToMove: bool) (moves: Position.Move LazyList): (string * bool) LazyList =
     let indices = Utils.lazInfinite
                   |> LazyList.map (fun i -> [ i + 1; i + 1 ])
                   |> LazyList.map LazyList.ofList
@@ -104,24 +104,38 @@ let multipleMovesText (areFigures: bool) (isWhiteToMove: bool) (moves: Position.
     let isWhiteToMoveBools =
         Utils.lazInfinite
         |> LazyList.map (fun _ ->
-                           if isWhiteToMove then [ true; false ]
-                           else [ false; true ]
-                        )
+             if isWhiteToMove then [ true; false ]
+             else [ false; true ]
+          )
         |> LazyList.map LazyList.ofList
         |> LazyList.concat
-    let moveStrings =
-        LazyList.zip indices isWhiteToMoveBools
-        |> LazyList.zip moves
-        |> LazyList.map
-            (fun (m, (i, b)) ->
-                let d = match (b, i, isWhiteToMove) with
-                        | (true, _, _) -> sprintf "%i." i
-                        | (false, 1, false) -> sprintf "%i..." i
-                        | (false, _, _) -> ""
-                let m = moveText b areFigures m
-                d + m
+    LazyList.zip indices isWhiteToMoveBools
+    |> LazyList.zip moves
+    |> LazyList.map
+        (fun (m, (i, b)) ->
+            let numberIndicators = match (b, i, isWhiteToMove) with
+                                   | (true, _, _) -> [ (sprintf "%i." i, true) ]
+                                   | (false, 1, false) -> [ (sprintf "%i..." i, true) ]
+                                   | (false, _, _) -> []
+                                   |> LazyList.ofList
+            [ (moveText b areFigures m, false) ]
+            |> LazyList.ofList
+            |> LazyList.append numberIndicators
+        )
+    |> LazyList.concat
+
+let multipleMovesText (areFigures: bool) (isWhiteToMove: bool) (moves: Position.Move LazyList): string =
+    let textsWithNumbers = moveTextsWithNumberIndicators areFigures isWhiteToMove moves
+    let (head, tail) = LazyList.uncons textsWithNumbers
+    LazyList.zip tail textsWithNumbers
+    |> LazyList.map (fun ((s, _), (_, prevIndicator)) -> (s, prevIndicator))
+    |> Utils.prependedLaz head
+    |> LazyList.fold
+            (fun acc (s, prevIndicator) ->
+                if prevIndicator then acc + s
+                else acc + " " + s
             )
-    String.Join(" ", moveStrings)
+            ""
 
 let rowFEN (row: Board.Resident array): string =
     let remaining (opt: int option): string =
