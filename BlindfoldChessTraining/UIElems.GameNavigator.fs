@@ -8,29 +8,42 @@ open BlindfoldChessTraining
 open BlindfoldChessMechanics
 open FSharpx.Collections
 
+exception NoneCurrentGame
+
 let notation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
-    let currentGame = model.CurrentGame.Value
-    let flexChildren = currentGame.Moves
-                       |> LazyList.ofArray
-                       |> Notation.Emitter.moveTextsWithNumberIndicators
-                                   model.ConfigOptions.AreSymbolsEnabled
-                                   currentGame.InitialPosition.IsWhiteToMove
-                       |> LazyList.map
-                                   (fun (s, b) ->
-                                       View.Label(
-                                           text = (if b then s else s + " "),
-                                           fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                                           fontAttributes = (if b then FontAttributes.None else FontAttributes.Bold),
-                                           horizontalTextAlignment = TextAlignment.Center,
-                                           verticalTextAlignment = TextAlignment.Center
-                                       )
-                                   )
-                       |> LazyList.toList
-    View.FlexLayout(
-        //horizontalOptions = LayoutOptions.Center,
-        //alignItems = FlexAlignItems.Center,
-        //alignContent = FlexAlignContent.Center,
-        justifyContent = FlexJustify.Center,
-        wrap = FlexWrap.Wrap,
-        children = flexChildren
-    )
+    match model.CurrentGame with
+    | None ->
+        raise NoneCurrentGame
+    | Some currentGame ->
+        let movesWithIndicators = currentGame.Moves
+                                  |> LazyList.ofArray
+                                  |> Notation.Emitter.moveTextsWithNumberIndicators
+                                              model.ConfigOptions.AreSymbolsEnabled
+                                              currentGame.InitialPosition.IsWhiteToMove
+        let flexChildren = LazyList.fold
+                                 (fun (accI, accLaz) (s, b) ->
+                                     let nextAccI = if b then accI else accI + 1
+                                     let currentMoveIndex = if b then None else Some accI
+                                     let nextAccLaz = Utils.prependedLaz (currentMoveIndex, s, b) accLaz
+                                     (nextAccI, nextAccLaz)
+                                 )
+                                 (0, LazyList.empty)
+                                 movesWithIndicators
+                           |> snd
+                           |> LazyList.rev
+                           |> LazyList.map
+                                 (fun (iOpt, s, b) ->
+                                     View.Label(
+                                         text = (if b then s else s + " "),
+                                         fontAttributes = (if iOpt = model.CurrentMoveIndex then FontAttributes.Bold else FontAttributes.None),
+                                         fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                                         horizontalTextAlignment = TextAlignment.Center,
+                                         verticalTextAlignment = TextAlignment.Center
+                                     )
+                                 )
+                           |> LazyList.toList
+        View.FlexLayout(
+            justifyContent = FlexJustify.Center,
+            wrap = FlexWrap.Wrap,
+            children = flexChildren
+        )
