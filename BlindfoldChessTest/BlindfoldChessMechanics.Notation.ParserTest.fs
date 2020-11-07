@@ -2,12 +2,10 @@
 
 open Xunit
 open FsUnit.Xunit
+open FSharpx.Collections
 
 open BlindfoldChessMechanics.Notation.Parser
 open BlindfoldChessMechanics.Logic
-open System.IO
-open FSharpx.Collections
-open BlindfoldChessMechanics
 
 // tests
 

@@ -5,7 +5,6 @@ open FsUnit.Xunit
 
 open BlindfoldChessMechanics.Logic.Position
 open BlindfoldChessMechanics.Logic.Board
-open BlindfoldChessMechanics
 open FSharpx.Collections
 
 // tests

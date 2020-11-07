@@ -13,6 +13,7 @@
 	<Compile Include="BlindfoldChessMechanics.Logic.PositionTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.Notation.EmitterTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.Notation.ParserTest.fs" />
+	<Compile Include="BlindfoldChessMechanics.NaturalLanguageTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

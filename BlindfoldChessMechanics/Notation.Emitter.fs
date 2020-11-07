@@ -59,11 +59,13 @@ let pieceText (isWhite: bool) (areFigures: bool) (p: Board.Piece): string =
     | (Board.Pawn, true, false) -> "♟︎"
 
 let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
-    match (m.Piece, snd m.FromCoords, snd m.ToCoords, m.IsCheck) with
-    | (Board.King, 4, 6, false) -> "O-O"
-    | (Board.King, 4, 2, false) -> "O-O-O"
-    | (Board.King, 4, 6, true) -> "O-O+"
-    | (Board.King, 4, 2, true) -> "O-O-O+"
+    match (m.Piece, snd m.FromCoords, snd m.ToCoords, m.IsCheck, m.IsMate) with
+    | (Board.King, 4, 6, false, false) -> "O-O"
+    | (Board.King, 4, 2, false, false) -> "O-O-O"
+    | (Board.King, 4, 6, true, false) -> "O-O+"
+    | (Board.King, 4, 2, true, false) -> "O-O-O+"
+    | (Board.King, 4, 6, true, true) -> "O-O#"
+    | (Board.King, 4, 2, true, true) -> "O-O-O#"
     | _ -> let piece = match m.Piece with
                        | Board.Pawn -> ""
                        | _ -> m.Piece

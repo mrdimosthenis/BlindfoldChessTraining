@@ -11,6 +11,7 @@
 	<Compile Include="Logic.Game.fs" />
 	<Compile Include="Notation.Emitter.fs" />
 	<Compile Include="Notation.Parser.fs" />
+	<Compile Include="NaturalLanguage.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 
