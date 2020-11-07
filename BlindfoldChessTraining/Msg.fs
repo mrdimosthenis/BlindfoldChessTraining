@@ -13,4 +13,3 @@ type Msg =
     | SelectPitchConfig of float
     | SelectLocaleConfig of int
     | ResetConfigs
-    | MoveClick of int

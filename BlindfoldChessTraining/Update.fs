@@ -23,9 +23,6 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                           | _ -> None
         { model with Model.SelectedPage = v; Model.CurrentGame = currentGame }, Cmd.none
 
-    | Msg.MoveClick v ->
-         { model with Model.CurrentMoveIndex = Some v }, Cmd.none
-
     | Msg.Speak v ->
         Speech.speak model.ConfigOptions.SpeechPitch
                      model.Locales
