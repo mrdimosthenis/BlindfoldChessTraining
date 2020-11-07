@@ -3,6 +3,8 @@
 open Fabulous.XamarinForms
 open BlindfoldChessTraining
 
+let empty : Image.Value = Resources.image "icons.empty"
+
 let options: Image.Value = Resources.image "icons.options"
 
 let speaker: Image.Value = Resources.image "icons.speaker"

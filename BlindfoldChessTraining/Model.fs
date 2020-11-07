@@ -26,7 +26,7 @@ type Model =
       ConfigOptions : ConfigOptions
       EndgameJsonStr: string
       OpeningJsonStr: string
-      CurrentGame: Logic.Game.Game option
+      CurrentGame: Logic.Game.Game
       CurrentMoveIndex: int option }
 
 // default values
@@ -56,10 +56,11 @@ let initConfigOptions(): ConfigOptions =
       SpeechPitch = Preferences.speechPitchKey |> Preferences.tryGetFloat |> Option.defaultValue defaultSpeechPitch }
 
 let init(): Model =
+    let endgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
     { SelectedPage = HomePage
       Locales = LazyList.empty
       ConfigOptions = initConfigOptions()
       EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
       OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr
-      CurrentGame = None
+      CurrentGame = Notation.Parser.jsonOfGame endgameJsonStr
       CurrentMoveIndex = None }

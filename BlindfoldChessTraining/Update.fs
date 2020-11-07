@@ -16,12 +16,27 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
 
     | Msg.SelectPage v ->
         let currentGame = match v with
-                          | Model.EndgamePuzzlesPage ->
-                                model.EndgameJsonStr |> Notation.Parser.jsonOfGame |> Some
-                          | Model.OpeningPuzzlesPage ->
-                              model.OpeningJsonStr |> Notation.Parser.jsonOfGame |> Some
-                          | _ -> None
+                          | Model.OpeningPuzzlesPage -> Notation.Parser.jsonOfGame model.OpeningJsonStr
+                          | _ -> Notation.Parser.jsonOfGame model.EndgameJsonStr
         { model with Model.SelectedPage = v; Model.CurrentGame = currentGame }, Cmd.none
+
+    | Msg.GoToNextMove ->
+        let newCurrentMoveIndex = match model.CurrentMoveIndex with
+                                  | None -> Some 0
+                                  | Some i when i = model.CurrentGame.Moves.Length - 1 -> model.CurrentMoveIndex
+                                  | Some i -> Some (i + 1)
+        { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
+    | Msg.GoToPrevMove ->
+        let newCurrentMoveIndex = match model.CurrentMoveIndex with
+                                  | None -> None
+                                  | Some 0 -> None
+                                  | Some i -> Some (i - 1)
+        { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
+    | Msg.GoToInitPos ->
+        { model with Model.CurrentMoveIndex = None }, Cmd.none
+    | Msg.GoToLastPos ->
+        let newCurrentMoveIndex = Some (model.CurrentGame.Moves.Length - 1)
+        { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
 
     | Msg.Speak v ->
         Speech.speak model.ConfigOptions.SpeechPitch

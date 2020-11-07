@@ -8,6 +8,7 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\puzzles\opening_puzzles.jsonl" />
     <EmbeddedResource Include="resources\puzzles\endgame_puzzles.jsonl" />
+    <EmbeddedResource Include="resources\images\icons\empty.png" />
     <EmbeddedResource Include="resources\images\icons\chevron_double_left.png" />
     <EmbeddedResource Include="resources\images\icons\chevron_double_right.png" />
     <EmbeddedResource Include="resources\images\icons\chevron_left.png" />
