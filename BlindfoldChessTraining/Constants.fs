@@ -3,3 +3,6 @@
 let version: string = "3.0.0"
 
 let titleSizeRatio: float = 1.5
+
+let numOfLevelsPerCategory: int = 10
+let numOfPuzzlesPerLevel: int = 50
