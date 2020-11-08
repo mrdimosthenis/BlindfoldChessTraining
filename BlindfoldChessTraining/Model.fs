@@ -21,7 +21,8 @@ type ConfigOptions = { AreCoordsEnabled: bool
                        SpeechPitch: float }
 
 type GameWithBoards =
-        { Level: int
+        { CategoryId: int
+          Level: int
           IndexInLevel: int
           IsWhiteToMove: bool
           InitBoard: Logic.Board.Board
@@ -49,6 +50,7 @@ let defaultOpeningJsonStr: string = DB.getGameJsonStr(1, 0, 0)
 // functions
 
 let gameToGameWithBoards(game: Logic.Game.Game): GameWithBoards =
+    let categoryId = game.MetaTags.Item("category_id") |> int
     let level = game.MetaTags.Item("level") |> int
     let indexInLevel = game.MetaTags.Item("index_in_level") |> int
     let isWhiteToMove = game.InitialPosition.IsWhiteToMove
@@ -68,7 +70,8 @@ let gameToGameWithBoards(game: Logic.Game.Game): GameWithBoards =
             |> LazyList.rev
             |> LazyList.map (fun (move, pos: Logic.Position.Position) -> (move, pos.Board))
             |> LazyList.toArray
-    { Level = level
+    { CategoryId = categoryId
+      Level = level
       IndexInLevel = indexInLevel
       IsWhiteToMove = isWhiteToMove
       InitBoard = initBoard
