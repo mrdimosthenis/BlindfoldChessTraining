@@ -6,6 +6,10 @@ open FSharpx.Collections
 type Msg = 
     | LocalesLoaded of Locale LazyList
     | SelectPage of Model.SelectedPage
+    | GoToNextLevel
+    | GoToPrevLevel
+    | GoToNextPuzzle
+    | GoToPrevPuzzle
     | GoToNextMove
     | GoToPrevMove
     | GoToInitPos

@@ -22,6 +22,15 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                 |> Model.gameToGameWithBoards
         { model with Model.SelectedPage = v; Model.CurrentGameWithBoards = currentGameWithBoards }, Cmd.none
 
+    | Msg.GoToPrevLevel ->
+        model, Cmd.none
+    | Msg.GoToNextLevel ->
+        model, Cmd.none
+    | Msg.GoToPrevPuzzle ->
+        model, Cmd.none
+    | Msg.GoToNextPuzzle ->
+        model, Cmd.none
+
     | Msg.GoToNextMove ->
         let newCurrentMoveIndex = match model.CurrentMoveIndex with
                                   | None ->

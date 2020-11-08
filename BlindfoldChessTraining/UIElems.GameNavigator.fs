@@ -8,6 +8,58 @@ open BlindfoldChessTraining
 open BlindfoldChessMechanics
 open FSharpx.Collections
 
+let levelNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+    let level = model.CurrentGameWithBoards.Level
+    let levelMainText = level + 1 |> sprintf "Level %i"
+    let levelParenText = match model.SelectedPage with
+                         | Model.OpeningPuzzlesPage -> sprintf "(%i Half Moves)" (level + 10)
+                         | _ -> sprintf "(%i Pieces)" (level + 5)
+    let levelInfo =
+            View.StackLayout(
+                orientation = StackOrientation.Horizontal,
+                horizontalOptions = LayoutOptions.Center,
+                children = [
+                    View.Button(
+                        image = Icons.rewind,
+                        command = (fun () -> dispatch Msg.GoToPrevLevel)
+                    )
+                    View.Label(
+                        text = levelMainText + " " + levelParenText,
+                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                        verticalTextAlignment = TextAlignment.Center
+                    )
+                    View.Button(
+                        image = Icons.fastForward,
+                        command = (fun () -> dispatch Msg.GoToNextLevel)
+                    )
+                ]
+            )
+    let puzzleInfo =
+            View.StackLayout(
+                orientation = StackOrientation.Horizontal,
+                horizontalOptions = LayoutOptions.Center,
+                children = [
+                    View.Button(
+                        image = Icons.arrowCircleLeft,
+                        command = (fun () -> dispatch Msg.GoToPrevPuzzle)
+                    )
+                    View.Label(
+                        text = (model.CurrentGameWithBoards.IndexInLevel + 1 |> sprintf "Puzzle %i"),
+                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                        verticalTextAlignment = TextAlignment.Center
+                    )
+                    View.Button(
+                        image = Icons.arrowCircleRight,
+                        command = (fun () -> dispatch Msg.GoToNextPuzzle)
+                    )
+                ]
+            )
+    View.StackLayout(
+        horizontalOptions = LayoutOptions.Center,
+        verticalOptions = LayoutOptions.Center,
+        children = [ levelInfo; puzzleInfo ]
+    )
+
 let chessboard (model: Model.Model): ViewElement =
     match model.CurrentMoveIndex with
     | None -> model.CurrentGameWithBoards.InitBoard
@@ -49,7 +101,7 @@ let notation (model: Model.Model): ViewElement =
         children = flexChildren
     )
 
-let nagivation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+let boardNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     View.StackLayout(
         orientation = StackOrientation.Horizontal,
         horizontalOptions = LayoutOptions.Center,
