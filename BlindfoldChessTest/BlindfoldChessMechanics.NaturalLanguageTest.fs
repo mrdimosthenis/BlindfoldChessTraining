@@ -30,6 +30,12 @@ let ``Ra4`` () =
        "rook h 4"
 
 [<Fact>]
+let ``Pe6`` () =
+    phrase "Pe6"
+    |> should equal
+       "pawn e 6"
+
+[<Fact>]
 let ``♔c5`` () =
     phrase "♔c5"
     |> should equal
