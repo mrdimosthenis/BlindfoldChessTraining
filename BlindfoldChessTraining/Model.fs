@@ -20,13 +20,20 @@ type ConfigOptions = { AreCoordsEnabled: bool
                        SelectedLocale: int option
                        SpeechPitch: float }
 
+type GameWithBoards =
+        { Level: int
+          IndexInLevel: int
+          IsWhiteToMove: bool
+          InitBoard: Logic.Board.Board
+          MovesWithBoards: (Logic.Position.Move * Logic.Board.Board) array }
+
 type Model = 
     { SelectedPage: SelectedPage
       Locales: Locale LazyList
       ConfigOptions : ConfigOptions
       EndgameJsonStr: string
       OpeningJsonStr: string
-      CurrentGame: Logic.Game.Game
+      CurrentGameWithBoards: GameWithBoards
       CurrentMoveIndex: int option }
 
 // default values
@@ -40,6 +47,32 @@ let defaultEndgameJsonStr: string = DB.getGameJsonStr(0, 0, 0)
 let defaultOpeningJsonStr: string = DB.getGameJsonStr(1, 0, 0)
 
 // functions
+
+let gameToGameWithBoards(game: Logic.Game.Game): GameWithBoards =
+    let level = game.MetaTags.Item("level") |> int
+    let indexInLevel = game.MetaTags.Item("index_in_level") |> int
+    let isWhiteToMove = game.InitialPosition.IsWhiteToMove
+    let initBoard = game.InitialPosition.Board
+    let movesWithBoards =
+            game.Moves
+            |> LazyList.ofArray
+            |> LazyList.fold
+                      (fun acc x ->
+                          let prevPos =
+                              if LazyList.isEmpty acc then game.InitialPosition
+                              else acc |> LazyList.head |> snd
+                          let nextPos = Logic.Position.positionAfterMove x prevPos
+                          Utils.prependedLaz (x, nextPos) acc
+                      )
+                      LazyList.empty
+            |> LazyList.rev
+            |> LazyList.map (fun (move, pos: Logic.Position.Position) -> (move, pos.Board))
+            |> LazyList.toArray
+    { Level = level
+      IndexInLevel = indexInLevel
+      IsWhiteToMove = isWhiteToMove
+      InitBoard = initBoard
+      MovesWithBoards = movesWithBoards }
 
 let resetConfigOptions(): unit =
     Preferences.removeIfExists Preferences.areCoordsEnabledKey
@@ -62,5 +95,5 @@ let init(): Model =
       ConfigOptions = initConfigOptions()
       EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
       OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr
-      CurrentGame = Notation.Parser.jsonOfGame endgameJsonStr
+      CurrentGameWithBoards = endgameJsonStr |> Notation.Parser.jsonOfGame |> gameToGameWithBoards
       CurrentMoveIndex = None }

@@ -15,16 +15,21 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     | Msg.LocalesLoaded v -> { model with Model.Locales = v }, Cmd.none
 
     | Msg.SelectPage v ->
-        let currentGame = match v with
-                          | Model.OpeningPuzzlesPage -> Notation.Parser.jsonOfGame model.OpeningJsonStr
-                          | _ -> Notation.Parser.jsonOfGame model.EndgameJsonStr
-        { model with Model.SelectedPage = v; Model.CurrentGame = currentGame }, Cmd.none
+        let currentGameWithBoards =
+                match v with
+                | Model.OpeningPuzzlesPage -> Notation.Parser.jsonOfGame model.OpeningJsonStr
+                | _ -> Notation.Parser.jsonOfGame model.EndgameJsonStr
+                |> Model.gameToGameWithBoards
+        { model with Model.SelectedPage = v; Model.CurrentGameWithBoards = currentGameWithBoards }, Cmd.none
 
     | Msg.GoToNextMove ->
         let newCurrentMoveIndex = match model.CurrentMoveIndex with
-                                  | None -> Some 0
-                                  | Some i when i = model.CurrentGame.Moves.Length - 1 -> model.CurrentMoveIndex
-                                  | Some i -> Some (i + 1)
+                                  | None ->
+                                        Some 0
+                                  | Some i when i = model.CurrentGameWithBoards.MovesWithBoards.Length - 1 ->
+                                        model.CurrentMoveIndex
+                                  | Some i ->
+                                        Some (i + 1)
         { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
     | Msg.GoToPrevMove ->
         let newCurrentMoveIndex = match model.CurrentMoveIndex with
@@ -35,7 +40,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     | Msg.GoToInitPos ->
         { model with Model.CurrentMoveIndex = None }, Cmd.none
     | Msg.GoToLastPos ->
-        let newCurrentMoveIndex = Some (model.CurrentGame.Moves.Length - 1)
+        let newCurrentMoveIndex = Some (model.CurrentGameWithBoards.MovesWithBoards.Length - 1)
         { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
 
     | Msg.Speak v ->

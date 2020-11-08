@@ -9,24 +9,18 @@ open BlindfoldChessMechanics
 open FSharpx.Collections
 
 let chessboard (model: Model.Model): ViewElement =
-    let position = match model.CurrentMoveIndex with
-                   | None ->
-                        model.CurrentGame.InitialPosition
-                   | Some i ->
-                        model.CurrentGame.Moves
-                        |> LazyList.ofArray
-                        |> LazyList.take (i + 1)
-                        |> LazyList.fold
-                                (fun acc x -> Logic.Position.positionAfterMove x acc)
-                                model.CurrentGame.InitialPosition
-    UIElems.Board.grid model.ConfigOptions.AreSymbolsEnabled position.Board
+    match model.CurrentMoveIndex with
+    | None -> model.CurrentGameWithBoards.InitBoard
+    | Some i -> model.CurrentGameWithBoards.MovesWithBoards.[i] |> snd
+    |> UIElems.Board.grid model.ConfigOptions.AreSymbolsEnabled
 
 let notation (model: Model.Model): ViewElement =
-    let movesWithIndicators = model.CurrentGame.Moves
+    let movesWithIndicators = model.CurrentGameWithBoards.MovesWithBoards
                               |> LazyList.ofArray
+                              |> LazyList.map fst
                               |> Notation.Emitter.moveTextsWithNumberIndicators
                                           model.ConfigOptions.AreSymbolsEnabled
-                                          model.CurrentGame.InitialPosition.IsWhiteToMove
+                                          model.CurrentGameWithBoards.IsWhiteToMove
     let flexChildren = LazyList.fold
                              (fun (accI, accLaz) (s, b) ->
                                  let nextAccI = if b then accI else accI + 1
@@ -69,12 +63,12 @@ let nagivation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                 command = (fun () -> dispatch Msg.GoToPrevMove)
             )
             View.Button(
-                image = (if model.CurrentMoveIndex <> Some (model.CurrentGame.Moves.Length - 1)
+                image = (if model.CurrentMoveIndex <> Some (model.CurrentGameWithBoards.MovesWithBoards.Length - 1)
                          then Icons.chevronRight else Icons.empty),
                 command = (fun () -> dispatch Msg.GoToNextMove)
             )
             View.Button(
-                image = (if model.CurrentMoveIndex <> Some (model.CurrentGame.Moves.Length - 1)
+                image = (if model.CurrentMoveIndex <> Some (model.CurrentGameWithBoards.MovesWithBoards.Length - 1)
                          then Icons.chevronDoubleRight else Icons.empty),
                 command = (fun () -> dispatch Msg.GoToLastPos)
             )
