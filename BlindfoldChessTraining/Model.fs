@@ -7,6 +7,7 @@ open BlindfoldChessMechanics
 // types
 
 type SelectedPage =
+    | IntroPage
     | HomePage
     | OpeningPuzzlesPage
     | EndgamePuzzlesPage
@@ -93,7 +94,7 @@ let initConfigOptions(): ConfigOptions =
 
 let init(): Model =
     let endgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
-    { SelectedPage = HomePage
+    { SelectedPage = IntroPage
       Locales = LazyList.empty
       ConfigOptions = initConfigOptions()
       EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
