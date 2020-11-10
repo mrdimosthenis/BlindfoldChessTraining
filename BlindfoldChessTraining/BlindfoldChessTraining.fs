@@ -9,23 +9,20 @@ open BlindfoldChessTraining.Page
 
 module App =
 
-    let view (modelOpt: Model.Model option) (dispatch: Msg.Msg -> unit) =
-        match modelOpt with
-        | None ->
-            Intro.view dispatch
-        | Some model ->
-            let v =  match model.SelectedPage with
-                     | Model.HomePage -> Home.view
-                     | Model.OpeningPuzzlesPage -> OpeningPuzzles.view
-                     | Model.EndgamePuzzlesPage -> EndgamePuzzles.view
-                     | Model.DescriptionPage -> Description.view
-                     | Model.OptionsPage -> Options.view
-                     | Model.CreditsPage -> Credits.view
-            v model dispatch
+    let view (model: Model.Model) (dispatch: Msg.Msg -> unit) =
+        let v =  match model.SelectedPage with
+                 | Model.IntroPage -> Intro.view
+                 | Model.HomePage -> Home.view
+                 | Model.OpeningPuzzlesPage -> OpeningPuzzles.view
+                 | Model.EndgamePuzzlesPage -> EndgamePuzzles.view
+                 | Model.DescriptionPage -> Description.view
+                 | Model.OptionsPage -> Options.view
+                 | Model.CreditsPage -> Credits.view
+        v model dispatch
 
     // Note, this declaration is needed if you enable LiveUpdate
     let program = XamarinFormsProgram.mkProgram
-                    (fun () -> None, Cmd.none)
+                    (fun () -> Model.init(), Update.cmdInit())
                     Update.update
                     view
 

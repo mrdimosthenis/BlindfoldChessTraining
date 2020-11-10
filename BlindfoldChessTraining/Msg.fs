@@ -1,12 +1,10 @@
 ﻿module BlindfoldChessTraining.Msg
 
-open FSharpx.Collections
 open Xamarin.Essentials
+open FSharpx.Collections
 
 type Msg = 
-    | PrepareDB
-    | LoadLocales
-    | InitModel of Locale LazyList
+    | LocalesLoaded of Locale LazyList
     | SelectPage of Model.SelectedPage
     | GoToNextLevel
     | GoToPrevLevel
