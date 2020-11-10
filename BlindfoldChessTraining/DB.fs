@@ -61,12 +61,14 @@ let getGameJsonStr(categoryId: int, level: int, indexInLevel: int): string =
         .First()
         .Game
 
-// executable statement
-
-if doesTableExist()
-    then ()
-else connection.BeginTransaction()
-     createTable()
-     insertPuzzles("BlindfoldChessTraining.resources.puzzles.endgame_puzzles.jsonl")
-     insertPuzzles("BlindfoldChessTraining.resources.puzzles.opening_puzzles.jsonl")
-     connection.Commit()
+let initializeDBAsync(): Async<unit> =
+    async {
+        if doesTableExist()
+            then ()
+        else connection.BeginTransaction()
+             createTable()
+             insertPuzzles("BlindfoldChessTraining.resources.puzzles.endgame_puzzles.jsonl")
+             insertPuzzles("BlindfoldChessTraining.resources.puzzles.opening_puzzles.jsonl")
+             connection.Commit()
+    }
+    

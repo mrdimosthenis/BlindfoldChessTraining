@@ -7,7 +7,6 @@ open BlindfoldChessMechanics
 // types
 
 type SelectedPage =
-    | IntroPage
     | HomePage
     | OpeningPuzzlesPage
     | EndgamePuzzlesPage
@@ -44,9 +43,6 @@ let defaultAreCoordsEnabled: bool = true
 let defaultAreSymbolsEnabled: bool = false
 let defaultFontSize: float = 17.0
 let defaultSpeechPitch: float = 1.0
-
-let defaultEndgameJsonStr: string = DB.getGameJsonStr(0, 0, 0)
-let defaultOpeningJsonStr: string = DB.getGameJsonStr(1, 0, 0)
 
 // functions
 
@@ -92,12 +88,16 @@ let initConfigOptions(): ConfigOptions =
       SelectedLocale = Preferences.selectedLocaleKey |> Preferences.tryGetInt
       SpeechPitch = Preferences.speechPitchKey |> Preferences.tryGetFloat |> Option.defaultValue defaultSpeechPitch }
 
-let init(): Model =
+let init(locales: Locale LazyList): Model option =
+    let defaultEndgameJsonStr: string = DB.getGameJsonStr(0, 0, 0)
+    let defaultOpeningJsonStr: string = DB.getGameJsonStr(1, 0, 0)
+
     let endgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
-    { SelectedPage = IntroPage
-      Locales = LazyList.empty
+    { SelectedPage = HomePage
+      Locales = locales
       ConfigOptions = initConfigOptions()
       EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
       OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr
       CurrentGameWithBoards = endgameJsonStr |> Notation.Parser.jsonOfGame |> gameToGameWithBoards
       CurrentMoveIndex = None }
+    |> Some

@@ -4,7 +4,7 @@ open Xamarin.Essentials
 open FSharpx.Collections
 open BlindfoldChessMechanics
 
-let loadLocales(): Async<Locale LazyList> =
+let loadLocalesAsync(): Async<Locale LazyList> =
     async {
         let! locales = TextToSpeech.GetLocalesAsync() |> Async.AwaitTask
         let validLocales = locales

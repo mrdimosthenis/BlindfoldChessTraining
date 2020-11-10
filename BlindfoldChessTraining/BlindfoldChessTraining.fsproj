@@ -65,6 +65,7 @@
     <Compile Include="Msg.fs" />
     <Compile Include="Update.fs" />
     <Compile Include="UIElems.Icons.fs" />
+    <Compile Include="UIElems.Images.fs" />
     <Compile Include="UIElems.Board.fs" />
     <Compile Include="UIElems.GameNavigator.fs" />
     <Compile Include="Page.Intro.fs" />

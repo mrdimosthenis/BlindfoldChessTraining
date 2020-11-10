@@ -8,7 +8,14 @@ open BlindfoldChessTraining
 open System
 open Xamarin.Essentials
 
-let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+//let wait (dispatch: Msg.Msg -> unit) =
+//    async {
+//        do! Async.Sleep Constants.waitIntroMillis
+//        dispatch Msg.SkipIntro
+//    }
+
+let view (dispatch: Msg.Msg -> unit): ViewElement =
+    //wait(dispatch) |> Async.RunSynchronously
     View.ContentPage(
         content = View.StackLayout(
             verticalOptions = LayoutOptions.Center,
@@ -20,7 +27,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                     verticalTextAlignment = TextAlignment.End
                 )
                 View.ImageButton(
-                    source = Resources.image "logos.fabulous",
+                    source = UIElems.Images.fabulous,
                     backgroundColor = Color.Transparent,
                     command = (fun () -> new Uri("https://fsprojects.github.io/Fabulous/") |> Launcher.OpenAsync |> Async.AwaitTask|> Async.StartImmediate)
                 )
@@ -30,10 +37,9 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                     verticalTextAlignment = TextAlignment.Start
                 )
                 View.ActivityIndicator(isRunning = true)
-                View.Label(
-                    text = "Wait until the app is ready to start",
-                    horizontalTextAlignment = TextAlignment.Center,
-                    verticalTextAlignment = TextAlignment.End
+                View.Button(
+                    text = "next",
+                    command = fun () -> dispatch Msg.PrepareDB
                 )
             ]
         )

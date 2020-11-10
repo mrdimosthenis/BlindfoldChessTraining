@@ -3,51 +3,62 @@
 open Fabulous
 open BlindfoldChessMechanics
 
-let cmdInit(): Cmd<Msg.Msg> =
-    async {
-        let! locales = Speech.loadLocales()
-        let localesMsg = Msg.LocalesLoaded locales
-        return localesMsg
-    } |> Cmd.ofAsyncMsg
-
-let getNewGameFromDBAndModel (model: Model.Model) (categoryId: int, level: int, indexInLevel: int): Model.Model =
+let getNewGameFromDBAndModel (model: Model.Model) (categoryId: int, level: int, indexInLevel: int): Model.Model option =
     let newGameJsonStr = DB.getGameJsonStr(categoryId, level, indexInLevel)
     let newGameWithBoards = newGameJsonStr |> Notation.Parser.jsonOfGame |> Model.gameToGameWithBoards
     match model.SelectedPage with
     | Model.OpeningPuzzlesPage ->
         Preferences.setString Preferences.openingJsonStrKey newGameJsonStr
-        { model with CurrentGameWithBoards = newGameWithBoards; CurrentMoveIndex = None; OpeningJsonStr = newGameJsonStr }
+        Some { model with CurrentGameWithBoards = newGameWithBoards; CurrentMoveIndex = None; OpeningJsonStr = newGameJsonStr }
     | _ ->
         Preferences.setString Preferences.endgameJsonStrKey newGameJsonStr
-        { model with CurrentGameWithBoards = newGameWithBoards; CurrentMoveIndex = None; EndgameJsonStr = newGameJsonStr }
+        Some { model with CurrentGameWithBoards = newGameWithBoards; CurrentMoveIndex = None; EndgameJsonStr = newGameJsonStr }
 
-let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
-    match msg with
-    | Msg.LocalesLoaded v -> { model with Model.Locales = v }, Cmd.none
+let update (msg: Msg.Msg) (modelOpt: Model.Model option):(Model.Model option) * Cmd<Msg.Msg> =
+    match (modelOpt, msg) with
+    | (_, Msg.PrepareDB) ->
+        let cmd = async {
+                    do! DB.initializeDBAsync()
+                    return Msg.LoadLocales
+                  } |> Cmd.ofAsyncMsg
+        None, cmd
 
-    | Msg.SelectPage v ->
+    | (_, Msg.LoadLocales) ->
+        let cmd = async {
+                    let! locales = Speech.loadLocalesAsync()
+                    return Msg.InitModel locales
+                  } |> Cmd.ofAsyncMsg
+        None, cmd
+
+    | (_, Msg.InitModel locales) ->
+        Model.init(locales), Cmd.none
+
+    | (None, _) ->
+        None, Cmd.none
+
+    | (Some model, Msg.SelectPage v) ->
         let currentGameWithBoards =
                 match v with
                 | Model.OpeningPuzzlesPage -> Notation.Parser.jsonOfGame model.OpeningJsonStr
                 | _ -> Notation.Parser.jsonOfGame model.EndgameJsonStr
                 |> Model.gameToGameWithBoards
-        { model with Model.SelectedPage = v; Model.CurrentGameWithBoards = currentGameWithBoards }, Cmd.none
+        Some { model with Model.SelectedPage = v; Model.CurrentGameWithBoards = currentGameWithBoards }, Cmd.none
 
-    | Msg.GoToPrevLevel ->
+    | (Some model, Msg.GoToPrevLevel) ->
         let categoryId = model.CurrentGameWithBoards.CategoryId
         let level = if model.CurrentGameWithBoards.Level < 1 then Constants.numOfLevelsPerCategory - 1
                     else model.CurrentGameWithBoards.Level - 1
         let indexInLevel = model.CurrentGameWithBoards.IndexInLevel
         let newModel = getNewGameFromDBAndModel model (categoryId, level, indexInLevel)
         newModel, Cmd.none
-    | Msg.GoToNextLevel ->
+    | (Some model, Msg.GoToNextLevel) ->
         let categoryId = model.CurrentGameWithBoards.CategoryId
         let level = if model.CurrentGameWithBoards.Level > (Constants.numOfLevelsPerCategory - 2) then 0
                     else model.CurrentGameWithBoards.Level + 1
         let indexInLevel = model.CurrentGameWithBoards.IndexInLevel
         let newModel = getNewGameFromDBAndModel model (categoryId, level, indexInLevel)
         newModel, Cmd.none
-    | Msg.GoToPrevPuzzle ->
+    | (Some model, Msg.GoToPrevPuzzle) ->
         let doesLevelChange = model.CurrentGameWithBoards.IndexInLevel < 1
         let categoryId = model.CurrentGameWithBoards.CategoryId
         let level = match (doesLevelChange, model.CurrentGameWithBoards.Level < 1) with
@@ -58,7 +69,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                            else model.CurrentGameWithBoards.IndexInLevel - 1
         let newModel = getNewGameFromDBAndModel model (categoryId, level, indexInLevel)
         newModel, Cmd.none
-    | Msg.GoToNextPuzzle ->
+    | (Some model, Msg.GoToNextPuzzle) ->
         let doesLevelChange = model.CurrentGameWithBoards.IndexInLevel > (Constants.numOfPuzzlesPerLevel - 2)
         let categoryId = model.CurrentGameWithBoards.CategoryId
         let level = match (doesLevelChange, model.CurrentGameWithBoards.Level > (Constants.numOfLevelsPerCategory - 2)) with
@@ -70,7 +81,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         let newModel = getNewGameFromDBAndModel model (categoryId, level, indexInLevel)
         newModel, Cmd.none
 
-    | Msg.GoToNextMove ->
+    | (Some model, Msg.GoToNextMove) ->
         let newCurrentMoveIndex = match model.CurrentMoveIndex with
                                   | None ->
                                         Some 0
@@ -78,46 +89,46 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                                         model.CurrentMoveIndex
                                   | Some i ->
                                         Some (i + 1)
-        { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
-    | Msg.GoToPrevMove ->
+        Some { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
+    | (Some model, Msg.GoToPrevMove) ->
         let newCurrentMoveIndex = match model.CurrentMoveIndex with
                                   | None -> None
                                   | Some 0 -> None
                                   | Some i -> Some (i - 1)
-        { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
-    | Msg.GoToInitPos ->
-        { model with Model.CurrentMoveIndex = None }, Cmd.none
-    | Msg.GoToLastPos ->
+        Some { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
+    | (Some model, Msg.GoToInitPos) ->
+        Some { model with Model.CurrentMoveIndex = None }, Cmd.none
+    | (Some model, Msg.GoToLastPos) ->
         let newCurrentMoveIndex = Some (model.CurrentGameWithBoards.MovesWithBoards.Length - 1)
-        { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
+        Some { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
 
-    | Msg.Speak v ->
+    | (Some model, Msg.Speak v) ->
         Speech.speak model.ConfigOptions.SpeechPitch
                      model.Locales
                      model.ConfigOptions.SelectedLocale
                      v
-        model, Cmd.none
+        Some model, Cmd.none
 
-    | Msg.SelectCoordsConfig v ->
+    | (Some model, Msg.SelectCoordsConfig v) ->
         Preferences.setBool Preferences.areCoordsEnabledKey v
         let newConfigOptions = { model.ConfigOptions with AreCoordsEnabled = v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
-    | Msg.SelectPieceSymbolConfig v ->
+        Some { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+    | (Some model, Msg.SelectPieceSymbolConfig v) ->
         Preferences.setBool Preferences.areSymbolsEnabledKey v
         let newConfigOptions = { model.ConfigOptions with AreSymbolsEnabled = v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
-    | Msg.SelectFontSizeConfig v ->
+        Some { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+    | (Some model, Msg.SelectFontSizeConfig v) ->
         Preferences.setFloat Preferences.fontSizeKey v
         let newConfigOptions = { model.ConfigOptions with FontSize = v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
-    | Msg.SelectPitchConfig v ->
+        Some { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+    | (Some model, Msg.SelectPitchConfig v) ->
         Preferences.setFloat Preferences.speechPitchKey v
         let newConfigOptions = { model.ConfigOptions with SpeechPitch = v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
-    | Msg.SelectLocaleConfig v ->
+        Some { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+    | (Some model, Msg.SelectLocaleConfig v) ->
         Preferences.setInt Preferences.selectedLocaleKey v
         let newConfigOptions = { model.ConfigOptions with SelectedLocale = Some v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
-    | Msg.ResetConfigs ->
+        Some { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+    | (Some model, Msg.ResetConfigs) ->
         Model.resetConfigOptions()
-        { model with Model.ConfigOptions = Model.initConfigOptions() }, Cmd.none
+        Some { model with Model.ConfigOptions = Model.initConfigOptions() }, Cmd.none
