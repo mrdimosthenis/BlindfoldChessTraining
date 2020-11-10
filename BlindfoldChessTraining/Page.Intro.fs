@@ -20,21 +20,11 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                     verticalTextAlignment = TextAlignment.End
                 )
                 View.ImageButton(
-                    source = Resources.image "logos.fabulous",
+                    source = UIElems.Images.fabulous,
                     backgroundColor = Color.Transparent,
                     command = (fun () -> new Uri("https://fsprojects.github.io/Fabulous/") |> Launcher.OpenAsync |> Async.AwaitTask|> Async.StartImmediate)
                 )
-                View.Label(
-                    text = "F# Functional App Development, using declarative dynamic UI",
-                    horizontalTextAlignment = TextAlignment.Center,
-                    verticalTextAlignment = TextAlignment.Start
-                )
                 View.ActivityIndicator(isRunning = true)
-                View.Label(
-                    text = "Wait until the app is ready to start",
-                    horizontalTextAlignment = TextAlignment.Center,
-                    verticalTextAlignment = TextAlignment.End
-                )
             ]
         )
     )

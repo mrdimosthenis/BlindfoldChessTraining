@@ -23,7 +23,12 @@ let getNewGameFromDBAndModel (model: Model.Model) (categoryId: int, level: int, 
 
 let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     match msg with
-    | Msg.LocalesLoaded v -> { model with Model.Locales = v }, Cmd.none
+    | Msg.LocalesLoaded v ->
+        let cmd = async {
+                    do! Async.Sleep Constants.introWaitMillis
+                    return Msg.SelectPage Model.HomePage
+                  } |> Cmd.ofAsyncMsg
+        { model with Model.Locales = v }, cmd
 
     | Msg.SelectPage v ->
         let currentGameWithBoards =
