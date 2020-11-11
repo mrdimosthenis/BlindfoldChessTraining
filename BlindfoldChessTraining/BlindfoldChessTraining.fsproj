@@ -8,8 +8,13 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\puzzles\opening_puzzles.jsonl" />
     <EmbeddedResource Include="resources\puzzles\endgame_puzzles.jsonl" />
+    <EmbeddedResource Include="resources\images\logos\app_logo.png" />
     <EmbeddedResource Include="resources\images\logos\fabulous.png" />
     <EmbeddedResource Include="resources\images\icons\empty.png" />
+    <EmbeddedResource Include="resources\images\icons\cube.png" />
+    <EmbeddedResource Include="resources\images\icons\library.png" />
+    <EmbeddedResource Include="resources\images\icons\questionmark.png" />
+    <EmbeddedResource Include="resources\images\icons\fingerprint.png" />
     <EmbeddedResource Include="resources\images\icons\arrow_circle_left.png" />
     <EmbeddedResource Include="resources\images\icons\arrow_circle_right.png" />
     <EmbeddedResource Include="resources\images\icons\fast_forward.png" />
@@ -22,6 +27,8 @@
     <EmbeddedResource Include="resources\images\icons\home.png" />
     <EmbeddedResource Include="resources\images\icons\speaker.png" />
     <EmbeddedResource Include="resources\images\icons\options.png" />
+    <EmbeddedResource Include="resources\images\icons\code.png" />
+    <EmbeddedResource Include="resources\images\icons\id_card.png" />
     <EmbeddedResource Include="resources\images\board\1.png" />
     <EmbeddedResource Include="resources\images\board\2.png" />
     <EmbeddedResource Include="resources\images\board\3.png" />
@@ -68,6 +75,8 @@
     <Compile Include="UIElems.Images.fs" />
     <Compile Include="UIElems.Board.fs" />
     <Compile Include="UIElems.GameNavigator.fs" />
+    <Compile Include="Template.Component.fs" />
+    <Compile Include="Template.Page.fs" />
     <Compile Include="Page.Intro.fs" />
     <Compile Include="Page.Home.fs" />
     <Compile Include="Page.OpeningPuzzles.fs" />
@@ -77,6 +86,8 @@
     <Compile Include="Page.Credits.fs" />
     <Compile Include="BlindfoldChessTraining.fs" />
   </ItemGroup>
+
+  <ItemGroup />
   <ItemGroup>
     <PackageReference Include="FSharp.SystemTextJson" Version="0.14.8" />
     <PackageReference Include="FSharpx.Collections" Version="2.1.3" />

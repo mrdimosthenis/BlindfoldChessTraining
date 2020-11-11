@@ -1,18 +1,27 @@
 ﻿module BlindfoldChessTraining.Page.Credits
 
+open System
 open Fabulous
-open Fabulous.XamarinForms
-open Xamarin.Forms
+open Xamarin.Essentials
 
 open BlindfoldChessTraining
+open BlindfoldChessTraining.UIElems
+open BlindfoldChessTraining.Template
+
+let openGitHub() = new Uri("https://github.com/mrdimosthenis/BlindfoldChessTraining")
+                   |> Launcher.OpenAsync
+                   |> Async.AwaitTask
+                   |> Async.StartImmediate
+
+let openLinkedIn() = new Uri("https://www.linkedin.com/in/mrdimosthenis/")
+                     |> Launcher.OpenAsync
+                     |> Async.AwaitTask
+                     |> Async.StartImmediate
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
-    View.ContentPage(
-        content = View.StackLayout(
-            verticalOptions = LayoutOptions.Center,
-            children = [
-                View.Label(text = "Credits", fontAttributes = FontAttributes.Bold, horizontalOptions = LayoutOptions.Center)
-                View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
-            ]
-        )
-    )
+    
+    [ Component.label model false "Blindfold Chess Trainind was created by Dimosthenis Michailidis"
+      Component.button "Source Code" Icons.code true openGitHub
+      Component.button "Software Developer" Icons.idCard true openLinkedIn
+      Constants.version |> sprintf "Version: %s" |> Component.label model false ]
+    |> Page.page model dispatch "Credits" Icons.fingerprint

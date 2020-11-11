@@ -1,10 +1,10 @@
 ﻿module BlindfoldChessTraining.Page.Description
 
 open Fabulous
-open Fabulous.XamarinForms
-open Xamarin.Forms
 
 open BlindfoldChessTraining
+open BlindfoldChessTraining.UIElems
+open BlindfoldChessTraining.Template
 
 let description: string =
     """Improve your blindfold thinking by solving chess puzzles without diagrams. Read or listen to each puzzle description and try to find the best move. Train yourself while walking, jogging or in transportation.
@@ -16,23 +16,5 @@ In Opening Puzzles try to visualize the position that arises after the first mov
 Use the volume keys on your device to listen to the puzzle description. Volume down key describes the puzzle sentence by sentence, while volume up key starts over the top."""
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
-    View.ContentPage(
-        content = View.StackLayout(
-            verticalOptions = LayoutOptions.Center,
-            children = [
-                View.Label(
-                    text = "Description",
-                    fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                    fontAttributes = FontAttributes.Bold,
-                    horizontalOptions = LayoutOptions.Center
-                )
-                View.ScrollView(
-                  View.Label(
-                    text = description,
-                    fontSize = FontSize.fromValue model.ConfigOptions.FontSize
-                  )
-                )
-                View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
-            ]
-        )
-    )
+    [ Component.label model false description ]
+    |> Page.page model dispatch "Description" Icons.questionmark

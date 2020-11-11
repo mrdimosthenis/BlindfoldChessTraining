@@ -4,17 +4,12 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
-open BlindfoldChessTraining.UIElems
 open BlindfoldChessTraining
+open BlindfoldChessTraining.UIElems
+open BlindfoldChessTraining.Template
 
 open BlindfoldChessMechanics
 open FSharpx.Collections
-
-let separator(): ViewElement =
-    View.BoxView(
-        height = 1.0,
-        color = Color.Accent
-    )
 
 let firstMove: Logic.Position.Move =
     { Piece = Logic.Board.Pawn
@@ -89,125 +84,52 @@ let accentPicker (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
             horizontalTextAlignment = TextAlignment.Center
         )
 
-let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement = 
-    View.ContentPage(
-        content = View.ScrollView(
-            content = View.StackLayout(
-                horizontalOptions = LayoutOptions.Center,
-                verticalOptions = LayoutOptions.Center,
-                children = [
-                    View.StackLayout(
-                        orientation = StackOrientation.Horizontal,
-                        horizontalOptions = LayoutOptions.Center,
-                        verticalOptions = LayoutOptions.Start,
-                        children = [
-                            View.Label(
-                                text = "Options",
-                                fontSize = FontSize.fromValue (Constants.titleSizeRatio * model.ConfigOptions.FontSize),
-                                fontAttributes = FontAttributes.Bold,
-                                horizontalOptions = LayoutOptions.Center,
-                                verticalOptions = LayoutOptions.Center
-                            )
-                            View.Image(source = Icons.options)
-                        ]
-                    )
-                    separator()
-                    Board.grid model.ConfigOptions.AreCoordsEnabled Logic.Board.init
-                    View.StackLayout(
-                        orientation = StackOrientation.Horizontal,
-                        horizontalOptions = LayoutOptions.Center,
-                        children = [
-                            View.Label(
-                                text = "Board Coordinates:",
-                                fontSize = FontSize.fromValue model.ConfigOptions.FontSize
-                            )
-                            View.CheckBox(
-                                isChecked = model.ConfigOptions.AreCoordsEnabled,
-                                checkedChanged = (fun args -> model.ConfigOptions.AreCoordsEnabled |> not |> Msg.SelectCoordsConfig |> dispatch)
-                            )
-                        ]
-                    )
-                    separator()
-                    View.StackLayout(
-                        orientation = StackOrientation.Horizontal,
-                        horizontalOptions = LayoutOptions.Center,
-                        children = [
-                            View.Label(
-                                text = "Piece Symbol Notation:",
-                                fontSize = FontSize.fromValue model.ConfigOptions.FontSize
-                            )
-                            View.CheckBox(
-                                isChecked = model.ConfigOptions.AreSymbolsEnabled,
-                                checkedChanged = (fun args -> model.ConfigOptions.AreSymbolsEnabled |> not |> Msg.SelectPieceSymbolConfig |> dispatch)
-                            )
-                        ]
-                    )
-                    View.Label(
-                        text = (model.ConfigOptions.AreSymbolsEnabled |> pieceNotationExample |>  sprintf "Example: %s"),
-                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                        horizontalTextAlignment = TextAlignment.Center
-                    )
-                    separator()
-                    View.Label(
-                        text = sprintf "Font Size: %.0f" model.ConfigOptions.FontSize,
-                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                        horizontalTextAlignment = TextAlignment.Center
-                    )
-                    View.Slider(
-                        minimumMaximum = (1.0, 100.0),
-                        valueChanged = (fun args -> args.NewValue |> Msg.SelectFontSizeConfig |> dispatch),
-                        value = model.ConfigOptions.FontSize
-                    )
-                    separator()
-                    View.Label(
-                        text = sprintf "Speech Pitch: %.1f" model.ConfigOptions.SpeechPitch,
-                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                        horizontalTextAlignment = TextAlignment.Center
-                    )
-                    View.Slider(
-                        minimumMaximum = (0.1, 2.0),
-                        valueChanged = (fun args -> args.NewValue |> Msg.SelectPitchConfig |> dispatch),
-                        value = model.ConfigOptions.SpeechPitch
-                    )
-                    separator()
-                    View.Label(
-                        text = "Speech Accent:",
-                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                        horizontalTextAlignment = TextAlignment.Center
-                    )
-                    accentPicker model dispatch
-                    View.Button(
-                        text = "Speak",
-                        horizontalOptions = LayoutOptions.Center,
-                        command = (fun () -> "Blindfold Chess Training" |> Msg.Speak |> dispatch),
-                        image = Icons.speaker
-                    )
-                    View.Label(
-                        text = "Please make sure that the accent is actually supported by the device. By pressing the button above, you should hear an example of the accent.",
-                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                        horizontalTextAlignment = TextAlignment.Center
-                    )
-                    separator()
-                    View.StackLayout(
-                        orientation = StackOrientation.Horizontal,
-                        horizontalOptions = LayoutOptions.Center,
-                        verticalOptions = LayoutOptions.End,
-                        children = [
-                            View.Button(
-                                text = "Reset ",
-                                horizontalOptions = LayoutOptions.Start,
-                                command = (fun () -> dispatch Msg.ResetConfigs),
-                                image = Icons.chip
-                            )
-                            View.Button(
-                                text = "Back",
-                                horizontalOptions = LayoutOptions.End,
-                                command = (fun () -> Model.HomePage |> Msg.SelectPage |> dispatch),
-                                image = Icons.home
-                            )
-                        ]
-                    )
-                ]
-            )
-        )
-    )
+let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+    let innerElems =
+            [ Board.grid model.ConfigOptions.AreCoordsEnabled Logic.Board.init
+              View.StackLayout(
+                  orientation = StackOrientation.Horizontal,
+                  horizontalOptions = LayoutOptions.Center,
+                  children = [
+                      Component.label model false "Board Coordinates:"
+                      View.CheckBox(
+                          isChecked = model.ConfigOptions.AreCoordsEnabled,
+                          checkedChanged = (fun args -> model.ConfigOptions.AreCoordsEnabled |> not |> Msg.SelectCoordsConfig |> dispatch)
+                      )
+                  ]
+              )
+              Component.separator()
+              View.StackLayout(
+                  orientation = StackOrientation.Horizontal,
+                  horizontalOptions = LayoutOptions.Center,
+                  children = [
+                      Component.label model false "Piece Symbol Notation:"
+                      View.CheckBox(
+                          isChecked = model.ConfigOptions.AreSymbolsEnabled,
+                          checkedChanged = (fun args -> model.ConfigOptions.AreSymbolsEnabled |> not |> Msg.SelectPieceSymbolConfig |> dispatch)
+                      )
+                  ]
+              )
+              model.ConfigOptions.AreSymbolsEnabled |> pieceNotationExample |>  sprintf "Example: %s" |> Component.label model false
+              Component.separator()
+              model.ConfigOptions.FontSize |> sprintf "Font Size: %.0f" |> Component.label model false
+              View.Slider(
+                  minimumMaximum = (1.0, 100.0),
+                  valueChanged = (fun args -> args.NewValue |> Msg.SelectFontSizeConfig |> dispatch),
+                  value = model.ConfigOptions.FontSize
+              )
+              Component.separator()
+              model.ConfigOptions.SpeechPitch |> sprintf "Speech Pitch: %.1f" |> Component.label model false
+              View.Slider(
+                  minimumMaximum = (0.1, 2.0),
+                  valueChanged = (fun args -> args.NewValue |> Msg.SelectPitchConfig |> dispatch),
+                  value = model.ConfigOptions.SpeechPitch
+              )
+              Component.separator()
+              Component.label model false "Speech Accent:"
+              accentPicker model dispatch
+              Component.button "Speak" Icons.speaker false (fun () -> "Blindfold Chess Training" |> Msg.Speak |> dispatch)
+              Component.label model false "Please make sure that the accent is actually supported by the device. By pressing the button above, you should hear an example of the accent."
+              Component.separator()
+              Component.button "Reset to Default" Icons.chip false (fun () -> dispatch Msg.ResetConfigs) ]
+    Page.page model dispatch "Options" Icons.options innerElems

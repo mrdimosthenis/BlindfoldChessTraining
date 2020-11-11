@@ -15,7 +15,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
             horizontalOptions = LayoutOptions.Center,
             children = [
                 View.Label(
-                    text = "Created with",
+                    text = "...created with...",
                     horizontalTextAlignment = TextAlignment.Center,
                     verticalTextAlignment = TextAlignment.End
                 )

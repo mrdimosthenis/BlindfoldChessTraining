@@ -5,13 +5,25 @@ open BlindfoldChessTraining
 
 let empty : Image.Value = Resources.image "icons.empty"
 
+
+let home: Image.Value = Resources.image "icons.home"
+
+let library: Image.Value = Resources.image "icons.library"
+
+let questionmark : Image.Value = Resources.image "icons.questionmark"
+
+let fingerprint : Image.Value = Resources.image "icons.fingerprint"
+
+let cube: Image.Value = Resources.image "icons.cube"
+
 let options: Image.Value = Resources.image "icons.options"
 
 let speaker: Image.Value = Resources.image "icons.speaker"
 
-let home: Image.Value = Resources.image "icons.home"
-
 let chip: Image.Value = Resources.image "icons.chip"
+
+let code: Image.Value = Resources.image "icons.code"
+let idCard: Image.Value = Resources.image "icons.id_card"
 
 let arrowCircleLeft: Image.Value = Resources.image "icons.arrow_circle_left"
 let arrowCircleRight: Image.Value = Resources.image "icons.arrow_circle_right"

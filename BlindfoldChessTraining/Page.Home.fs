@@ -6,36 +6,15 @@ open Xamarin.Forms
 
 open BlindfoldChessTraining
 open BlindfoldChessTraining.UIElems
+open BlindfoldChessTraining.Template
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
-    View.ContentPage(
-        content = View.ScrollView(
-            content = View.StackLayout(
-                horizontalOptions = LayoutOptions.Center,
-                verticalOptions = LayoutOptions.Center,
-                children = [
-                    View.Label(
-                        text = "Blindfold Chess Training",
-                        fontSize = FontSize.fromValue (Constants.titleSizeRatio * model.ConfigOptions.FontSize),
-                        fontAttributes = FontAttributes.Bold,
-                        horizontalOptions = LayoutOptions.Center,
-                        verticalOptions = LayoutOptions.Start
-                    )
-                    View.Button(text = "Opening Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.OpeningPuzzlesPage))
-                    View.Button(text = "Endgame Puzzles", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.EndgamePuzzlesPage))
-                    View.Button(text = "Description", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.DescriptionPage))
-                    View.Button(
-                        text = "Options",
-                        horizontalOptions = LayoutOptions.Center,
-                        command = (fun () -> dispatch (Msg.SelectPage Model.OptionsPage)),
-                        image = Icons.options
-                    )
-                    View.Button(
-                        text = "Credits",
-                        horizontalOptions = LayoutOptions.Center,
-                        command = (fun () -> dispatch (Msg.SelectPage Model.CreditsPage))
-                    )
-                ]
-            )
-        )
-    )
+    let innerElems =
+            [ View.Image(source = Images.appLogo)
+              Component.separator()
+              Component.button "Opening Puzzles" Icons.library true (fun () -> Model.OpeningPuzzlesPage |> Msg.SelectPage |> dispatch)
+              Component.button "Endgame Puzzles" Icons.cube true (fun () -> Model.EndgamePuzzlesPage |> Msg.SelectPage |> dispatch)
+              Component.button "Description" Icons.questionmark true (fun () -> Model.DescriptionPage |> Msg.SelectPage |> dispatch)
+              Component.button "Options" Icons.options true (fun () -> Model.OptionsPage |> Msg.SelectPage |> dispatch)
+              Component.button "Credits" Icons.fingerprint true (fun () -> Model.CreditsPage |> Msg.SelectPage |> dispatch) ]
+    Page.page model dispatch "Blindfold Chess Training" Icons.home innerElems
