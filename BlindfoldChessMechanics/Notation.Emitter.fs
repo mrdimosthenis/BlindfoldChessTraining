@@ -58,6 +58,45 @@ let pieceText (isWhite: bool) (areFigures: bool) (p: Board.Piece): string =
     | (Board.Knight, true, false) -> "♞"
     | (Board.Pawn, true, false) -> "♟︎"
 
+let textsOfPieces (areFigures: bool) (board: Board.Board): string LazyList * string LazyList =
+    let piecesWithColorAndPriorityGroups =
+            Utils.laz2DIndices 8 8
+            |> LazyList.map
+                  (fun (i, j) ->
+                      match Board.resident (i, j) board with
+                      | Some piece ->
+                          let pieceDescription =
+                                piece.PieceType
+                                |> pieceText piece.IsWhite areFigures
+                                |> String.map Char.ToUpper
+                          let description = pieceDescription + columnText j + rowText i
+                          let priority = match piece.PieceType with
+                                         | Board.King -> 1
+                                         | Board.Pawn -> 2
+                                         | Board.Knight -> 3
+                                         | Board.Bishop -> 4
+                                         | Board.Rook -> 5
+                                         | Board.Queen -> 6
+                          [ (description, piece.IsWhite, priority) ]
+                      | None ->
+                          []
+                      |> LazyList.ofList
+                  )
+            |> LazyList.concat
+            |> Seq.sortBy (fun (_, _, p) -> p)
+            |> Seq.groupBy (fun (_, w, _) -> w)
+            |> LazyList.ofSeq
+            |> LazyList.map (fun (k, s) -> (k, LazyList.ofSeq s))
+    let whitePieces = piecesWithColorAndPriorityGroups
+                      |> LazyList.find fst
+                      |> snd
+                      |> LazyList.map (fun (d, _, _) -> d)
+    let blackPieces = piecesWithColorAndPriorityGroups
+                      |> LazyList.find (fun t -> t |> fst |> not)
+                      |> snd
+                      |> LazyList.map (fun (d, _, _) -> d)
+    (whitePieces, blackPieces)
+
 let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
     match (m.Piece, snd m.FromCoords, snd m.ToCoords, m.IsCheck, m.IsMate) with
     | (Board.King, 4, 6, false, false) -> "O-O"

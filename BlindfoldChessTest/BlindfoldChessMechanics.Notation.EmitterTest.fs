@@ -10,6 +10,47 @@ open BlindfoldChessMechanics.Logic
 open FSharpx.Collections
 
 [<Fact>]
+let ``Texts of pieces of initial position without figures`` () =
+    let (whitePieces, blackPieces) = textsOfPieces false Board.init
+    let whitePiecesList = LazyList.toList whitePieces
+    let blackPiecesList = LazyList.toList blackPieces
+    (whitePiecesList, blackPiecesList)
+    |> should equal
+        ( [ "Ke1"
+            "Pa2"; "Pb2"; "Pc2"; "Pd2"; "Pe2"; "Pf2"; "Pg2"; "Ph2"
+            "Nb1"; "Ng1"
+            "Bc1"; "Bf1"
+            "Ra1"; "Rh1"
+            "Qd1" ],
+          [ "Ke8"
+            "Pa7"; "Pb7"; "Pc7"; "Pd7"; "Pe7"; "Pf7"; "Pg7"; "Ph7"
+            "Nb8"; "Ng8"
+            "Bc8"; "Bf8"
+            "Ra8"; "Rh8"
+            "Qd8" ] )
+
+[<Fact>]
+let ``Texts of pieces of initial position with figures`` () =
+    let (whitePieces, blackPieces) = textsOfPieces true Board.init
+    let whitePiecesList = LazyList.toList whitePieces
+    let blackPiecesList = LazyList.toList blackPieces
+    (whitePiecesList, blackPiecesList)
+    |> should equal
+        ( [ "♔e1"
+            "♙a2"
+            "♙b2"; "♙c2"; "♙d2"; "♙e2"; "♙f2"; "♙g2"; "♙h2"
+            "♘b1"; "♘g1"
+            "♗c1"; "♗f1"
+            "♖a1"; "♖h1"
+            "♕d1" ],
+          [ "♚e8"
+            "♟︎a7"; "♟︎b7"; "♟︎c7"; "♟︎d7"; "♟︎e7"; "♟︎f7"; "♟︎g7"; "♟︎h7"
+            "♞b8"; "♞g8"
+            "♝c8"; "♝f8"
+            "♜a8"; "♜h8"
+            "♛d8" ] )
+
+[<Fact>]
 let ``O-O move text`` () =
     { Piece = King
       FromCoords = (0, 4)

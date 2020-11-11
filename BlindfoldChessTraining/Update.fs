@@ -16,10 +16,14 @@ let getNewGameFromDBAndModel (model: Model.Model) (categoryId: int, level: int, 
     match model.SelectedPage with
     | Model.OpeningPuzzlesPage ->
         Preferences.setString Preferences.openingJsonStrKey newGameJsonStr
-        { model with CurrentGameWithBoards = newGameWithBoards; CurrentMoveIndex = None; OpeningJsonStr = newGameJsonStr }
+        { model with CurrentGameWithBoards = newGameWithBoards
+                     CurrentMoveIndex = None
+                     OpeningJsonStr = newGameJsonStr }
     | _ ->
         Preferences.setString Preferences.endgameJsonStrKey newGameJsonStr
-        { model with CurrentGameWithBoards = newGameWithBoards; CurrentMoveIndex = None; EndgameJsonStr = newGameJsonStr }
+        { model with CurrentGameWithBoards = newGameWithBoards
+                     CurrentMoveIndex = None
+                     EndgameJsonStr = newGameJsonStr }
 
 let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     match msg with
@@ -36,7 +40,10 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                 | Model.OpeningPuzzlesPage -> Notation.Parser.jsonOfGame model.OpeningJsonStr
                 | _ -> Notation.Parser.jsonOfGame model.EndgameJsonStr
                 |> Model.gameToGameWithBoards
-        { model with Model.SelectedPage = v; Model.CurrentGameWithBoards = currentGameWithBoards }, Cmd.none
+        let newModel = { model with Model.SelectedPage = v
+                                    Model.CurrentGameWithBoards = currentGameWithBoards
+                                    CurrentMoveIndex = None }
+        newModel, Cmd.none
 
     | Msg.GoToPrevLevel ->
         let categoryId = model.CurrentGameWithBoards.CategoryId

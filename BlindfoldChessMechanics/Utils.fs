@@ -20,6 +20,17 @@ let lazOfArrays<'a> (arr: 'a array array): 'a LazyList LazyList =
 let lazInfinite: int LazyList =
     LazyList.unfold (fun i -> Some (i, i + 1)) 0
 
+let laz2DIndices (m: int) (n: int): (int * int) LazyList =
+    lazInfinite
+    |> LazyList.take m
+    |> LazyList.map
+            (fun i ->
+                    lazInfinite
+                    |> LazyList.take n
+                    |> LazyList.map (fun j -> (i, j))
+            )
+    |> LazyList.concat
+
 let lazIndexed<'a> (laz: 'a LazyList): (int * 'a) LazyList =
     LazyList.zip lazInfinite laz
 

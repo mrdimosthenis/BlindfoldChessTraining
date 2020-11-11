@@ -205,15 +205,7 @@ let positionAfterMovement (movement: Movement) (position: Position): Position =
       Fullmove = newFullMove }
 
 let validMovements (position: Position): Movement LazyList =
-    Utils.lazInfinite
-    |> LazyList.take 8
-    |> LazyList.map
-            (fun i ->
-                    Utils.lazInfinite
-                    |> LazyList.take 8
-                    |> LazyList.map (fun j -> (i, j))
-            )
-    |> LazyList.concat
+    Utils.laz2DIndices 8 8
     |> LazyList.filter (fun coords ->
                              match Board.resident coords position.Board with
                              | Some {Board.IsWhite = isWh} when isWh = position.IsWhiteToMove -> true

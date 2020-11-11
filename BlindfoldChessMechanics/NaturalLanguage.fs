@@ -10,7 +10,7 @@ let words (c: char): string =
     | 82   -> "rook"        // 'R'
     | 66   -> "bishop"      // 'B'
     | 78   -> "knight"      // 'N'
-    | 80   -> "pawn"      // 'P'
+    | 80   -> "pawn"        // 'P'
     | 9812 -> "king"        // '♔'
     | 9813 -> "queen"       // '♕'
     | 9814 -> "rook"        // '♖'
