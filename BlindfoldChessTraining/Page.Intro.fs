@@ -10,6 +10,7 @@ open Xamarin.Essentials
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     View.ContentPage(
+        backgroundColor = Constants.backgroundColor,
         content = View.StackLayout(
             verticalOptions = LayoutOptions.Center,
             horizontalOptions = LayoutOptions.Center,

@@ -14,15 +14,17 @@ let page (model: Model.Model)
          (innerElems: ViewElement list)
          : ViewElement =
     let header =
-            View.StackLayout(
-                orientation = StackOrientation.Horizontal,
-                horizontalOptions = LayoutOptions.Center,
-                verticalOptions = LayoutOptions.Start,
-                children = [
-                    Component.label model true title
-                    View.Image(source = icon)
-                ]
-            )
+            if model.SelectedPage = Model.HomePage
+                then Component.label model true title
+                else View.StackLayout(
+                         orientation = StackOrientation.Horizontal,
+                         horizontalOptions = LayoutOptions.Center,
+                         verticalOptions = LayoutOptions.Start,
+                         children = [
+                             Component.label model true title
+                             View.Image(source = icon)
+                         ]
+                     )
     let backBtn = Component.button "Back" Icons.home false (fun () -> Model.HomePage |> Msg.SelectPage |> dispatch)
     let childElems = [ [ header ]
                        [ Component.separator() ]
@@ -32,6 +34,7 @@ let page (model: Model.Model)
                             else [ Component.separator(); backBtn ] ]
                      |> List.concat
     View.ContentPage(
+        backgroundColor = Constants.backgroundColor,
         content = View.ScrollView(
             verticalOptions = LayoutOptions.Start,
             content = View.StackLayout(
