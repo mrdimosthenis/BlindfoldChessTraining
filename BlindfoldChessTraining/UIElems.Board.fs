@@ -18,8 +18,8 @@ let image (name: string): ViewElement =
     View.Image(source = pngImgSrc)
 
 
-let imgWh: ViewElement = View.Image(backgroundColor = Constants.backgroundColor)
-let imgBl: ViewElement = View.Image(backgroundColor = Color.Brown)
+let imgWh: ViewElement = View.Image(backgroundColor = Constants.lightSquareColor)
+let imgBl: ViewElement = View.Image(backgroundColor = Constants.darkSquareColor)
 
 let imgEmpty = image "empty"
 

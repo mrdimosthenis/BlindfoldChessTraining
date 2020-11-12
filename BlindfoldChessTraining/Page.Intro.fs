@@ -8,6 +8,8 @@ open BlindfoldChessTraining
 open System
 open Xamarin.Essentials
 
+open BlindfoldChessTraining.Template
+
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     View.ContentPage(
         backgroundColor = Constants.backgroundColor,
@@ -15,11 +17,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
             verticalOptions = LayoutOptions.Center,
             horizontalOptions = LayoutOptions.Center,
             children = [
-                View.Label(
-                    text = "...created with...",
-                    horizontalTextAlignment = TextAlignment.Center,
-                    verticalTextAlignment = TextAlignment.End
-                )
+                Component.label model false "...created with..."
                 View.ImageButton(
                     source = UIElems.Images.fabulous,
                     backgroundColor = Color.Transparent,

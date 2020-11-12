@@ -9,7 +9,7 @@ open BlindfoldChessTraining
 let separator(): ViewElement =
     View.BoxView(
         height = 1.0,
-        color = Color.Accent
+        color = Constants.lineColor
     )
 
 let button (title: string) (icon: Image.Value) (isMenuItem: bool) (f: unit -> unit): ViewElement =
@@ -32,6 +32,7 @@ let label (model: Model.Model) (isLarge: bool) (title: string): ViewElement =
     View.Label(
         text = title,
         fontSize = (multiplier |> (*) model.ConfigOptions.FontSize |> FontSize.fromValue),
+        textColor = Constants.textColor,
         fontAttributes = attributes,
         horizontalTextAlignment = TextAlignment.Center,
         verticalTextAlignment = TextAlignment.Center,

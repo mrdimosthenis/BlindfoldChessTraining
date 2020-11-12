@@ -27,7 +27,9 @@ let page (model: Model.Model)
                      )
     let backBtn = Component.button "Back" Icons.home false (fun () -> Model.HomePage |> Msg.SelectPage |> dispatch)
     let childElems = [ [ header ]
-                       [ Component.separator() ]
+                       if model.SelectedPage = Model.HomePage
+                            then []
+                            else [ Component.separator() ]
                        innerElems
                        if model.SelectedPage = Model.HomePage
                             then []
