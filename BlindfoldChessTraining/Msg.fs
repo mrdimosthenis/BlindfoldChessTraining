@@ -21,3 +21,6 @@ type Msg =
     | SelectPitchConfig of float
     | SelectLocaleConfig of int
     | ResetConfigs
+    | VolumeUpPressed
+    | VolumeDownPressed
+    | BackPressed

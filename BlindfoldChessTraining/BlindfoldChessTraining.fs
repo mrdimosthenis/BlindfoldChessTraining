@@ -75,4 +75,4 @@ type App () as app =
         this.OnResume()
 #endif
 
-
+    member __.Program = runner

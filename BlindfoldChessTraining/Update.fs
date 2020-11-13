@@ -113,6 +113,15 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                      v
         model, Cmd.none
 
+    | Msg.BackPressed ->
+        if model.SelectedPage = Model.HomePage
+            then System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow() |> ignore
+            else ()
+        { model with Model.SelectedPage = Model.HomePage }, Cmd.none
+
+    | Msg.VolumeUpPressed | Msg.VolumeDownPressed ->
+           model, Cmd.none
+
     | Msg.SelectCoordsConfig v ->
         Preferences.setBool Preferences.areCoordsEnabledKey v
         let newConfigOptions = { model.ConfigOptions with AreCoordsEnabled = v }
