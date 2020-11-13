@@ -9,7 +9,7 @@ open BlindfoldChessMechanics
 open FSharpx.Collections
 
 let levelNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
-    let level = model.CurrentGameWithBoards.Level
+    let level = model.CurrentGame.Level
     let levelMainText = level + 1 |> sprintf "Level %i"
     let levelParenText = match model.SelectedPage with
                          | Model.OpeningPuzzlesPage -> sprintf "(%i Half Moves)" (level + 10)
@@ -44,7 +44,7 @@ let levelNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElemen
                         command = (fun () -> dispatch Msg.GoToPrevPuzzle)
                     )
                     View.Label(
-                        text = (model.CurrentGameWithBoards.IndexInLevel + 1 |> sprintf "Puzzle %i"),
+                        text = (model.CurrentGame.IndexInLevel + 1 |> sprintf "Puzzle %i"),
                         fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
                         verticalTextAlignment = TextAlignment.Center
                     )
@@ -62,17 +62,11 @@ let levelNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElemen
 
 let chessboard (model: Model.Model): ViewElement =
     match model.CurrentMoveIndex with
-    | None -> model.CurrentGameWithBoards.InitBoard
-    | Some i -> model.CurrentGameWithBoards.MovesWithBoards.[i] |> snd
+    | None -> model.CurrentGame.InitBoard
+    | Some i -> model.CurrentGame.Boards.[i]
     |> UIElems.Board.grid model.ConfigOptions.AreSymbolsEnabled
 
 let notation (model: Model.Model): ViewElement =
-    let movesWithIndicators = model.CurrentGameWithBoards.MovesWithBoards
-                              |> LazyList.ofArray
-                              |> LazyList.map fst
-                              |> Notation.Emitter.moveTextsWithNumberIndicators
-                                          model.ConfigOptions.AreSymbolsEnabled
-                                          model.CurrentGameWithBoards.IsWhiteToMove
     let flexChildren = LazyList.fold
                              (fun (accI, accLaz) (s, b) ->
                                  let nextAccI = if b then accI else accI + 1
@@ -81,7 +75,7 @@ let notation (model: Model.Model): ViewElement =
                                  (nextAccI, nextAccLaz)
                              )
                              (0, LazyList.empty)
-                             movesWithIndicators
+                             model.CurrentGame.MovesWithNumberIndicators
                        |> snd
                        |> LazyList.rev
                        |> LazyList.map
@@ -115,12 +109,12 @@ let boardNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElemen
                 command = (fun () -> dispatch Msg.GoToPrevMove)
             )
             View.Button(
-                image = (if model.CurrentMoveIndex <> Some (model.CurrentGameWithBoards.MovesWithBoards.Length - 1)
+                image = (if model.CurrentMoveIndex <> Some (model.CurrentGame.Boards.Length - 1)
                          then Icons.chevronRight else Icons.empty),
                 command = (fun () -> dispatch Msg.GoToNextMove)
             )
             View.Button(
-                image = (if model.CurrentMoveIndex <> Some (model.CurrentGameWithBoards.MovesWithBoards.Length - 1)
+                image = (if model.CurrentMoveIndex <> Some (model.CurrentGame.Boards.Length - 1)
                          then Icons.chevronDoubleRight else Icons.empty),
                 command = (fun () -> dispatch Msg.GoToLastPos)
             )

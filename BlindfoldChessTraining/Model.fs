@@ -21,13 +21,17 @@ type ConfigOptions = { AreCoordsEnabled: bool
                        SelectedLocale: int option
                        SpeechPitch: float }
 
-type GameWithBoards =
+type CurrentGame =
         { CategoryId: int
           Level: int
           IndexInLevel: int
           IsWhiteToMove: bool
           InitBoard: Logic.Board.Board
-          MovesWithBoards: (Logic.Position.Move * Logic.Board.Board) array }
+          MovesWithNumberIndicators: (string * bool) LazyList
+          Boards: Logic.Board.Board array
+          WhitePieces: string LazyList
+          BlackPieces: string LazyList
+          Announcements : string array }
 
 type Model = 
     { SelectedPage: SelectedPage
@@ -35,7 +39,7 @@ type Model =
       ConfigOptions : ConfigOptions
       EndgameJsonStr: string
       OpeningJsonStr: string
-      CurrentGameWithBoards: GameWithBoards
+      CurrentGame: CurrentGame
       CurrentMoveIndex: int option }
 
 // default values
@@ -50,7 +54,7 @@ let defaultOpeningJsonStr: string = DB.getGameJsonStr(1, 0, 0)
 
 // functions
 
-let gameToGameWithBoards(game: Logic.Game.Game): GameWithBoards =
+let gameToGameWithBoards (areSymbolsEnabled: bool) (selectedPage: SelectedPage) (game: Logic.Game.Game): CurrentGame =
     let categoryId = game.MetaTags.Item("category_id") |> int
     let level = game.MetaTags.Item("level") |> int
     let indexInLevel = game.MetaTags.Item("index_in_level") |> int
@@ -70,13 +74,62 @@ let gameToGameWithBoards(game: Logic.Game.Game): GameWithBoards =
                       LazyList.empty
             |> LazyList.rev
             |> LazyList.map (fun (move, pos: Logic.Position.Position) -> (move, pos.Board))
+    let movesWithNumberIndicators =
+            movesWithBoards
+            |> LazyList.map fst
+            |> Notation.Emitter.moveTextsWithNumberIndicators areSymbolsEnabled isWhiteToMove
+    let boards = movesWithBoards
+                 |> LazyList.map snd
+                 |> LazyList.toArray
+    let (whitePieces, blackPieces) =
+            Notation.Emitter.textsOfPieces areSymbolsEnabled initBoard
+    let announcements =
+            match selectedPage with
+            | OpeningPuzzlesPage ->
+                let (lastMove, restRevMoves) =
+                        movesWithNumberIndicators
+                        |> LazyList.filter (fun (_, b) -> not b)
+                        |> LazyList.map fst
+                        |> LazyList.rev
+                        |> LazyList.uncons
+                let firstAnnouncements = LazyList.ofList [ "first moves" ]
+                let middleAnnouncements = LazyList.rev restRevMoves
+                let lastAnnouncements = LazyList.ofList [ "best move"; lastMove ]
+                [ firstAnnouncements; middleAnnouncements; lastAnnouncements ]
+            | _ ->
+                let (firstAnnouncements, secondAnnouncements, thirdAnnouncements) =
+                        let whitePiecesAnnouncements = Utils.prependedLaz "white pieces" whitePieces
+                        let blackPiecesAnnouncements = Utils.prependedLaz "black pieces" blackPieces
+                        if isWhiteToMove
+                            then (
+                                    LazyList.ofList [ "white to play" ],
+                                    whitePiecesAnnouncements,
+                                    blackPiecesAnnouncements
+                                 )
+                            else (
+                                LazyList.ofList [ "black to play" ],
+                                blackPiecesAnnouncements,
+                                whitePiecesAnnouncements
+                             )
+                let lastAnnouncements =
+                        movesWithNumberIndicators
+                        |> LazyList.filter (fun (_, b) -> not b)
+                        |> LazyList.take 1
+                        |> LazyList.map fst
+                [ firstAnnouncements; secondAnnouncements; thirdAnnouncements; lastAnnouncements ]
+            |> LazyList.ofList
+            |> LazyList.concat
             |> LazyList.toArray
     { CategoryId = categoryId
       Level = level
       IndexInLevel = indexInLevel
       IsWhiteToMove = isWhiteToMove
       InitBoard = initBoard
-      MovesWithBoards = movesWithBoards }
+      MovesWithNumberIndicators = movesWithNumberIndicators
+      Boards = boards
+      WhitePieces = whitePieces
+      BlackPieces = blackPieces
+      Announcements  = announcements }
 
 let resetConfigOptions(): unit =
     Preferences.removeIfExists Preferences.areCoordsEnabledKey
@@ -93,11 +146,12 @@ let initConfigOptions(): ConfigOptions =
       SpeechPitch = Preferences.speechPitchKey |> Preferences.tryGetFloat |> Option.defaultValue defaultSpeechPitch }
 
 let init(): Model =
+    let initCfgOpts = initConfigOptions()
     let endgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
     { SelectedPage = IntroPage
       Locales = LazyList.empty
-      ConfigOptions = initConfigOptions()
+      ConfigOptions = initCfgOpts
       EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
       OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr
-      CurrentGameWithBoards = endgameJsonStr |> Notation.Parser.jsonOfGame |> gameToGameWithBoards
+      CurrentGame = endgameJsonStr |> Notation.Parser.jsonOfGame |> gameToGameWithBoards initCfgOpts.AreSymbolsEnabled IntroPage
       CurrentMoveIndex = None }
