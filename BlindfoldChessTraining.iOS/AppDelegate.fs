@@ -20,13 +20,12 @@ type AppDelegate () =
         Forms.Init()
         let appcore = new App()
         this.LoadApplication (appcore)
-
         
         _app <- Some appcore
 
         base.FinishedLaunching(app, options)
 
-    //override this.OnKeyDown(keycode: Keycode, _: KeyEvent) =
+    //override this.KeyDown(theEvent: NSEvent) =
     //    match _app with
     //    | Some appcore ->
     //                match keycode with
