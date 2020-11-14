@@ -36,6 +36,7 @@ type CurrentGame =
 type Model = 
     { SelectedPage: SelectedPage
       Locales: Locale LazyList
+      IsDisplayBoardOptionEnabled: bool
       ConfigOptions : ConfigOptions
       EndgameJsonStr: string
       OpeningJsonStr: string
@@ -43,6 +44,8 @@ type Model =
       CurrentMoveIndex: int option }
 
 // default values
+
+let defaultIsDisplayBoardOptionEnabled: bool = true
 
 let defaultAreCoordsEnabled: bool = true
 let defaultAreSymbolsEnabled: bool = false
@@ -78,6 +81,11 @@ let gameToGameWithBoards (areSymbolsEnabled: bool) (selectedPage: SelectedPage) 
             movesWithBoards
             |> LazyList.map fst
             |> Notation.Emitter.moveTextsWithNumberIndicators areSymbolsEnabled isWhiteToMove
+    let moveAnnouncements =
+            movesWithNumberIndicators
+            |> LazyList.filter (fun (_, b) -> not b)
+            |> LazyList.map fst
+            |> LazyList.map NaturalLanguage.phrase
     let boards = movesWithBoards
                  |> LazyList.map snd
                  |> LazyList.toArray
@@ -87,9 +95,7 @@ let gameToGameWithBoards (areSymbolsEnabled: bool) (selectedPage: SelectedPage) 
             match selectedPage with
             | OpeningPuzzlesPage ->
                 let (lastMove, restRevMoves) =
-                        movesWithNumberIndicators
-                        |> LazyList.filter (fun (_, b) -> not b)
-                        |> LazyList.map fst
+                        moveAnnouncements
                         |> LazyList.rev
                         |> LazyList.uncons
                 let firstAnnouncements = LazyList.ofList [ "first moves" ]
@@ -98,8 +104,14 @@ let gameToGameWithBoards (areSymbolsEnabled: bool) (selectedPage: SelectedPage) 
                 [ firstAnnouncements; middleAnnouncements; lastAnnouncements ]
             | _ ->
                 let (firstAnnouncements, secondAnnouncements, thirdAnnouncements) =
-                        let whitePiecesAnnouncements = Utils.prependedLaz "white pieces" whitePieces
-                        let blackPiecesAnnouncements = Utils.prependedLaz "black pieces" blackPieces
+                        let whitePiecesAnnouncements =
+                                whitePieces
+                                |> LazyList.map NaturalLanguage.phrase
+                                |> Utils.prependedLaz "white pieces" 
+                        let blackPiecesAnnouncements =
+                                blackPieces
+                                |> LazyList.map NaturalLanguage.phrase
+                                |> Utils.prependedLaz "black pieces"
                         if isWhiteToMove
                             then (
                                     LazyList.ofList [ "white to play" ],
@@ -112,10 +124,8 @@ let gameToGameWithBoards (areSymbolsEnabled: bool) (selectedPage: SelectedPage) 
                                 whitePiecesAnnouncements
                              )
                 let lastAnnouncements =
-                        movesWithNumberIndicators
-                        |> LazyList.filter (fun (_, b) -> not b)
+                        moveAnnouncements
                         |> LazyList.take 1
-                        |> LazyList.map fst
                 [ firstAnnouncements; secondAnnouncements; thirdAnnouncements; lastAnnouncements ]
             |> LazyList.ofList
             |> LazyList.concat
@@ -150,6 +160,7 @@ let init(): Model =
     let endgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
     { SelectedPage = IntroPage
       Locales = LazyList.empty
+      IsDisplayBoardOptionEnabled = Preferences.isDisplayBoardOptionEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultIsDisplayBoardOptionEnabled
       ConfigOptions = initCfgOpts
       EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
       OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr

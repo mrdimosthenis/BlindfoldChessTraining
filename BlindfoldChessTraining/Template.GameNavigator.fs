@@ -1,12 +1,15 @@
-﻿module BlindfoldChessTraining.UIElems.GameNavigator
+﻿module BlindfoldChessTraining.Template.GameNavigator
 
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
 open BlindfoldChessTraining
+open BlindfoldChessTraining.UIElems
+open BlindfoldChessTraining.Template
 open BlindfoldChessMechanics
 open FSharpx.Collections
+open System
 
 let levelNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let level = model.CurrentGame.Level
@@ -23,11 +26,7 @@ let levelNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElemen
                         image = Icons.rewind,
                         command = (fun () -> dispatch Msg.GoToPrevLevel)
                     )
-                    View.Label(
-                        text = levelMainText + " " + levelParenText,
-                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                        verticalTextAlignment = TextAlignment.Center
-                    )
+                    levelMainText + " " + levelParenText |> Component.label model false
                     View.Button(
                         image = Icons.fastForward,
                         command = (fun () -> dispatch Msg.GoToNextLevel)
@@ -43,11 +42,7 @@ let levelNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElemen
                         image = Icons.arrowCircleLeft,
                         command = (fun () -> dispatch Msg.GoToPrevPuzzle)
                     )
-                    View.Label(
-                        text = (model.CurrentGame.IndexInLevel + 1 |> sprintf "Puzzle %i"),
-                        fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
-                        verticalTextAlignment = TextAlignment.Center
-                    )
+                    model.CurrentGame.IndexInLevel + 1 |> sprintf "Puzzle %i" |> Component.label model false
                     View.Button(
                         image = Icons.arrowCircleRight,
                         command = (fun () -> dispatch Msg.GoToNextPuzzle)
@@ -58,6 +53,35 @@ let levelNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElemen
         horizontalOptions = LayoutOptions.Center,
         verticalOptions = LayoutOptions.Center,
         children = [ levelInfo; puzzleInfo ]
+    )
+
+let pieceDescriptions (model: Model.Model): ViewElement =
+    let isWhiteToMove = model.CurrentGame.IsWhiteToMove
+    let whitePieces = model.CurrentGame.WhitePieces
+    let blackPieces = model.CurrentGame.BlackPieces
+    let (sideToPlay, moveSideDescription, otherSideDescription, moveSidePieceDescription, otherSidePieceDescription) =
+            if isWhiteToMove
+                then ("White to play", "White pieces", "Black pieces", String.Join(",", whitePieces), String.Join(",", blackPieces))
+                else ("Black to play", "Black pieces", "White pieces", String.Join(",", blackPieces), String.Join(",", whitePieces))
+    View.StackLayout(
+        horizontalOptions = LayoutOptions.Center,
+        verticalOptions = LayoutOptions.Center,
+        children = [ Component.label model false sideToPlay
+                     sprintf "%s: %s" moveSideDescription  moveSidePieceDescription |> Component.label model false
+                     sprintf "%s: %s" otherSideDescription  otherSidePieceDescription |> Component.label model false ]
+    )
+
+let displayBoardOption (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+    View.StackLayout(
+        orientation = StackOrientation.Horizontal,
+        horizontalOptions = LayoutOptions.Center,
+        children = [
+            View.CheckBox(
+                isChecked = model.IsDisplayBoardOptionEnabled,
+                checkedChanged = (fun args -> model.IsDisplayBoardOptionEnabled |> not |> Msg.SelectDisplayBoardOption |> dispatch)
+            )
+            Component.label model false "Chessboard"
+        ]
     )
 
 let chessboard (model: Model.Model): ViewElement =

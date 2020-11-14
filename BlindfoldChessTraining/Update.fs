@@ -125,6 +125,10 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     | Msg.VolumeUpPressed | Msg.VolumeDownPressed ->
            model, Cmd.none
 
+    | Msg.SelectDisplayBoardOption v ->
+        Preferences.setBool Preferences.isDisplayBoardOptionEnabledKey v
+        { model with Model.IsDisplayBoardOptionEnabled = v }, Cmd.none
+
     | Msg.SelectCoordsConfig v ->
         Preferences.setBool Preferences.areCoordsEnabledKey v
         let newConfigOptions = { model.ConfigOptions with AreCoordsEnabled = v }

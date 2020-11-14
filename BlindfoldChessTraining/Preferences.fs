@@ -4,6 +4,8 @@ open Xamarin.Essentials
 
 // preferences keys
 
+let isDisplayBoardOptionEnabledKey: string = "isDisplayBoardOptionEnabled"
+
 let areCoordsEnabledKey: string = "areCoordsEnabled"
 let areSymbolsEnabledKey: string = "areSymbolsEnabled"
 let fontSizeKey: string = "fontSize"

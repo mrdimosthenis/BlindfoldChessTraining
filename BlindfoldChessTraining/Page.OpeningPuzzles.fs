@@ -19,10 +19,10 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                     fontAttributes = FontAttributes.Bold,
                     horizontalOptions = LayoutOptions.Center
                 )
-                UIElems.GameNavigator.levelNavigation model dispatch
-                UIElems.GameNavigator.chessboard model
-                UIElems.GameNavigator.notation model
-                UIElems.GameNavigator.boardNavigation model dispatch
+                Template.GameNavigator.levelNavigation model dispatch
+                Template.GameNavigator.chessboard model
+                Template.GameNavigator.notation model
+                Template.GameNavigator.boardNavigation model dispatch
                 View.Button(text = "Back", horizontalOptions = LayoutOptions.Center, command = fun () -> dispatch (Msg.SelectPage Model.HomePage))
             ]
         )

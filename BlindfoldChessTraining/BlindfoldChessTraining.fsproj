@@ -70,8 +70,8 @@
     <Compile Include="UIElems.Icons.fs" />
     <Compile Include="UIElems.Images.fs" />
     <Compile Include="UIElems.Board.fs" />
-    <Compile Include="UIElems.GameNavigator.fs" />
     <Compile Include="Template.Component.fs" />
+    <Compile Include="Template.GameNavigator.fs" />
     <Compile Include="Template.Page.fs" />
     <Compile Include="Page.Intro.fs" />
     <Compile Include="Page.Home.fs" />
