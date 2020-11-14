@@ -61,8 +61,8 @@ let pieceDescriptions (model: Model.Model): ViewElement =
     let blackPieces = model.CurrentGame.BlackPieces
     let (sideToPlay, moveSideDescription, otherSideDescription, moveSidePieceDescription, otherSidePieceDescription) =
             if isWhiteToMove
-                then ("White to Play", "White Pieces", "Black Pieces", String.Join(",", whitePieces), String.Join(", ", blackPieces))
-                else ("Black to Play", "Black Pieces", "White Pieces", String.Join(",", blackPieces), String.Join(", ", whitePieces))
+                then ("White to Play", "White Pieces", "Black Pieces", String.Join(", ", whitePieces), String.Join(", ", blackPieces))
+                else ("Black to Play", "Black Pieces", "White Pieces", String.Join(", ", blackPieces), String.Join(", ", whitePieces))
     View.StackLayout(
         horizontalOptions = LayoutOptions.Center,
         verticalOptions = LayoutOptions.Center,
