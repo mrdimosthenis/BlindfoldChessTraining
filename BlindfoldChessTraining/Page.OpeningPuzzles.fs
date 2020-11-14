@@ -1,8 +1,6 @@
 ﻿module BlindfoldChessTraining.Page.OpeningPuzzles
 
 open Fabulous
-open Fabulous.XamarinForms
-open Xamarin.Forms
 
 open BlindfoldChessTraining
 open BlindfoldChessTraining.UIElems
@@ -12,8 +10,12 @@ open BlindfoldChessMechanics
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let innerElems =
             [ [ GameNavigator.levelNavigation model dispatch ]
+              [ Component.separator() ]
               [ Component.label model false "First Moves" ]
               [ GameNavigator.notation model ]
+              if model.IsPuzzleSolved
+                  then []
+                  else [ Component.separator() ]
               if model.IsPuzzleSolved
                   then []
                   else [ GameNavigator.displayBoardOption model dispatch ]
