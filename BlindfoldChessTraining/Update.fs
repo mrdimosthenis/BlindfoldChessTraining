@@ -21,12 +21,14 @@ let getNewGameFromDBAndModel (model: Model.Model) (categoryId: int, level: int, 
         Preferences.setString Preferences.openingJsonStrKey newGameJsonStr
         { model with CurrentGame = newCurrentGame
                      CurrentMoveIndex = None
-                     OpeningJsonStr = newGameJsonStr }
+                     OpeningJsonStr = newGameJsonStr
+                     IsPuzzleSolved = false }
     | _ ->
         Preferences.setString Preferences.endgameJsonStrKey newGameJsonStr
         { model with CurrentGame = newCurrentGame
                      CurrentMoveIndex = None
-                     EndgameJsonStr = newGameJsonStr }
+                     EndgameJsonStr = newGameJsonStr
+                     IsPuzzleSolved = false }
 
 let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     match msg with
@@ -35,7 +37,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                     do! Async.Sleep Constants.introWaitMillis
                     return Msg.SelectPage Model.HomePage
                   } |> Cmd.ofAsyncMsg
-        { model with Model.Locales = v }, cmd
+        { model with Locales = v }, cmd
 
     | Msg.SelectPage v ->
         let newCurrentGame =
@@ -43,9 +45,10 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                 | Model.OpeningPuzzlesPage -> Notation.Parser.jsonOfGame model.OpeningJsonStr
                 | _ -> Notation.Parser.jsonOfGame model.EndgameJsonStr
                 |> Model.gameToGameWithBoards model.ConfigOptions.AreSymbolsEnabled v
-        let newModel = { model with Model.SelectedPage = v
-                                    Model.CurrentGame = newCurrentGame
-                                    CurrentMoveIndex = None }
+        let newModel = { model with SelectedPage = v
+                                    CurrentGame = newCurrentGame
+                                    CurrentMoveIndex = None
+                                    IsPuzzleSolved = false }
         newModel, Cmd.none
 
     | Msg.GoToPrevLevel ->
@@ -93,18 +96,18 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                                         model.CurrentMoveIndex
                                   | Some i ->
                                         Some (i + 1)
-        { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
+        { model with CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
     | Msg.GoToPrevMove ->
         let newCurrentMoveIndex = match model.CurrentMoveIndex with
                                   | None -> None
                                   | Some 0 -> None
                                   | Some i -> Some (i - 1)
-        { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
+        { model with CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
     | Msg.GoToInitPos ->
-        { model with Model.CurrentMoveIndex = None }, Cmd.none
+        { model with CurrentMoveIndex = None }, Cmd.none
     | Msg.GoToLastPos ->
         let newCurrentMoveIndex = Some (model.CurrentGame.Boards.Length - 1)
-        { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
+        { model with CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
 
     | Msg.Speak v ->
         let cmd = async {
@@ -116,39 +119,42 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                   } |> Cmd.ofAsyncMsgOption
         model, cmd
 
+    | Msg.ShowSolution ->
+        { model with IsPuzzleSolved = true }, Cmd.ofMsg Msg.GoToLastPos
+
     | Msg.BackPressed ->
         if model.SelectedPage = Model.HomePage
             then System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow() |> ignore
             else ()
-        { model with Model.SelectedPage = Model.HomePage }, Cmd.none
+        { model with SelectedPage = Model.HomePage }, Cmd.none
 
     | Msg.VolumeUpPressed | Msg.VolumeDownPressed ->
            model, Cmd.none
 
     | Msg.SelectDisplayBoardOption v ->
         Preferences.setBool Preferences.isDisplayBoardOptionEnabledKey v
-        { model with Model.IsDisplayBoardOptionEnabled = v }, Cmd.none
+        { model with IsDisplayBoardOptionEnabled = v }, Cmd.none
 
     | Msg.SelectCoordsConfig v ->
         Preferences.setBool Preferences.areCoordsEnabledKey v
         let newConfigOptions = { model.ConfigOptions with AreCoordsEnabled = v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+        { model with ConfigOptions = newConfigOptions }, Cmd.none
     | Msg.SelectPieceSymbolConfig v ->
         Preferences.setBool Preferences.areSymbolsEnabledKey v
         let newConfigOptions = { model.ConfigOptions with AreSymbolsEnabled = v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+        { model with ConfigOptions = newConfigOptions }, Cmd.none
     | Msg.SelectFontSizeConfig v ->
         Preferences.setFloat Preferences.fontSizeKey v
         let newConfigOptions = { model.ConfigOptions with FontSize = v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+        { model with ConfigOptions = newConfigOptions }, Cmd.none
     | Msg.SelectPitchConfig v ->
         Preferences.setFloat Preferences.speechPitchKey v
         let newConfigOptions = { model.ConfigOptions with SpeechPitch = v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+        { model with ConfigOptions = newConfigOptions }, Cmd.none
     | Msg.SelectLocaleConfig v ->
         Preferences.setInt Preferences.selectedLocaleKey v
         let newConfigOptions = { model.ConfigOptions with SelectedLocale = Some v }
-        { model with Model.ConfigOptions = newConfigOptions }, Cmd.none
+        { model with ConfigOptions = newConfigOptions }, Cmd.none
     | Msg.ResetConfigs ->
         Model.resetConfigOptions()
-        { model with Model.ConfigOptions = Model.initConfigOptions() }, Cmd.none
+        { model with ConfigOptions = Model.initConfigOptions() }, Cmd.none

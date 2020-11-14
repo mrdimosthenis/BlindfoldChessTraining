@@ -101,6 +101,7 @@ let notation (model: Model.Model): ViewElement =
                              (0, LazyList.empty)
                              model.CurrentGame.MovesWithNumberIndicators
                        |> snd
+                       |> (if model.IsPuzzleSolved then id else LazyList.tail)
                        |> LazyList.rev
                        |> LazyList.map
                              (fun (iOpt, s, b) ->
@@ -108,8 +109,11 @@ let notation (model: Model.Model): ViewElement =
                                      text = (if b then s else s + " "),
                                      fontAttributes = (if iOpt = model.CurrentMoveIndex then FontAttributes.Bold else FontAttributes.None),
                                      fontSize = FontSize.fromValue model.ConfigOptions.FontSize,
+                                     textColor = Constants.textColor,
                                      horizontalTextAlignment = TextAlignment.Center,
-                                     verticalTextAlignment = TextAlignment.Center
+                                     verticalTextAlignment = TextAlignment.Center,
+                                     horizontalOptions = LayoutOptions.Center,
+                                     verticalOptions = LayoutOptions.Center
                                  )
                              )
                        |> LazyList.toList

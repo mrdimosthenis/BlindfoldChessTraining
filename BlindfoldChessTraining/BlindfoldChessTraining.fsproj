@@ -30,6 +30,7 @@
     <EmbeddedResource Include="resources\images\icons\options.png" />
     <EmbeddedResource Include="resources\images\icons\code.png" />
     <EmbeddedResource Include="resources\images\icons\id_card.png" />
+    <EmbeddedResource Include="resources\images\icons\eye.png" />
     <EmbeddedResource Include="resources\images\board\empty.png" />
     <EmbeddedResource Include="resources\images\board\1.png" />
     <EmbeddedResource Include="resources\images\board\2.png" />
@@ -75,8 +76,8 @@
     <Compile Include="Template.Page.fs" />
     <Compile Include="Page.Intro.fs" />
     <Compile Include="Page.Home.fs" />
-    <Compile Include="Page.OpeningPuzzles.fs" />
     <Compile Include="Page.EndgamePuzzles.fs" />
+    <Compile Include="Page.OpeningPuzzles.fs" />
     <Compile Include="Page.Description.fs" />
     <Compile Include="Page.Options.fs" />
     <Compile Include="Page.Credits.fs" />

@@ -25,6 +25,8 @@ let chip: Image.Value = Resources.image "icons.chip"
 let code: Image.Value = Resources.image "icons.code"
 let idCard: Image.Value = Resources.image "icons.id_card"
 
+let eye: Image.Value = Resources.image "icons.eye"
+
 let arrowCircleLeft: Image.Value = Resources.image "icons.arrow_circle_left"
 let arrowCircleRight: Image.Value = Resources.image "icons.arrow_circle_right"
 let fastForward: Image.Value = Resources.image "icons.fast_forward"

@@ -15,6 +15,7 @@ type Msg =
     | GoToInitPos
     | GoToLastPos
     | Speak of string
+    | ShowSolution
     | SelectDisplayBoardOption of bool
     | SelectCoordsConfig of bool
     | SelectPieceSymbolConfig of bool

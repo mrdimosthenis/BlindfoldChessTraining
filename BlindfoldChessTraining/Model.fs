@@ -9,8 +9,8 @@ open BlindfoldChessMechanics
 type SelectedPage =
     | IntroPage
     | HomePage
-    | OpeningPuzzlesPage
     | EndgamePuzzlesPage
+    | OpeningPuzzlesPage
     | DescriptionPage
     | OptionsPage
     | CreditsPage
@@ -41,7 +41,8 @@ type Model =
       EndgameJsonStr: string
       OpeningJsonStr: string
       CurrentGame: CurrentGame
-      CurrentMoveIndex: int option }
+      CurrentMoveIndex: int option
+      IsPuzzleSolved: bool }
 
 // default values
 
@@ -165,4 +166,5 @@ let init(): Model =
       EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
       OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr
       CurrentGame = endgameJsonStr |> Notation.Parser.jsonOfGame |> gameToGameWithBoards initCfgOpts.AreSymbolsEnabled IntroPage
-      CurrentMoveIndex = None }
+      CurrentMoveIndex = None
+      IsPuzzleSolved = false }
