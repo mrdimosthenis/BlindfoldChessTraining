@@ -107,11 +107,14 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         { model with Model.CurrentMoveIndex = newCurrentMoveIndex }, Cmd.none
 
     | Msg.Speak v ->
-        Speech.speak model.ConfigOptions.SpeechPitch
-                     model.Locales
-                     model.ConfigOptions.SelectedLocale
-                     v
-        model, Cmd.none
+        let cmd = async {
+                    do! Speech.speak model.ConfigOptions.SpeechPitch
+                                     model.Locales
+                                     model.ConfigOptions.SelectedLocale
+                                     v
+                    return None
+                  } |> Cmd.ofAsyncMsgOption
+        model, cmd
 
     | Msg.BackPressed ->
         if model.SelectedPage = Model.HomePage

@@ -17,7 +17,7 @@ let loadLocales(): Async<Locale LazyList> =
 let localeNames (locales: Locale LazyList): string LazyList =
     LazyList.map (fun (loc: Locale) -> loc.Name) locales
 
-let speak (pitch: float) (locales: Locale LazyList) (localesIndex: int option) (text: string): unit =
+let speak (pitch: float) (locales: Locale LazyList) (localesIndex: int option) (text: string): Async<unit> =
     let pitch = new System.Nullable<float32>(float32 pitch)
     let settings = match localesIndex with
                    | Some i when i < LazyList.length locales ->
@@ -26,4 +26,3 @@ let speak (pitch: float) (locales: Locale LazyList) (localesIndex: int option) (
                         new SpeechOptions(Pitch = pitch)
     TextToSpeech.SpeakAsync(text, settings)
     |> Async.AwaitTask
-    |> Async.StartImmediate
