@@ -42,7 +42,8 @@ type Model =
       OpeningJsonStr: string
       CurrentGame: CurrentGame
       CurrentMoveIndex: int option
-      IsPuzzleSolved: bool }
+      IsPuzzleSolved: bool
+      CurrentAnnouncementIndex: int }
 
 // default values
 
@@ -127,6 +128,7 @@ let gameToGameWithBoards (areSymbolsEnabled: bool) (selectedPage: SelectedPage) 
                 let lastAnnouncements =
                         moveAnnouncements
                         |> LazyList.take 1
+                        |> Utils.prependedLaz "best move"
                 [ firstAnnouncements; secondAnnouncements; thirdAnnouncements; lastAnnouncements ]
             |> LazyList.ofList
             |> LazyList.concat
@@ -167,4 +169,5 @@ let init(): Model =
       OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr
       CurrentGame = endgameJsonStr |> Notation.Parser.jsonOfGame |> gameToGameWithBoards initCfgOpts.AreSymbolsEnabled IntroPage
       CurrentMoveIndex = None
-      IsPuzzleSolved = false }
+      IsPuzzleSolved = false
+      CurrentAnnouncementIndex = 0 }

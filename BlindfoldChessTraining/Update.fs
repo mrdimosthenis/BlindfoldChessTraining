@@ -22,13 +22,15 @@ let getNewGameFromDBAndModel (model: Model.Model) (categoryId: int, level: int, 
         { model with CurrentGame = newCurrentGame
                      CurrentMoveIndex = None
                      OpeningJsonStr = newGameJsonStr
-                     IsPuzzleSolved = false }
+                     IsPuzzleSolved = false
+                     CurrentAnnouncementIndex = 0 }
     | _ ->
         Preferences.setString Preferences.endgameJsonStrKey newGameJsonStr
         { model with CurrentGame = newCurrentGame
                      CurrentMoveIndex = None
                      EndgameJsonStr = newGameJsonStr
-                     IsPuzzleSolved = false }
+                     IsPuzzleSolved = false
+                     CurrentAnnouncementIndex = 0 }
 
 let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     match msg with
@@ -48,7 +50,8 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         let newModel = { model with SelectedPage = v
                                     CurrentGame = newCurrentGame
                                     CurrentMoveIndex = None
-                                    IsPuzzleSolved = false }
+                                    IsPuzzleSolved = false
+                                    CurrentAnnouncementIndex = 0 }
         newModel, Cmd.none
 
     | Msg.GoToPrevLevel ->
@@ -128,8 +131,27 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
             else ()
         { model with SelectedPage = Model.HomePage }, Cmd.none
 
-    | Msg.VolumeUpPressed | Msg.VolumeDownPressed ->
-           model, Cmd.none
+    | Msg.VolumeUpPressed ->
+        let cmd = model.CurrentGame.Announcements.[0] |> Msg.Speak |> Cmd.ofMsg
+        { model with CurrentAnnouncementIndex = 1 }, cmd
+
+    | Msg.VolumeDownPressed ->
+            match model.CurrentAnnouncementIndex with
+            | v when v = model.CurrentGame.Announcements.Length ->
+                let firstCmd = "next puzzle" |> Msg.Speak |> Cmd.ofMsg
+                let secondCmd = Cmd.ofMsg Msg.GoToNextPuzzle
+                let cmd = Cmd.batch [ firstCmd; secondCmd ]
+                model, cmd
+            | v when v = model.CurrentGame.Announcements.Length - 1 ->
+                let newModel = { model with CurrentAnnouncementIndex = v + 1 }
+                let firstCmd = Cmd.ofMsg Msg.ShowSolution
+                let secondCmd = model.CurrentGame.Announcements.[v] |> Msg.Speak |> Cmd.ofMsg
+                let cmd = Cmd.batch [ firstCmd; secondCmd ]
+                newModel, cmd
+            | v ->
+                let newModel = { model with CurrentAnnouncementIndex = v + 1 }
+                let cmd = model.CurrentGame.Announcements.[v] |> Msg.Speak |> Cmd.ofMsg
+                newModel, cmd
 
     | Msg.SelectDisplayBoardOption v ->
         Preferences.setBool Preferences.isDisplayBoardOptionEnabledKey v
