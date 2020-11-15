@@ -9,7 +9,7 @@ let introWaitMillis: int = 1000
 let titleSizeRatio: float = 1.5
 
 let backgroundColor: Color = Color.LightSteelBlue
-let lineColor: Color = Color.Black
+let lineColor: Color = Color.DarkSlateGray
 let textColor: Color = Color.Black
 
 let darkSquareColor: Color = Color.SlateGray
