@@ -8,7 +8,6 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\puzzles\opening_puzzles.jsonl" />
     <EmbeddedResource Include="resources\puzzles\endgame_puzzles.jsonl" />
-    <EmbeddedResource Include="resources\images\logos\app_logo.png" />
     <EmbeddedResource Include="resources\images\logos\main.png" />
     <EmbeddedResource Include="resources\images\logos\fabulous.png" />
     <EmbeddedResource Include="resources\images\icons\empty.png" />
