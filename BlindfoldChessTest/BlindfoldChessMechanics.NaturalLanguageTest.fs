@@ -27,40 +27,40 @@ let ``O-O#`` () =
 let ``Ra4`` () =
     phrase "Rh4"
     |> should equal
-       "rook h four"
+       "rook H. four"
 
 [<Fact>]
 let ``Pe6`` () =
     phrase "Pe6"
     |> should equal
-       "pawn e six"
+       "pawn E. six"
 
 [<Fact>]
 let ``♔c5`` () =
     phrase "♔c5"
     |> should equal
-       "king c five"
+       "king C. five"
 
 [<Fact>]
 let ``♟️b3`` () =
     phrase "♟️b3"
     |> should equal
-       "pawn b three"
+       "pawn B. three"
 
 [<Fact>]
 let ``♝b7`` () =
     phrase "♝b7"
     |> should equal
-       "bishop b seven"
+       "bishop B. seven"
 
 [<Fact>]
 let ``Qxa1#`` () =
     phrase "Qxa1#"
     |> should equal
-       "queen takes a one mate"
+       "queen takes A. one mate"
 
 [<Fact>]
 let ``cxd1=N+`` () =
     phrase "cxd1=N+"
     |> should equal
-       "c takes d one promotes to knight check"
+       "C. takes D. one promotes to knight check"
