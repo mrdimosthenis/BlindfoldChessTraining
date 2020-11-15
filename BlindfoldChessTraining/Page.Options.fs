@@ -34,9 +34,9 @@ let secondMove: Logic.Position.Move =
       SamePieceCoords = None }
 
 let thirdMove: Logic.Position.Move =
-    { Piece = Logic.Board.Knight
-      FromCoords = (0, 6)
-      ToCoords = (2, 5)
+    { Piece = Logic.Board.Bishop
+      FromCoords = (0, 5)
+      ToCoords = (3, 2)
       IsCapture = false
       Promotion = None
       IsCheck = false
