@@ -27,6 +27,14 @@ let words (c: char): string =
     | 43   -> "check"       // '+'
     | 35   -> "mate"        // '#'
     | 61   -> "promotes to" // '='
+    | 49   -> "one"         // '1'
+    | 50   -> "two"         // '2'
+    | 51   -> "three"       // '3'
+    | 52   -> "four"        // '4'
+    | 53   -> "five"        // '5'
+    | 54   -> "six"         // '6'
+    | 55   -> "seven"       // '7'
+    | 56   -> "eight"       // '8'
     | i    -> (char i).ToString()
 
 let phrase (str: string): string =
