@@ -88,7 +88,7 @@ let chessboard (model: Model.Model): ViewElement =
     match model.CurrentMoveIndex with
     | None -> model.CurrentGame.InitBoard
     | Some i -> model.CurrentGame.Boards.[i]
-    |> UIElems.Board.grid model.ConfigOptions.AreSymbolsEnabled
+    |> UIElems.Board.grid model.ConfigOptions.AreCoordsEnabled
 
 let notation (model: Model.Model): ViewElement =
     let flexChildren = LazyList.fold
@@ -101,7 +101,15 @@ let notation (model: Model.Model): ViewElement =
                              (0, LazyList.empty)
                              model.CurrentGame.MovesWithNumberIndicators
                        |> snd
-                       |> (if model.IsPuzzleSolved then id else LazyList.tail)
+                       // remove last move
+                       |> if model.IsPuzzleSolved then id else LazyList.tail
+                       // remove last number indicator if exist
+                       |> (fun laz ->
+                                let (_, _, b) = LazyList.head laz
+                                if b && not model.IsPuzzleSolved
+                                        then LazyList.tail laz
+                                        else laz
+                          )
                        |> LazyList.rev
                        |> LazyList.map
                              (fun (iOpt, s, b) ->
