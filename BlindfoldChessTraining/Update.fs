@@ -122,8 +122,20 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                   } |> Cmd.ofAsyncMsgOption
         model, cmd
 
+    | Msg.VolumeNoteClicked ->
+        Preferences.setBool Preferences.didVolumeNoteClickedKey true
+        { model with DidVolumeNoteClicked = true }, Cmd.ofMsg Msg.VolumeUpPressed
+
     | Msg.ShowSolution ->
-        { model with IsPuzzleSolved = true }, Cmd.ofMsg Msg.GoToLastPos
+        let newCurrentMoveIndex =
+                match model.SelectedPage with
+                | Model.OpeningPuzzlesPage ->
+                    Some (model.CurrentGame.Boards.Length - 2)
+                | _ ->
+                    None
+        let newModel = { model with CurrentMoveIndex = newCurrentMoveIndex 
+                                    IsPuzzleSolved = true }
+        newModel, Cmd.none
 
     | Msg.BackPressed ->
         if model.SelectedPage = Model.HomePage
@@ -132,10 +144,16 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         { model with SelectedPage = Model.HomePage }, Cmd.none
 
     | Msg.VolumeUpPressed ->
-        let cmd = model.CurrentGame.Announcements.[0] |> Msg.Speak |> Cmd.ofMsg
-        { model with CurrentAnnouncementIndex = 1 }, cmd
+        match model.SelectedPage with
+        | Model.OpeningPuzzlesPage | Model.EndgamePuzzlesPage ->
+            let cmd = model.CurrentGame.Announcements.[0] |> Msg.Speak |> Cmd.ofMsg
+            { model with CurrentAnnouncementIndex = 1 }, cmd
+        | _ ->
+            model, Cmd.none
 
     | Msg.VolumeDownPressed ->
+        match model.SelectedPage with
+        | Model.OpeningPuzzlesPage | Model.EndgamePuzzlesPage ->
             match model.CurrentAnnouncementIndex with
             | v when v = model.CurrentGame.Announcements.Length ->
                 let firstCmd = "next puzzle" |> Msg.Speak |> Cmd.ofMsg
@@ -152,6 +170,8 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
                 let newModel = { model with CurrentAnnouncementIndex = v + 1 }
                 let cmd = model.CurrentGame.Announcements.[v] |> Msg.Speak |> Cmd.ofMsg
                 newModel, cmd
+        | _ ->
+            model, Cmd.none
 
     | Msg.SelectDisplayBoardOption v ->
         Preferences.setBool Preferences.isDisplayBoardOptionEnabledKey v

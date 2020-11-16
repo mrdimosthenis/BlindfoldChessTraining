@@ -4,17 +4,15 @@ namespace BlindfoldChessTraining.Android
 open System
 
 open Android.App
-open Android.Content
 open Android.Content.PM
 open Android.Runtime
 open Android.Views
-open Android.Widget
 open Android.OS
 open Xamarin.Forms.Platform.Android
 
 open BlindfoldChessTraining
 
-[<Activity (Label = "BlindfoldChessTraining.Android", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = (ConfigChanges.ScreenSize ||| ConfigChanges.Orientation))>]
+[<Activity (Label = "Blindfold Chess Training", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = (ConfigChanges.ScreenSize ||| ConfigChanges.Orientation))>]
 type MainActivity() =
     inherit FormsAppCompatActivity()
 

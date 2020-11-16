@@ -30,6 +30,10 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                   else []
               if model.IsPuzzleSolved
                     then [ GameNavigator.boardNavigation model dispatch ]
-                    else [] ]
+                    else []
+              if model.DidVolumeNoteClicked
+                    then []
+                    else [ Component.separator()
+                           GameNavigator.volumeNotification model dispatch ] ]
             |> List.concat
     Template.Page.page model dispatch "Opening Puzzles" Icons.library innerElems

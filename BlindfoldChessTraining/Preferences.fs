@@ -12,6 +12,8 @@ let fontSizeKey: string = "fontSize"
 let selectedLocaleKey: string = "selectedLocale"
 let speechPitchKey: string = "speechPitch"
 
+let didVolumeNoteClickedKey: string = "didVolumeNoteClicked"
+
 let endgameJsonStrKey: string = "endgameJsonStr"
 let openingJsonStrKey: string = "openingJsonStr"
 

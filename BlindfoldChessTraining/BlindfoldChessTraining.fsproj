@@ -14,7 +14,6 @@
     <EmbeddedResource Include="resources\images\icons\empty.png" />
     <EmbeddedResource Include="resources\images\icons\cube.png" />
     <EmbeddedResource Include="resources\images\icons\library.png" />
-    <EmbeddedResource Include="resources\images\icons\questionmark.png" />
     <EmbeddedResource Include="resources\images\icons\fingerprint.png" />
     <EmbeddedResource Include="resources\images\icons\arrow_circle_left.png" />
     <EmbeddedResource Include="resources\images\icons\arrow_circle_right.png" />
@@ -31,6 +30,8 @@
     <EmbeddedResource Include="resources\images\icons\code.png" />
     <EmbeddedResource Include="resources\images\icons\id_card.png" />
     <EmbeddedResource Include="resources\images\icons\eye.png" />
+    <EmbeddedResource Include="resources\images\icons\volume_up.png" />
+    <EmbeddedResource Include="resources\images\icons\annotation.png" />
     <EmbeddedResource Include="resources\images\board\empty.png" />
     <EmbeddedResource Include="resources\images\board\1.png" />
     <EmbeddedResource Include="resources\images\board\2.png" />

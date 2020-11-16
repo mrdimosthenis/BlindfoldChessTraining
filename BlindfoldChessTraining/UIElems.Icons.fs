@@ -10,7 +10,7 @@ let home: Image.Value = Resources.image "icons.home"
 
 let library: Image.Value = Resources.image "icons.library"
 
-let questionmark : Image.Value = Resources.image "icons.questionmark"
+let annotation : Image.Value = Resources.image "icons.annotation"
 
 let fingerprint : Image.Value = Resources.image "icons.fingerprint"
 
@@ -26,6 +26,8 @@ let code: Image.Value = Resources.image "icons.code"
 let idCard: Image.Value = Resources.image "icons.id_card"
 
 let eye: Image.Value = Resources.image "icons.eye"
+
+let volume_up: Image.Value = Resources.image "icons.volume_up"
 
 let arrowCircleLeft: Image.Value = Resources.image "icons.arrow_circle_left"
 let arrowCircleRight: Image.Value = Resources.image "icons.arrow_circle_right"

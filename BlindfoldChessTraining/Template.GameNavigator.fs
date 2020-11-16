@@ -1,5 +1,8 @@
 ﻿module BlindfoldChessTraining.Template.GameNavigator
 
+open System
+open FSharpx.Collections
+
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
@@ -8,8 +11,6 @@ open BlindfoldChessTraining
 open BlindfoldChessTraining.UIElems
 open BlindfoldChessTraining.Template
 open BlindfoldChessMechanics
-open FSharpx.Collections
-open System
 
 let levelNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let level = model.CurrentGame.Level
@@ -153,6 +154,20 @@ let boardNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElemen
                 image = (if model.CurrentMoveIndex <> Some (model.CurrentGame.Boards.Length - 1)
                          then Icons.chevronDoubleRight else Icons.empty),
                 command = (fun () -> dispatch Msg.GoToLastPos)
+            )
+        ]
+    )
+
+let volumeNotification (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+    View.StackLayout(
+        orientation = StackOrientation.Horizontal,
+        horizontalOptions = LayoutOptions.Center,
+        verticalOptions = LayoutOptions.Center,
+        children = [
+            Component.label model false "Use the volume keys of the device for audio training"
+            View.Button(
+                image = Icons.volume_up,
+                command = (fun () -> dispatch Msg.VolumeNoteClicked)
             )
         ]
     )

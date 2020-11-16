@@ -17,4 +17,4 @@ Use the volume keys on your device to listen to the puzzle description. Volume d
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     [ Component.label model false description ]
-    |> Page.page model dispatch "Description" Icons.questionmark
+    |> Page.page model dispatch "Description" Icons.annotation

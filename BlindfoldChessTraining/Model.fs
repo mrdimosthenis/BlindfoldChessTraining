@@ -43,7 +43,8 @@ type Model =
       CurrentGame: CurrentGame
       CurrentMoveIndex: int option
       IsPuzzleSolved: bool
-      CurrentAnnouncementIndex: int }
+      CurrentAnnouncementIndex: int
+      DidVolumeNoteClicked: bool }
 
 // default values
 
@@ -53,6 +54,8 @@ let defaultAreCoordsEnabled: bool = true
 let defaultAreSymbolsEnabled: bool = false
 let defaultFontSize: float = 17.0
 let defaultSpeechPitch: float = 1.0
+
+let defaultDidVolumeNoteClicked: bool = false
 
 let defaultEndgameJsonStr: string = DB.getGameJsonStr(0, 0, 0)
 let defaultOpeningJsonStr: string = DB.getGameJsonStr(1, 0, 0)
@@ -170,4 +173,5 @@ let init(): Model =
       CurrentGame = endgameJsonStr |> Notation.Parser.jsonOfGame |> gameToGameWithBoards initCfgOpts.AreSymbolsEnabled IntroPage
       CurrentMoveIndex = None
       IsPuzzleSolved = false
-      CurrentAnnouncementIndex = 0 }
+      CurrentAnnouncementIndex = 0
+      DidVolumeNoteClicked = Preferences.didVolumeNoteClickedKey |> Preferences.tryGetBool |> Option.defaultValue defaultDidVolumeNoteClicked }
