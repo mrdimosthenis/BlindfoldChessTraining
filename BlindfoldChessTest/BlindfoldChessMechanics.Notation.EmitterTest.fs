@@ -7,6 +7,48 @@ open BlindfoldChessMechanics.Notation.Emitter
 open BlindfoldChessMechanics.Logic.Board
 open BlindfoldChessMechanics.Logic.Position
 open BlindfoldChessMechanics.Logic
+open FSharpx.Collections
+
+[<Fact>]
+let ``Texts of pieces of initial position without figures`` () =
+    let (whitePieces, blackPieces) = textsOfPieces false Board.init
+    let whitePiecesList = LazyList.toList whitePieces
+    let blackPiecesList = LazyList.toList blackPieces
+    (whitePiecesList, blackPiecesList)
+    |> should equal
+        ( [ "Ke1"
+            "Pa2"; "Pb2"; "Pc2"; "Pd2"; "Pe2"; "Pf2"; "Pg2"; "Ph2"
+            "Nb1"; "Ng1"
+            "Bc1"; "Bf1"
+            "Ra1"; "Rh1"
+            "Qd1" ],
+          [ "Ke8"
+            "Pa7"; "Pb7"; "Pc7"; "Pd7"; "Pe7"; "Pf7"; "Pg7"; "Ph7"
+            "Nb8"; "Ng8"
+            "Bc8"; "Bf8"
+            "Ra8"; "Rh8"
+            "Qd8" ] )
+
+[<Fact>]
+let ``Texts of pieces of initial position with figures`` () =
+    let (whitePieces, blackPieces) = textsOfPieces true Board.init
+    let whitePiecesList = LazyList.toList whitePieces
+    let blackPiecesList = LazyList.toList blackPieces
+    (whitePiecesList, blackPiecesList)
+    |> should equal
+        ( [ "♔e1"
+            "♙a2"
+            "♙b2"; "♙c2"; "♙d2"; "♙e2"; "♙f2"; "♙g2"; "♙h2"
+            "♘b1"; "♘g1"
+            "♗c1"; "♗f1"
+            "♖a1"; "♖h1"
+            "♕d1" ],
+          [ "♚e8"
+            "♟︎a7"; "♟︎b7"; "♟︎c7"; "♟︎d7"; "♟︎e7"; "♟︎f7"; "♟︎g7"; "♟︎h7"
+            "♞b8"; "♞g8"
+            "♝c8"; "♝f8"
+            "♜a8"; "♜h8"
+            "♛d8" ] )
 
 [<Fact>]
 let ``O-O move text`` () =
@@ -69,6 +111,21 @@ let ``gxh1=♜# move text`` () =
         "gxh1=♜#"
 
 [<Fact>]
+let ``♞c6 move text`` () =
+    { Piece = Knight
+      FromCoords = (7, 1)
+      ToCoords = (5, 2)
+      IsCapture = false
+      Promotion = None
+      IsCheck = false
+      IsMate = false
+      IsStalemate = false
+      SamePieceCoords = None }
+    |> moveText false true
+    |> should equal
+        "♞c6"
+
+[<Fact>]
 let ``N1b3+ move text`` () =
     { Piece = Knight
       FromCoords = (0, 0)
@@ -112,6 +169,62 @@ let ``b8=Q move text`` () =
     |> moveText true false
     |> should equal
         "b8=Q"
+
+[<Fact>]
+let ``Multiple moves text with figures`` () =
+    [ PositionTest.forthHalfMove
+      PositionTest.fifthHalfMove
+      PositionTest.sixthHalfMove
+      PositionTest.seventhHalfMove
+      PositionTest.eighthHalfMove
+      PositionTest.ninthHalfMove ]
+    |> LazyList.ofList
+    |> multipleMovesText true false
+    |> should equal
+        "1...♞f6 2.♗e2 e6 3.h4 ♝a3 4.bxa3"
+
+[<Fact>]
+let ``Multiple moves text with figures in king's pawn game`` () =
+    [ { Piece = Pawn
+        FromCoords = (1, 4)
+        ToCoords = (3, 4)
+        IsCapture = false
+        Promotion = None
+        IsCheck = false
+        IsMate = false
+        IsStalemate = false
+        SamePieceCoords = None }
+      { Piece = Pawn
+        FromCoords = (6, 4)
+        ToCoords = (4, 4)
+        IsCapture = false
+        Promotion = None
+        IsCheck = false
+        IsMate = false
+        IsStalemate = false
+        SamePieceCoords = None }
+      { Piece = Knight
+        FromCoords = (0, 6)
+        ToCoords = (2, 5)
+        IsCapture = false
+        Promotion = None
+        IsCheck = false
+        IsMate = false
+        IsStalemate = false
+        SamePieceCoords = None }
+      { Piece = Knight
+        FromCoords = (7, 1)
+        ToCoords = (5, 2)
+        IsCapture = false
+        Promotion = None
+        IsCheck = false
+        IsMate = false
+        IsStalemate = false
+        SamePieceCoords = None } ]
+    |> LazyList.ofList
+    |> multipleMovesText true true
+    |> should equal
+        "1.e4 e5 2.♘f3 ♞c6"
 
 [<Fact>]
 let ``Position text of initial one`` () =
@@ -210,8 +323,7 @@ let ``Position text after thirteenth half move`` () =
     |> should equal
         "rnbq1rk1/pp3ppp/2P1pn2/8/7P/P7/P1PPBPP1/RNBQ1KNR b - - 0 7"
 
-[<Fact>]
-let ``Game text`` () =
+let exampleGame =
     { Game.MetaTags = Map.ofArray [| ("White", "me"); ("Black", "you") |]
       Game.InitialPosition = PositionTest.positionAfterThirdHalfMovement
       Game.Moves = [| PositionTest.forthHalfMove
@@ -225,6 +337,10 @@ let ``Game text`` () =
                       PositionTest.twelfthHalfMove
                       PositionTest.thirteenthHalfMove |]
       Game.Result = Some Game.Draw }
+
+[<Fact>]
+let ``Game text`` () =
+    exampleGame
     |> gameText
     |> should equal
     <|String.concat "\n"
@@ -233,4 +349,10 @@ let ``Game text`` () =
            """[White "me"]"""
            ""
            "1...Nf6 2.Be2 e6 3.h4 Ba3 4.bxa3 O-O 5.Kf1 c5 6.dxc6  1/2-1/2" |]
-        
+
+[<Fact>]
+let ``Game json`` () =
+    exampleGame
+    |> gameJson
+    |> should equal
+        ResourcesAsCode.exampleGameJson

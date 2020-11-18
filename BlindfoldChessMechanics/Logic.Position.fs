@@ -3,6 +3,7 @@
 open BlindfoldChessMechanics.Logic
 open BlindfoldChessMechanics
 open System
+open FSharpx.Collections
 
 // types
 
@@ -49,40 +50,40 @@ let init: Position = { Board = Board.init
 
 // functions
 
-let specialKingMovements (coordinates: Board.Coordinates) (position: Position): Movement seq =
+let specialKingMovements (coordinates: Board.Coordinates) (position: Position): Movement LazyList =
     let (rowIndex, columnIndex) = coordinates
     match Board.resident coordinates position.Board with
     | Some { PieceType = Board.King; IsWhite = isWhite } ->
         let controlledCoordsByOpponent = Board.coordinatesControlledByColor (not isWhite) position.Board
-        [| (true, position.Castling.WhiteKingSideCastle, (+))
-           (true, position.Castling.WhiteQueenSideCastle, (-))
-           (false, position.Castling.BlackKingSideCastle, (+))
-           (false, position.Castling.BlackQueenSideCastle, (-)) |]
-        |> Seq.ofArray
-        |> Seq.map ( fun (isWh, ability, op) ->
-                        ability && isWh = isWhite
-                        && Board.resident (rowIndex, op columnIndex 1) position.Board = None
-                        && Board.resident (rowIndex, op columnIndex 2) position.Board = None
-                        && (Seq.forall ((<>) coordinates) controlledCoordsByOpponent)
-                        && (Seq.forall ((<>) (rowIndex, op columnIndex 1)) controlledCoordsByOpponent)
-                        && (Seq.forall ((<>) (rowIndex, op columnIndex 2)) controlledCoordsByOpponent)
-                   )
-        |> Seq.zip (Seq.ofArray [| (rowIndex, columnIndex + 2)
-                                   (rowIndex, columnIndex - 2)
-                                   (rowIndex, columnIndex + 2)
-                                   (rowIndex, columnIndex - 2) |])
-        |> Seq.filter snd
-        |> Seq.map (fun (toCoords, _) ->
-                        { Piece = Board.King
-                          FromCoords = coordinates
-                          ToCoords = toCoords
-                          IsCapture = false
-                          Promotion = None }
-                   )
-        |> Seq.cache
+        [ (true, position.Castling.WhiteKingSideCastle, (+))
+          (true, position.Castling.WhiteQueenSideCastle, (-))
+          (false, position.Castling.BlackKingSideCastle, (+))
+          (false, position.Castling.BlackQueenSideCastle, (-)) ]
+        |> LazyList.ofList
+        |> LazyList.map ( fun (isWh, ability, op) ->
+                             ability && isWh = isWhite
+                             && Board.resident (rowIndex, op columnIndex 1) position.Board = None
+                             && Board.resident (rowIndex, op columnIndex 2) position.Board = None
+                             && (Utils.lazForAll ((<>) coordinates) controlledCoordsByOpponent)
+                             && (Utils.lazForAll ((<>) (rowIndex, op columnIndex 1)) controlledCoordsByOpponent)
+                             && (Utils.lazForAll ((<>) (rowIndex, op columnIndex 2)) controlledCoordsByOpponent)
+                        )
+        |> LazyList.zip (LazyList.ofList [ (rowIndex, columnIndex + 2)
+                                           (rowIndex, columnIndex - 2)
+                                           (rowIndex, columnIndex + 2)
+                                           (rowIndex, columnIndex - 2) ]
+                        )
+        |> LazyList.filter snd
+        |> LazyList.map (fun (toCoords, _) ->
+                             { Piece = Board.King
+                               FromCoords = coordinates
+                               ToCoords = toCoords
+                               IsCapture = false
+                               Promotion = None }
+                        )
     | _ -> raise (Board.WrongPiece ("NoKing", rowIndex, columnIndex))
 
-let pawnMovements (coordinates: Board.Coordinates) (position: Position): Movement seq =
+let pawnMovements (coordinates: Board.Coordinates) (position: Position): Movement LazyList =
     let (rowIndex, columnIndex) = coordinates
     match Board.resident coordinates position.Board with
     | Some { PieceType = Board.Pawn; IsWhite = isWhite } ->
@@ -93,38 +94,35 @@ let pawnMovements (coordinates: Board.Coordinates) (position: Position): Movemen
                 let toCoords = (enPassRow, enPassCol)
                 let isCapture = true
                 let promotion = None
-                [|(toCoords, isCapture, promotion)|]
-            | _ -> [||]
-            |> Seq.ofArray
-            |> Seq.cache
+                [(toCoords, isCapture, promotion)]
+            | _ -> []
+            |> LazyList.ofList
         let otherMoveTuples = Board.coordinatesControlledByPawn coordinates position.Board
-                              |> Seq.map (fun toCoords ->
-                                            let (toRowIndex, _) = toCoords
-                                            let isCapture =
-                                                match Board.resident toCoords position.Board with
-                                                | None -> false
-                                                | _ -> true
-                                            match toRowIndex with
-                                            | 0 | 7 ->
-                                                [| (toCoords, isCapture, Some Board.Queen)
-                                                   (toCoords, isCapture, Some Board.Rook)
-                                                   (toCoords, isCapture, Some Board.Bishop)
-                                                   (toCoords, isCapture, Some Board.Knight) |]
-                                            | _ ->
-                                                [|(toCoords, isCapture, None)|]
-                                            |> Seq.ofArray
-                                         )
-                              |> Seq.concat
-                              |> Seq.cache
-        Seq.append enPassantMoveTuples otherMoveTuples
-        |> Seq.map (fun (toCoords, isCapture, promotion) ->
-                        { Piece = Board.Pawn
-                          FromCoords = coordinates
-                          ToCoords = toCoords
-                          IsCapture = isCapture
-                          Promotion = promotion }
-                   )
-        |> Seq.cache
+                              |> LazyList.map (fun toCoords ->
+                                                 let (toRowIndex, _) = toCoords
+                                                 let isCapture =
+                                                     match Board.resident toCoords position.Board with
+                                                     | None -> false
+                                                     | _ -> true
+                                                 match toRowIndex with
+                                                 | 0 | 7 ->
+                                                     [ (toCoords, isCapture, Some Board.Queen)
+                                                       (toCoords, isCapture, Some Board.Rook)
+                                                       (toCoords, isCapture, Some Board.Bishop)
+                                                       (toCoords, isCapture, Some Board.Knight) ]
+                                                 | _ ->
+                                                     [(toCoords, isCapture, None)]
+                                                 |> LazyList.ofList
+                                              )
+                              |> LazyList.concat
+        LazyList.append enPassantMoveTuples otherMoveTuples
+        |> LazyList.map (fun (toCoords, isCapture, promotion) ->
+                             { Piece = Board.Pawn
+                               FromCoords = coordinates
+                               ToCoords = toCoords
+                               IsCapture = isCapture
+                               Promotion = promotion }
+                        )
     | _ -> raise (Board.WrongPiece ("NoPawn", rowIndex, columnIndex))
 
 let simplePieceMovement (fromCoords: Board.Coordinates) (toCoords: Board.Coordinates) (position: Position): Movement =
@@ -140,20 +138,19 @@ let simplePieceMovement (fromCoords: Board.Coordinates) (toCoords: Board.Coordin
                       Promotion = None }
     | _ -> raise (Board.NoPiece fromCoords)
 
-let pieceMovements (coordinates: Board.Coordinates) (position: Position): Movement seq =
+let pieceMovements (coordinates: Board.Coordinates) (position: Position): Movement LazyList =
     match Board.resident coordinates position.Board with
     | Some { PieceType = Board.Pawn} ->
         pawnMovements coordinates position
     | Some { PieceType = Board.King} ->
         Board.coordinatesControlledByKing coordinates position.Board
-        |> Seq.map (fun toCoords -> simplePieceMovement coordinates toCoords position)
-        |> Seq.append (specialKingMovements coordinates position)
+        |> LazyList.map (fun toCoords -> simplePieceMovement coordinates toCoords position)
+        |> LazyList.append (specialKingMovements coordinates position)
     | Some piece ->
         Board.coordinatesControlledByPiece coordinates position.Board
-        |> Seq.map (fun toCoords -> simplePieceMovement coordinates toCoords position)
+        |> LazyList.map (fun toCoords -> simplePieceMovement coordinates toCoords position)
     | None ->
         raise (Board.NoPiece coordinates)
-    |> Seq.cache
 
 let positionAfterMovement (movement: Movement) (position: Position): Position =
     let newIsWhiteToMove = not position.IsWhiteToMove
@@ -207,44 +204,40 @@ let positionAfterMovement (movement: Movement) (position: Position): Position =
       Halfmove = newHalfMove
       Fullmove = newFullMove }
 
-let validMovements (position: Position): Movement seq =
-    seq {
-        for rowIndex in 0 .. 7 do
-            for columnIndex in 0 .. 7 ->
-                (rowIndex, columnIndex)
-    }
-    |> Seq.filter (fun coords ->
-                        match Board.resident coords position.Board with
-                        | Some {Board.IsWhite = isWh} when isWh = position.IsWhiteToMove -> true
-                        | _ -> false
-                  )
-    |> Seq.map (fun coords -> pieceMovements coords position)
-    |> Seq.concat
-    |> Seq.filter (fun move ->
-                        let newPos = positionAfterMovement move position
-                        Board.isKingInDanger position.IsWhiteToMove newPos.Board
-                        |> not
-                  )
-    |> Seq.cache
+let validMovements (position: Position): Movement LazyList =
+    Utils.laz2DIndices 8 8
+    |> LazyList.filter (fun coords ->
+                             match Board.resident coords position.Board with
+                             | Some {Board.IsWhite = isWh} when isWh = position.IsWhiteToMove -> true
+                             | _ -> false
+                       )
+    |> LazyList.map (fun coords -> pieceMovements coords position)
+    |> LazyList.concat
+    |> LazyList.filter (fun move ->
+                             let newPos = positionAfterMovement move position
+                             Board.isKingInDanger position.IsWhiteToMove newPos.Board
+                             |> not
+                       )
 
-let movesWithResultedPosition (position: Position): (Move * Position) seq =
+let movesWithResultedPosition (position: Position): (Move * Position) LazyList =
     let valMovements = validMovements position
     valMovements
-    |> Seq.map (fun move ->
+    |> LazyList.map
+            (fun move ->
                     let newPos = positionAfterMovement move position
                     let isCheck =
                         Board.isKingInDanger newPos.IsWhiteToMove newPos.Board
                     let canMove = newPos
                                   |> validMovements
-                                  |> Seq.isEmpty
+                                  |> LazyList.isEmpty
                                   |> not
                     let isMate = isCheck && (not canMove)
                     let isStalemate = (not isCheck) && (not canMove)
                     let samePieceCoords =
                         valMovements
-                        |> Seq.filter (fun m -> m <> move && m.Piece = move.Piece && m.ToCoords = move.ToCoords)
-                        |> Seq.map (fun m -> m.FromCoords)
-                        |> Seq.tryHead
+                        |> LazyList.filter (fun m -> m <> move && m.Piece = move.Piece && m.ToCoords = move.ToCoords)
+                        |> LazyList.map (fun m -> m.FromCoords)
+                        |> LazyList.tryHead
                     let m = 
                         { Piece = move.Piece
                           FromCoords = move.FromCoords
@@ -256,8 +249,7 @@ let movesWithResultedPosition (position: Position): (Move * Position) seq =
                           IsStalemate = isStalemate
                           SamePieceCoords= samePieceCoords }
                     (m, newPos)
-                )
-    |> Seq.cache
+            )
 
 let positionAfterMove (move: Move) (position: Position): Position =
     let move = { Piece = move.Piece

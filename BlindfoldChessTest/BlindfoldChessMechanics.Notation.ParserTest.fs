@@ -2,10 +2,10 @@
 
 open Xunit
 open FsUnit.Xunit
+open FSharpx.Collections
 
 open BlindfoldChessMechanics.Notation.Parser
 open BlindfoldChessMechanics.Logic
-open System.IO
 
 // tests
 
@@ -110,46 +110,46 @@ let ``Parse text of moves with result`` () =
     37. Rxc5 { [%eval #-3] [%clk 0:00:08] } 37... Rc2 { [%eval #-2] [%clk 0:00:19] } 0-1
     """
     let (moves, result) = textOfMovesWithResult text
-    let movesArr = Seq.toArray moves
+    let movesArr = LazyList.toList moves
     should equal (movesArr, result)
         (
-            [| "e4"; "c5";
-                "Nf3"; "e6";
-                "d3"; "Nc6";
-                "g3"; "g6";
-                "Bg5"; "Qc7";
-                "Nbd2"; "Bg7";
-                "Bf4"; "d6";
-                "Nc4"; "Bf8";
-                "a4"; "Na5";
-                "e5"; "Nxc4";
-                "dxc4"; "Qa5+";
-                "c3"; "dxe5";
-                "Nxe5"; "Bg7";
-                "Qd6"; "Qb6";
-                "Qxb6"; "axb6";
-                "Bd3"; "Nf6";
-                "Ke2"; "Nh5";
-                "Be4"; "g5";
-                "Nxf7"; "Nxf4+";
-                "gxf4"; "Kxf7";
-                "fxg5"; "Bd7";
-                "b3"; "Bc6";
-                "Bxc6"; "bxc6";
-                "Rac1"; "Rhd8";
-                "h4"; "Kg6";
-                "f4"; "Kf5";
-                "Ke3"; "Rd7";
-                "Rhd1"; "Rad8";
-                "Rxd7"; "Rxd7";
-                "Ra1"; "Bxc3";
-                "Rf1"; "Bd2+";
-                "Ke2"; "Bxf4";
-                "a5"; "bxa5";
-                "Ra1"; "Rd2+";
-                "Ke1"; "Ke4";
-                "Rxa5"; "Kf3";
-                "Rxc5"; "Rc2" |],
+            [ "e4"; "c5";
+               "Nf3"; "e6";
+               "d3"; "Nc6";
+               "g3"; "g6";
+               "Bg5"; "Qc7";
+               "Nbd2"; "Bg7";
+               "Bf4"; "d6";
+               "Nc4"; "Bf8";
+               "a4"; "Na5";
+               "e5"; "Nxc4";
+               "dxc4"; "Qa5+";
+               "c3"; "dxe5";
+               "Nxe5"; "Bg7";
+               "Qd6"; "Qb6";
+               "Qxb6"; "axb6";
+               "Bd3"; "Nf6";
+               "Ke2"; "Nh5";
+               "Be4"; "g5";
+               "Nxf7"; "Nxf4+";
+               "gxf4"; "Kxf7";
+               "fxg5"; "Bd7";
+               "b3"; "Bc6";
+               "Bxc6"; "bxc6";
+               "Rac1"; "Rhd8";
+               "h4"; "Kg6";
+               "f4"; "Kf5";
+               "Ke3"; "Rd7";
+               "Rhd1"; "Rad8";
+               "Rxd7"; "Rxd7";
+               "Ra1"; "Bxc3";
+               "Rf1"; "Bd2+";
+               "Ke2"; "Bxf4";
+               "a5"; "bxa5";
+               "Ra1"; "Rd2+";
+               "Ke1"; "Ke4";
+               "Rxa5"; "Kf3";
+               "Rxc5"; "Rc2" ],
             Some Game.Black
         )
 
@@ -301,3 +301,47 @@ Qh8+ Kg2 68.Kd3 Kg1 69.Ke2 g2 70.Qd4+ Kh1 71.Qh4+ Kg1 1-0"""
     largeGame.Moves
     |> Array.length
     |> should equal 142
+
+[<Fact>]
+let ``Json of example game`` () =
+    ResourcesAsCode.exampleGameJson
+    |> jsonOfGame
+    |> should equal
+        EmitterTest.exampleGame
+
+//[<Fact>]
+//let ``Convert endgame puzzles to v300`` () =
+//    "C:\Users\MrDIM\Desktop\old-blindfold\endgame_puzzles.pgn"
+//    |> Parser.fileOfGameTexts
+//    |> Utils.lazIndexed
+//    |> LazyList.map
+//            (fun (i, game) ->
+//                let newInitPosition = Position.positionAfterMove game.Moves.[0] game.InitialPosition
+//                let newMoves = [|game.Moves.[1]|]
+//                let newMetaTags = [ ("category_id", "0")
+//                                    ("level", string (i / 50))
+//                                    ("index_in_level", string (i % 50)) ]
+//                                  |> Map.ofList
+//                { Game.MetaTags = newMetaTags
+//                  Game.InitialPosition = newInitPosition
+//                  Game.Moves = newMoves
+//                  Game.Result = game.Result }
+//            )
+//    |> Emitter.gameFileJsons "C:\Users\MrDIM\Desktop\endgame_puzzles_v300.jsonl"
+//    |> should equal ()
+
+//[<Fact>]
+//let ``Convert opening puzzles to v300`` () =
+//    "C:\Users\MrDIM\Desktop\\fixed_opening_puzzles.pgn"
+//    |> Parser.fileOfGameTexts
+//    |> Utils.lazIndexed
+//    |> LazyList.map
+//            (fun (i, game) ->
+//                let newMetaTags = [ ("category_id", "1")
+//                                    ("level", string (i / 50))
+//                                    ("index_in_level", string (i % 50)) ]
+//                                  |> Map.ofList
+//                { game with MetaTags = newMetaTags }
+//            )
+//    |> Emitter.gameFileJsons "C:\Users\MrDIM\Desktop\opening_puzzles_v300.jsonl"
+//    |> should equal ()

@@ -11,7 +11,13 @@
 	<Compile Include="Logic.Game.fs" />
 	<Compile Include="Notation.Emitter.fs" />
 	<Compile Include="Notation.Parser.fs" />
+	<Compile Include="NaturalLanguage.fs" />
     <Compile Include="Library.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.SystemTextJson" Version="0.14.8" />
+    <PackageReference Include="FSharpx.Collections" Version="2.1.3" />
   </ItemGroup>
 
 </Project>
