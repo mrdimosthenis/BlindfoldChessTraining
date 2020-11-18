@@ -15,7 +15,7 @@ let getNewGameFromDBAndModel (model: Model.Model) (categoryId: int, level: int, 
     let newCurrentGame =
             newGameJsonStr
             |> Notation.Parser.jsonOfGame
-            |> Model.gameToGameWithBoards model.ConfigOptions.AreSymbolsEnabled model.SelectedPage
+            |> Model.mechanicToCurrentGame model.ConfigOptions.AreSymbolsEnabled model.SelectedPage
     match model.SelectedPage with
     | Model.OpeningPuzzlesPage ->
         Preferences.setString Preferences.openingJsonStrKey newGameJsonStr
@@ -44,9 +44,15 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     | Msg.SelectPage v ->
         let newCurrentGame =
                 match v with
-                | Model.OpeningPuzzlesPage -> Notation.Parser.jsonOfGame model.OpeningJsonStr
-                | _ -> Notation.Parser.jsonOfGame model.EndgameJsonStr
-                |> Model.gameToGameWithBoards model.ConfigOptions.AreSymbolsEnabled v
+                | Model.OpeningPuzzlesPage ->
+                    model.OpeningJsonStr
+                    |> Notation.Parser.jsonOfGame
+                    |> Model.mechanicToCurrentGame model.ConfigOptions.AreSymbolsEnabled v
+                | Model.EndgamePuzzlesPage ->
+                    model.EndgameJsonStr
+                    |> Notation.Parser.jsonOfGame
+                    |> Model.mechanicToCurrentGame model.ConfigOptions.AreSymbolsEnabled v
+                | _ -> model.CurrentGame
         let newModel = { model with SelectedPage = v
                                     CurrentGame = newCurrentGame
                                     CurrentMoveIndex = None
@@ -180,7 +186,15 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     | Msg.SelectCoordsConfig v ->
         Preferences.setBool Preferences.areCoordsEnabledKey v
         let newConfigOptions = { model.ConfigOptions with AreCoordsEnabled = v }
-        { model with ConfigOptions = newConfigOptions }, Cmd.none
+        let cmd = model.SelectedPage |> Msg.SelectPage |> Cmd.ofMsg
+        { model with ConfigOptions = newConfigOptions }, cmd
+    | Msg.SelectBoardSizeConfig v ->
+        Preferences.setFloat Preferences.boardSizeKey v
+        let newConfigOptions = { model.ConfigOptions with BoardSize = v }
+        let cmd1 = Model.IntroPage |> Msg.SelectPage |> Cmd.ofMsg
+        let cmd2 = Model.OptionsPage |> Msg.SelectPage |> Cmd.ofMsg
+        let cmd = Cmd.batch [ cmd1; cmd2 ]
+        { model with ConfigOptions = newConfigOptions }, cmd
     | Msg.SelectPieceSymbolConfig v ->
         Preferences.setBool Preferences.areSymbolsEnabledKey v
         let newConfigOptions = { model.ConfigOptions with AreSymbolsEnabled = v }

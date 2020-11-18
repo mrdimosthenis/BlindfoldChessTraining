@@ -147,9 +147,11 @@ let pieces (areCoordsEnabled: bool) (board: Board.Board): ViewElement LazyList =
         )
     |> LazyList.concat
 
-let grid (areCoordsEnabled: bool) (board: Board.Board): ViewElement =
+let grid (areCoordsEnabled: bool) (boardSize: float) (board: Board.Board): ViewElement =
     let maxColumn = if areCoordsEnabled then 8 else 7
-    let sizeNom = min Device.info.PixelScreenSize.Width Device.info.PixelScreenSize.Height
+    let sizeNom = Device.info.PixelScreenSize.Width
+                  |> min Device.info.PixelScreenSize.Height
+                  |> (*) boardSize
     let sizeDenom = 2.0 * (float maxColumn + 1.0)
     let squareSize = sizeNom / sizeDenom
     View.Grid(

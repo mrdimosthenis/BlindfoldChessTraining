@@ -25,8 +25,8 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <OtherFlags>/warnon:1182</OtherFlags>
     <WarningLevel>4</WarningLevel>
-    <SelectedDevice>phone_l-dpi_2_7in_pie_9_0_-_api_28</SelectedDevice>
-    <DefaultDevice>phone_l-dpi_2_7in_pie_9_0_-_api_28</DefaultDevice>
+    <SelectedDevice>Samsung SM-T580</SelectedDevice>
+    <DefaultDevice>nexus_s_nougat_7_0_-_api_24</DefaultDevice>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>

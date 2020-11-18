@@ -19,6 +19,7 @@ type Msg =
     | ShowSolution
     | SelectDisplayBoardOption of bool
     | SelectCoordsConfig of bool
+    | SelectBoardSizeConfig of float
     | SelectPieceSymbolConfig of bool
     | SelectFontSizeConfig of float
     | SelectPitchConfig of float

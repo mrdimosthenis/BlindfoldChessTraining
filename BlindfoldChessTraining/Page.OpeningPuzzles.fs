@@ -20,7 +20,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                   then []
                   else [ GameNavigator.displayBoardOption model dispatch ]
               if model.IsDisplayBoardOptionEnabled && not model.IsPuzzleSolved
-                  then [ Logic.Board.init |> UIElems.Board.grid model.ConfigOptions.AreCoordsEnabled ]
+                  then [ Logic.Board.init |> UIElems.Board.grid model.ConfigOptions.AreCoordsEnabled model.ConfigOptions.BoardSize ]
                   else []
               if model.IsPuzzleSolved
                   then [ GameNavigator.chessboard model ]

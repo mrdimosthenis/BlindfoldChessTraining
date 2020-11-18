@@ -16,6 +16,7 @@ type SelectedPage =
     | CreditsPage
 
 type ConfigOptions = { AreCoordsEnabled: bool
+                       BoardSize: float
                        AreSymbolsEnabled: bool
                        FontSize: float
                        SelectedLocale: int option
@@ -51,6 +52,7 @@ type Model =
 let defaultIsDisplayBoardOptionEnabled: bool = true
 
 let defaultAreCoordsEnabled: bool = true
+let defaultBoardSize: float = 1.0
 let defaultAreSymbolsEnabled: bool = false
 let defaultFontSize: float = 17.0
 let defaultSpeechPitch: float = 1.0
@@ -62,7 +64,7 @@ let defaultOpeningJsonStr: string = DB.getGameJsonStr(1, 0, 0)
 
 // functions
 
-let gameToGameWithBoards (areSymbolsEnabled: bool) (selectedPage: SelectedPage) (game: Logic.Game.Game): CurrentGame =
+let mechanicToCurrentGame (areSymbolsEnabled: bool) (selectedPage: SelectedPage) (game: Logic.Game.Game): CurrentGame =
     let categoryId = game.MetaTags.Item("category_id") |> int
     let level = game.MetaTags.Item("level") |> int
     let indexInLevel = game.MetaTags.Item("index_in_level") |> int
@@ -156,6 +158,7 @@ let resetConfigOptions(): unit =
 
 let initConfigOptions(): ConfigOptions =
     { AreCoordsEnabled = Preferences.areCoordsEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultAreCoordsEnabled
+      BoardSize = Preferences.boardSizeKey |> Preferences.tryGetFloat |> Option.defaultValue defaultBoardSize
       AreSymbolsEnabled = Preferences.areSymbolsEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultAreSymbolsEnabled
       FontSize = Preferences.fontSizeKey |> Preferences.tryGetFloat |> Option.defaultValue defaultFontSize
       SelectedLocale = Preferences.selectedLocaleKey |> Preferences.tryGetInt
@@ -170,7 +173,7 @@ let init(): Model =
       ConfigOptions = initCfgOpts
       EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
       OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr
-      CurrentGame = endgameJsonStr |> Notation.Parser.jsonOfGame |> gameToGameWithBoards initCfgOpts.AreSymbolsEnabled IntroPage
+      CurrentGame = endgameJsonStr |> Notation.Parser.jsonOfGame |> mechanicToCurrentGame initCfgOpts.AreSymbolsEnabled IntroPage
       CurrentMoveIndex = None
       IsPuzzleSolved = false
       CurrentAnnouncementIndex = 0

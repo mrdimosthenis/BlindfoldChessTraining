@@ -19,7 +19,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
                   then []
                   else [ GameNavigator.displayBoardOption model dispatch ]
               if model.IsDisplayBoardOptionEnabled && not model.IsPuzzleSolved
-                  then [ Logic.Board.empty |> UIElems.Board.grid model.ConfigOptions.AreCoordsEnabled ]
+                  then [ Logic.Board.empty |> UIElems.Board.grid model.ConfigOptions.AreCoordsEnabled model.ConfigOptions.BoardSize ]
                   else []
               if model.IsPuzzleSolved
                   then [ GameNavigator.notation model ]
