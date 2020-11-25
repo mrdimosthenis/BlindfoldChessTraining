@@ -277,6 +277,13 @@ let ``Text of small game`` () =
           Game.Result = (Some Game.Draw) }
 
 [<Fact>]
+let ``Text of small game without meta tags`` () =
+    let { Game.Moves = mvs } = textOfGame "1. e4 e5 2. Nf3 Nc6  1/2-1/2"
+    mvs
+    |> Array.length
+    |> should equal 4
+
+[<Fact>]
 let ``Text of large valid game`` () =
     let largeGame = textOfGame """[Event "?"]
 [Site "Dusseldorf (09)"]

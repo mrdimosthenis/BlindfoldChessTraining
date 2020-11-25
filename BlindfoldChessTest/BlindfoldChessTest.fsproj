@@ -14,7 +14,7 @@
 	<Compile Include="BlindfoldChessMechanics.Notation.EmitterTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.Notation.ParserTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.NaturalLanguageTest.fs" />
-	<Compile Include="BlindfoldChessEngine.CustomScripts.InsertEvaluatedLinesTest.fs" />
+	<Compile Include="BlindfoldChessEngine.CustomScriptsTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

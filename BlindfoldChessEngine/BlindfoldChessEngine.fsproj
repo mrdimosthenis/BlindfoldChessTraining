@@ -12,10 +12,9 @@
     <None Include="InitDB.sql" />
     <Compile Include="CustomScripts.Utils.fs" />
     <Compile Include="CustomScripts.InsertEvaluatedLines.fs" />
+    <Compile Include="CustomScripts.InsertPositions.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
-
-  <ItemGroup />
 
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.7.2" />
