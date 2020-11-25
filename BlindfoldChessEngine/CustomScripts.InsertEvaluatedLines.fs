@@ -3,10 +3,6 @@
 open Npgsql
 open System.IO
 
-let connection(): NpgsqlConnection =
-    let cs = "Host=localhost;Username=postgres;Password=postgres;Database=postgres";
-    new NpgsqlConnection(cs)
-
 let getOne(): string =
     let sql = "SELECT 1"
     let f conn =
@@ -15,7 +11,6 @@ let getOne(): string =
     Utils.withDBConnection f
 
 let insert(): unit =
-    let conn = connection()
     @"C:\Users\MrDIM\Desktop\lichess_db_evaluated_lines_202010.txt"
     |> File.ReadLines
     |> Seq.filter (fun s -> s.Trim() <> "")
