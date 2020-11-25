@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\MrDIM\.nuget\packages\synapses\7.3.1\contentFiles\any\netstandard2.0\LICENSE" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="InitDB.sql" />
+    <Compile Include="CustomScripts.Utils.fs" />
+    <Compile Include="CustomScripts.InsertEvaluatedLines.fs" />
+    <Compile Include="Library.fs" />
+  </ItemGroup>
+
+  <ItemGroup />
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BlindfoldChessMechanics\BlindfoldChessMechanics.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="5.0.0" />
+    <PackageReference Include="Synapses" Version="7.3.1" />
+  </ItemGroup>
+
+</Project>
