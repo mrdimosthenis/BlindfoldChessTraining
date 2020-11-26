@@ -22,10 +22,20 @@ let ``get one`` () =
 //    |> Option.isSome
 //    |> should equal true
 
+//[<Fact>]
+//let ``get evaluated line`` () =
+//    1
+//    |> InsertPositions.getEvaluatedLine
+//    |> Utils.withDBTransaction
+//    |> String.length
+//    |> should equal 3795
+
+//[<Fact>]
+//let ``get next unparsed evaluated line and insert fens`` () =
+//    InsertPositions.getNextUnparsedEvaluatedLineAndInsertFens()
+//    |> should equal ()
+
 [<Fact>]
-let ``get evaluated line`` () =
-    1
-    |> InsertPositions.getEvaluatedLine
-    |> Utils.withDBTransaction
-    |> String.length
-    |> should equal 3795
+let ``insert all fens`` () =
+    InsertPositions.insertAllFens()
+    |> should equal false

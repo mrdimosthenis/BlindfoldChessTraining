@@ -39,3 +39,4 @@ let withTransactionalExecution<'a>
     cmd.Transaction <- trans
     cmd.CommandText <- sql
     f cmd
+    cmd.ExecuteNonQuery() |> ignore

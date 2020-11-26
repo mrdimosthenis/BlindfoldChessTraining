@@ -3,14 +3,16 @@
 open Npgsql
 open System.Data.Common
 
+open BlindfoldChessMechanics
 open BlindfoldChessMechanics.Notation
 open BlindfoldChessMechanics.Logic.Game
+open BlindfoldChessMechanics.Logic
 
 let getNextUnparsedEvaluatedLineId(conn: NpgsqlConnection, trans: NpgsqlTransaction): int option =
     let sql = """
     SELECT id
     FROM evaluated_line
-    WHERE id NOT IN (SELECT evaluated_line_id FROM position)
+    WHERE is_parsed = FALSE
     LIMIT 1
     """
     let f (dr: DbDataReader) =
@@ -33,23 +35,57 @@ let getEvaluatedLine (id: int) (conn: NpgsqlConnection, trans: NpgsqlTransaction
     Utils.withTransactionalQuery f (conn, trans, sql)
 
 let insertSingleFen
-    (evaluated_line_id: int, num_of_halfmoves: int, fen: string)
+    (evaluatedLineId: int, numOfHalfMoves: int, fen: string)
     (conn: NpgsqlConnection, trans: NpgsqlTransaction): unit =
-    let sql = "INSERT INTO position(evaluated_line_id, num_of_halfmoves, fen) VALUES(@evaluated_line_id, @num_of_halfmoves, @fen)"
+    let sql = "INSERT INTO position VALUES(@evaluated_line_id, @num_of_halfmoves, @fen)"
     let f (cmd: NpgsqlCommand) =
-        cmd.Parameters.AddWithValue("evaluated_line_id", evaluated_line_id) |> ignore
-        cmd.Parameters.AddWithValue("num_of_halfmoves", num_of_halfmoves) |> ignore
+        cmd.Parameters.AddWithValue("evaluated_line_id", evaluatedLineId) |> ignore
+        cmd.Parameters.AddWithValue("num_of_halfmoves", numOfHalfMoves) |> ignore
         cmd.Parameters.AddWithValue("fen", fen) |> ignore
         cmd.Prepare()
     Utils.withTransactionalExecution f (conn, trans, sql)
 
-let getNextUnparsedEvaluatedLineAndInsertFens(): unit
+let markEvaluationLineAsParsed (id: int) (conn: NpgsqlConnection, trans: NpgsqlTransaction): unit =
+    let sql =
+        sprintf """
+                UPDATE evaluated_line
+                SET is_parsed = TRUE
+                WHERE id = %i
+                """
+                id
+    let f (cmd: NpgsqlCommand) = ()
+    Utils.withTransactionalExecution f (conn, trans, sql)
+
+let getNextUnparsedEvaluatedLineAndInsertFens(): bool =
     let f (conn: NpgsqlConnection, trans: NpgsqlTransaction) =
         match getNextUnparsedEvaluatedLineId(conn, trans) with
         | None ->
-            ()
+            false
         | Some lineId ->
-            let (game: Game) = getEvaluatedLine lineId (conn, trans)
-                               |> Parser.textOfGame
-    ()
+            let game = getEvaluatedLine lineId (conn, trans)
+                       |> Parser.textOfGame
+            game.Moves
+            |> Seq.ofArray
+            |> Seq.fold
+                    (fun acc x ->
+                        let nextPos = acc
+                                      |> Seq.head
+                                      |> Position.positionAfterMove x
+                        Seq.append (Seq.ofList [ nextPos ]) acc
+                    )
+                    (Seq.ofList [ Position.init ])
+            |> Seq.rev
+            |> Seq.indexed
+            |> Seq.tail
+            |> Seq.iter
+                    (fun (i, pos) ->
+                        let fen = Emitter.positionText pos
+                        insertSingleFen (lineId, i, fen) (conn, trans)
+                    )
+            markEvaluationLineAsParsed lineId (conn, trans)
+            true
+    Utils.withDBTransaction f
 
+let rec insertAllFens(): bool =
+    let res = getNextUnparsedEvaluatedLineAndInsertFens()
+    if res then insertAllFens() else res

@@ -277,11 +277,57 @@ let ``Text of small game`` () =
           Game.Result = (Some Game.Draw) }
 
 [<Fact>]
-let ``Text of small game without meta tags`` () =
-    let { Game.Moves = mvs } = textOfGame "1. e4 e5 2. Nf3 Nc6  1/2-1/2"
-    mvs
+let ``Text of game without meta tags`` () =
+    let game =
+        """1. e4 { [%eval 0.0] [%clk 0:10:00] } 1... d5?! { [%eval 0.52] [%clk 0:10:00] }
+    2. exd5 { [%eval 0.33] [%clk 0:10:01] } 2... Qxd5 { [%eval 0.48] [%clk 0:10:02] }
+    3. d4 { [%eval 0.28] [%clk 0:10:04] } 3... Nc6 { [%eval 0.13] [%clk 0:10:03] }
+    4. Nf3 { [%eval 0.25] [%clk 0:10:05] } 4... Bg4 { [%eval 0.01] [%clk 0:10:04] }
+    5. Be2 { [%eval 0.13] [%clk 0:09:57] } 5... O-O-O { [%eval 0.31] [%clk 0:10:00] }
+    6. Nc3 { [%eval 0.32] [%clk 0:09:26] } 6... Qd7 { [%eval 0.6] [%clk 0:09:57] }
+    7. Nb5? { [%eval -0.44] [%clk 0:08:01] } 7... a6 { [%eval -0.55] [%clk 0:09:53] }
+    8. Nc3?! { [%eval -1.44] [%clk 0:07:52] } 8... Bxf3 { [%eval -1.44] [%clk 0:09:51] }
+    9. Bxf3 { [%eval -1.33] [%clk 0:07:50] } 9... Nxd4 { [%eval -1.3] [%clk 0:09:50] }
+    10. Bg4? { [%eval -3.22] [%clk 0:07:44] } 10... f5 { [%eval -3.19] [%clk 0:09:50] }
+    11. Bh3 { [%eval -3.34] [%clk 0:07:39] } 11... g6?! { [%eval -2.47] [%clk 0:09:23] }
+    12. Be3 { [%eval -2.45] [%clk 0:07:22] } 12... Nb5? { [%eval -0.32] [%clk 0:09:14] }
+    13. Nxb5? { [%eval -1.65] [%clk 0:06:15] } 13... Qxd1+? { [%eval -0.37] [%clk 0:09:15] }
+    14. Rxd1 { [%eval -0.42] [%clk 0:06:16] } 14... Rxd1+ { [%eval -0.48] [%clk 0:09:18] }
+    15. Kxd1 { [%eval -0.56] [%clk 0:06:17] } 15... axb5 { [%eval -0.5] [%clk 0:09:19] }
+    16. Ke2?! { [%eval -1.34] [%clk 0:05:47] } 16... Bg7 { [%eval -1.13] [%clk 0:09:17] }
+    17. c3 { [%eval -1.27] [%clk 0:05:48] } 17... Nf6 { [%eval -1.27] [%clk 0:09:04] }
+    18. g4? { [%eval -2.36] [%clk 0:05:41] } 18... fxg4?! { [%eval -1.72] [%clk 0:08:46] }
+    19. Bf1 { [%eval -1.9] [%clk 0:05:35] } 19... h5 { [%eval -1.71] [%clk 0:08:42] }
+    20. f3 { [%eval -2.23] [%clk 0:05:34] } 20... gxf3+ { [%eval -1.72] [%clk 0:08:42] }
+    21. Kxf3 { [%eval -1.83] [%clk 0:05:35] } 21... Rf8?! { [%eval -1.22] [%clk 0:08:45] }
+    22. Bxb5? { [%eval -4.01] [%clk 0:05:34] } 22... c6?? { [%eval -0.48] [%clk 0:08:36] }
+    23. Bc4 { [%eval -0.79] [%clk 0:05:28] } 23... Nd5+ { [%eval -0.75] [%clk 0:08:12] }
+    24. Ke2 { [%eval -0.75] [%clk 0:05:27] } 24... Nxe3 { [%eval -0.95] [%clk 0:08:13] }
+    25. Be6+ { [%eval -1.1] [%clk 0:05:29] } 25... Kc7 { [%eval -1.08] [%clk 0:08:15] }
+    26. Kxe3 { [%eval -1.07] [%clk 0:05:22] } 26... Kd6 { [%eval -0.94] [%clk 0:08:17] }
+    27. Bb3 { [%eval -0.88] [%clk 0:05:19] } 27... Bh6+ { [%eval -0.87] [%clk 0:08:18] }
+    28. Kd4? { [%eval -2.16] [%clk 0:05:17] } 28... e5+ { [%eval -2.15] [%clk 0:08:08] }
+    29. Kd3 { [%eval -1.98] [%clk 0:04:52] } 29... Rf3+ { [%eval -1.8] [%clk 0:08:06] }
+    30. Kc2? { [%eval -2.84] [%clk 0:04:47] } 30... Rf2+ { [%eval -2.72] [%clk 0:08:09] }
+    31. Kd3 { [%eval -2.61] [%clk 0:04:49] } 31... Rd2+?! { [%eval -1.83] [%clk 0:08:07] }
+    32. Kc4?! { [%eval -2.62] [%clk 0:04:47] } 32... Rxb2 { [%eval -2.54] [%clk 0:07:59] }
+    33. Rd1+?! { [%eval -3.39] [%clk 0:04:49] } 33... Rd2? { [%eval -1.19] [%clk 0:08:01] }
+    34. Rf1? { [%eval -3.09] [%clk 0:04:48] } 34... Bf4 { [%eval -2.82] [%clk 0:08:01] }
+    35. h3? { [%eval -4.53] [%clk 0:04:48] } 35... Rh2 { [%eval -4.0] [%clk 0:08:02] }
+    36. Rd1+ { [%eval -4.56] [%clk 0:04:47] } 36... Kc7 { [%eval -4.09] [%clk 0:08:00] }
+    37. a4 { [%eval -4.45] [%clk 0:04:34] } 37... Rxh3 { [%eval -3.93] [%clk 0:08:02] }
+    38. Kc5? { [%eval -6.32] [%clk 0:04:32] } 38... Rxc3+ { [%eval -6.16] [%clk 0:07:56] }
+    39. Kb4 { [%eval -5.36] [%clk 0:04:32] } 39... Rh3 { [%eval -5.16] [%clk 0:07:47] }
+    40. a5 { [%eval -6.11] [%clk 0:04:32] } 40... g5 { [%eval -4.8] [%clk 0:07:47] }
+    41. a6? { [%eval -7.24] [%clk 0:04:31] } 41... bxa6 { [%eval -6.84] [%clk 0:07:49] }
+    42. Ra1 { [%eval -9.22] [%clk 0:04:28] } 42... a5+ { [%eval -8.49] [%clk 0:07:47] }
+    43. Rxa5? { [%eval #-14] [%clk 0:04:28] } 43... Bd2+ { [%eval #-13] [%clk 0:07:49] }
+    44. Ka4 { [%eval #-14] [%clk 0:04:30] } 44... Bxa5 { [%eval #-15] [%clk 0:07:52] }
+    45. Kxa5 { [%eval #-7] [%clk 0:04:33] } 45... Rxb3 { [%eval #-6] [%clk 0:07:55] } 0-1"""
+        |> textOfGame
+    game.Moves
     |> Array.length
-    |> should equal 4
+    |> should equal 90
 
 [<Fact>]
 let ``Text of large valid game`` () =
