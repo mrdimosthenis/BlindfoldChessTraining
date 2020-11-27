@@ -35,7 +35,7 @@ let ``get one`` () =
 //    InsertPositions.getNextUnparsedEvaluatedLineAndInsertFens()
 //    |> should equal ()
 
-[<Fact>]
-let ``insert all fens`` () =
-    InsertPositions.insertAllFens()
-    |> should equal false
+//[<Fact>]
+//let ``insert all fens`` () =
+//    InsertPositions.insertAllFens()
+//    |> should equal false
