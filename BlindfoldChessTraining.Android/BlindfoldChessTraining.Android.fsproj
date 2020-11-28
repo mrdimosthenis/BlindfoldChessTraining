@@ -25,7 +25,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <OtherFlags>/warnon:1182</OtherFlags>
     <WarningLevel>4</WarningLevel>
-    <SelectedDevice>Xiaomi Redmi 6</SelectedDevice>
+    <SelectedDevice>Android Emulator</SelectedDevice>
     <DefaultDevice>nexus_s_nougat_7_0_-_api_24</DefaultDevice>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
