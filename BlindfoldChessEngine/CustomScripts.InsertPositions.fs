@@ -13,6 +13,7 @@ let getNextUnparsedEvaluatedLineId(conn: NpgsqlConnection, trans: NpgsqlTransact
     SELECT id
     FROM evaluated_line
     WHERE is_parsed = FALSE
+        AND RANDOM() < 0.1
     LIMIT 1
     """
     let f (dr: DbDataReader) =
