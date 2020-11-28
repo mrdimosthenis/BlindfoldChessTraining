@@ -14,6 +14,7 @@
 	<Compile Include="BlindfoldChessMechanics.Notation.EmitterTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.Notation.ParserTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.NaturalLanguageTest.fs" />
+	<Compile Include="BlindfoldChessTraining.Resources.PuzzlesTest.fs" />
 	<Compile Include="BlindfoldChessEngine.CustomScriptsTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
@@ -37,6 +38,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BlindfoldChessEngine\BlindfoldChessEngine.fsproj" />
     <ProjectReference Include="..\BlindfoldChessMechanics\BlindfoldChessMechanics.fsproj" />
+    <ProjectReference Include="..\BlindfoldChessTraining\BlindfoldChessTraining.fsproj" />
   </ItemGroup>
 
   <ItemGroup>

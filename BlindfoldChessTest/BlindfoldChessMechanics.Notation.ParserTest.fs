@@ -6,6 +6,7 @@ open FSharpx.Collections
 
 open BlindfoldChessMechanics.Notation.Parser
 open BlindfoldChessMechanics.Logic
+open BlindfoldChessMechanics
 
 // tests
 
@@ -369,7 +370,7 @@ let ``Json of example game`` () =
 
 //[<Fact>]
 //let ``Convert endgame puzzles to v300`` () =
-//    "C:\Users\MrDIM\Desktop\old-blindfold\endgame_puzzles.pgn"
+//    @"C:\Users\MrDIM\Desktop\puzzles\endgame_puzzles.pgn"
 //    |> Parser.fileOfGameTexts
 //    |> Utils.lazIndexed
 //    |> LazyList.map
@@ -390,7 +391,7 @@ let ``Json of example game`` () =
 
 //[<Fact>]
 //let ``Convert opening puzzles to v300`` () =
-//    "C:\Users\MrDIM\Desktop\\fixed_opening_puzzles.pgn"
+//    @"C:\Users\MrDIM\Desktop\puzzles\fixed_opening_puzzles.pgn"
 //    |> Parser.fileOfGameTexts
 //    |> Utils.lazIndexed
 //    |> LazyList.map
