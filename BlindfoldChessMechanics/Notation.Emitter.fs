@@ -98,7 +98,8 @@ let textsOfPieces (areFigures: bool) (board: Board.Board): string LazyList * str
     (whitePieces, blackPieces)
 
 let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
-    match (m.Piece, snd m.FromCoords, snd m.ToCoords, m.IsCheck, m.IsMate) with
+    let (fromRow, fromColumn) = m.FromCoords
+    match (m.Piece, fromColumn, snd m.ToCoords, m.IsCheck, m.IsMate) with
     | (Board.King, 4, 6, false, false) -> "O-O"
     | (Board.King, 4, 2, false, false) -> "O-O-O"
     | (Board.King, 4, 6, true, false) -> "O-O+"
@@ -110,19 +111,20 @@ let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
                        | _ -> m.Piece
                               |> pieceText isWhite areFigures
                               |> String.map Char.ToUpper
+           let (fromRowText, fromColumnText) = (rowText fromRow, columnText fromColumn)
            let clarification =
                match (m.Piece, m.SamePieceCoords, m.IsCapture) with
-               | (Board.Pawn, _, true) -> m.FromCoords
-                                          |> snd
-                                          |> columnText
-               | (Board.Pawn, _, false) -> ""
-               | (_, Some (_, c), _) when c = (snd m.FromCoords) -> m.FromCoords
-                                                                    |> fst
-                                                                    |> rowText
-               | (_, Some _, _) -> m.FromCoords
-                                   |> snd
-                                   |> columnText
-               | _ -> ""
+               | (Board.Pawn, _, true) ->
+                    fromColumnText
+               | (Board.Pawn, _, false) | (_, [||], _) ->
+                    ""
+               | (_, samePieceCoords, _) ->
+                    let isSameColumn = Array.exists (fun (_, c) -> c = fromColumn) samePieceCoords
+                    let isSameRow = Array.exists (fun (r, _) -> r = fromRow) samePieceCoords
+                    match (isSameColumn, isSameRow) with
+                    | (true, true) -> fromColumnText + fromRowText
+                    | (true, false) -> fromRowText
+                    | _ -> fromColumnText
            let takes = if m.IsCapture then "x" else ""
            let targetSquare = coordinatesText m.ToCoords
            let promotion = match m.Promotion with

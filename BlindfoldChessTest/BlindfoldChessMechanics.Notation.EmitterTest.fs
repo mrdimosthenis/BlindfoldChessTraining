@@ -60,7 +60,7 @@ let ``O-O move text`` () =
       IsCheck = false
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = None }    
+      SamePieceCoords = [||] }    
     |> moveText true false
     |> should equal
         "O-O"
@@ -75,7 +75,7 @@ let ``O-O-O move text`` () =
       IsCheck = false
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = None }    
+      SamePieceCoords = [||] }    
     |> moveText false true
     |> should equal
         "O-O-O"
@@ -90,7 +90,7 @@ let ``bxc3 move text`` () =
       IsCheck = false
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = Some (1, 1) }    
+      SamePieceCoords = [| (1, 1) |] }    
     |> moveText true false
     |> should equal
         "dxc3"
@@ -105,7 +105,7 @@ let ``gxh1=♜# move text`` () =
       IsCheck = true
       IsMate = true
       IsStalemate = false
-      SamePieceCoords = None }    
+      SamePieceCoords = [||] }    
     |> moveText false true
     |> should equal
         "gxh1=♜#"
@@ -120,7 +120,7 @@ let ``♞c6 move text`` () =
       IsCheck = false
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = None }
+      SamePieceCoords = [||] }
     |> moveText false true
     |> should equal
         "♞c6"
@@ -135,7 +135,7 @@ let ``N1b3+ move text`` () =
       IsCheck = true
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = Some (4, 0) }    
+      SamePieceCoords = [| (4, 0) |] }    
     |> moveText false false
     |> should equal
         "N1b3+"
@@ -150,7 +150,7 @@ let ``♕axh2 move text`` () =
       IsCheck = false
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = Some (7, 7) }    
+      SamePieceCoords = [| (7, 7) |] }    
     |> moveText true true
     |> should equal
         "♕axh2"
@@ -165,7 +165,7 @@ let ``b8=Q move text`` () =
       IsCheck = false
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = Some (6, 2) }    
+      SamePieceCoords = [| (6, 2) |]  }    
     |> moveText true false
     |> should equal
         "b8=Q"
@@ -193,7 +193,7 @@ let ``Multiple moves text with figures in king's pawn game`` () =
         IsCheck = false
         IsMate = false
         IsStalemate = false
-        SamePieceCoords = None }
+        SamePieceCoords = [||] }
       { Piece = Pawn
         FromCoords = (6, 4)
         ToCoords = (4, 4)
@@ -202,7 +202,7 @@ let ``Multiple moves text with figures in king's pawn game`` () =
         IsCheck = false
         IsMate = false
         IsStalemate = false
-        SamePieceCoords = None }
+        SamePieceCoords = [||] }
       { Piece = Knight
         FromCoords = (0, 6)
         ToCoords = (2, 5)
@@ -211,7 +211,7 @@ let ``Multiple moves text with figures in king's pawn game`` () =
         IsCheck = false
         IsMate = false
         IsStalemate = false
-        SamePieceCoords = None }
+        SamePieceCoords = [||] }
       { Piece = Knight
         FromCoords = (7, 1)
         ToCoords = (5, 2)
@@ -220,7 +220,7 @@ let ``Multiple moves text with figures in king's pawn game`` () =
         IsCheck = false
         IsMate = false
         IsStalemate = false
-        SamePieceCoords = None } ]
+        SamePieceCoords = [||] } ]
     |> LazyList.ofList
     |> multipleMovesText true true
     |> should equal

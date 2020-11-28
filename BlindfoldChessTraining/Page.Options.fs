@@ -20,7 +20,7 @@ let firstMove: Logic.Position.Move =
       IsCheck = false
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = None }
+      SamePieceCoords = [||] }
 
 let secondMove: Logic.Position.Move =
     { Piece = Logic.Board.Pawn
@@ -31,7 +31,7 @@ let secondMove: Logic.Position.Move =
       IsCheck = false
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = None }
+      SamePieceCoords = [||] }
 
 let thirdMove: Logic.Position.Move =
     { Piece = Logic.Board.Bishop
@@ -42,7 +42,7 @@ let thirdMove: Logic.Position.Move =
       IsCheck = false
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = None }
+      SamePieceCoords = [||] }
 
 let forthMove: Logic.Position.Move =
     { Piece = Logic.Board.Knight
@@ -53,7 +53,7 @@ let forthMove: Logic.Position.Move =
       IsCheck = false
       IsMate = false
       IsStalemate = false
-      SamePieceCoords = None }
+      SamePieceCoords = [||] }
 
 let pieceNotationExample (areFigures: bool): string =
     [ firstMove

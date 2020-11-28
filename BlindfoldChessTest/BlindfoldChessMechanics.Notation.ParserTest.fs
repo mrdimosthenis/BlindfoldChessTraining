@@ -332,7 +332,7 @@ let ``Text of game without meta tags`` () =
         |> textOfGame
     game.Moves
     |> Array.length
-    |> should equal 90
+    |> should equal 99
 
 [<Fact>]
 let ``Text of large valid game`` () =
