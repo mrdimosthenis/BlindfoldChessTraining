@@ -13,3 +13,9 @@ CREATE TABLE position (
 	num_of_halfmoves int not null,
 	fen text not null
 );
+
+CREATE TABLE evaluation (
+	evaluated_line_id int not null,
+	num_of_halfmoves int not null,
+	eval text not null
+);

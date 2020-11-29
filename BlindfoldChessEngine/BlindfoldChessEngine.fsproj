@@ -13,6 +13,7 @@
     <Compile Include="CustomScripts.Utils.fs" />
     <Compile Include="CustomScripts.InsertEvaluatedLines.fs" />
     <Compile Include="CustomScripts.InsertPositions.fs" />
+    <Compile Include="CustomScripts.InsertEvals.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 
