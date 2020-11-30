@@ -16,6 +16,7 @@
 	<Compile Include="BlindfoldChessMechanics.NaturalLanguageTest.fs" />
 	<Compile Include="BlindfoldChessTraining.Resources.PuzzlesTest.fs" />
 	<Compile Include="BlindfoldChessEngine.CustomScriptsTest.fs" />
+	<Compile Include="BlindfoldChessEngine.Fitting.EncodeTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

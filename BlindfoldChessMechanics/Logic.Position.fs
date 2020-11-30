@@ -32,7 +32,7 @@ type Castling =
 type Position = { Board: Board.Board
                   IsWhiteToMove: bool
                   Castling: Castling
-                  EnPassant: Board.Coordinates Option
+                  EnPassant: Board.Coordinates option
                   Halfmove: int
                   Fullmove: int }
 
