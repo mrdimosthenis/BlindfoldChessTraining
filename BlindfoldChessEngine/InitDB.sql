@@ -19,3 +19,9 @@ CREATE TABLE evaluation (
 	num_of_halfmoves int not null,
 	eval text not null
 );
+
+CREATE TABLE synapses (
+	json_string text not null,
+	rmse_before_fit decimal not null,
+	tm timestamp not null default now()
+);

@@ -73,3 +73,13 @@ let ``parse evals`` () =
 //let ``insert all fens`` () =
 //    InsertEvals.insertAllEvals()
 //    |> should equal false
+
+//[<Fact>]
+//let ``neural network json`` () =
+//    Train.newNeuralNetworkJson()
+//    |> should equal ""
+
+[<Fact>]
+let ``infinite fit`` () =
+    Train.infiniteFit()
+    |> should equal ()
