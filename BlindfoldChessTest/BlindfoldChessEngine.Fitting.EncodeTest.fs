@@ -8,6 +8,48 @@ open FSharpx.Collections
 open BlindfoldChessEngine.Fitting.Encode
 
 [<Fact>]
+let ``parsed evaluation of 3_33`` () =
+    "3.33"
+    |> parsedEvaluation
+    |> should equal
+                (Centipawns 3.33)
+
+[<Fact>]
+let ``parsed evaluation of -10_08`` () =
+    "-10.08"
+    |> parsedEvaluation
+    |> should equal
+                (Centipawns -10.08)
+
+[<Fact>]
+let ``parsed evaluation of #24`` () =
+    "#24"
+    |> parsedEvaluation
+    |> should equal
+                (WhiteMate 24)
+
+[<Fact>]
+let ``parsed evaluation of #-3`` () =
+    "#-3"
+    |> parsedEvaluation
+    |> should equal
+                (BlackMate 3)
+
+[<Fact>]
+let ``parsed evaluation of 1-0`` () =
+    "1-0"
+    |> parsedEvaluation
+    |> should equal
+                (WhiteMate 0)
+
+[<Fact>]
+let ``parsed evaluation of 0-1`` () =
+    "0-1"
+    |> parsedEvaluation
+    |> should equal
+                (BlackMate 0)
+
+[<Fact>]
 let ``initial fen floats`` () =
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     |> fenFloats
@@ -171,3 +213,171 @@ let ``endgame fen floats`` () =
                    0.0; 0.0; 0.0; 0.0; 0.0; 0.0; 0.0; 0.0
                    
                    0.0 |]
+
+[<Fact>]
+let ``evaluation floats of 1-0`` () =
+    "1-0"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 1.0; 1.0; 1.0 ]
+
+[<Fact>]
+let ``evaluation floats of 0-1`` () =
+    "0-1"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.0; 0.0; 0.0 ]
+
+[<Fact>]
+let ``evaluation floats of #1`` () =
+    "#1"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 1.0; 1.0; 0.9929577464788732 ]
+
+[<Fact>]
+let ``evaluation floats of #-1`` () =
+    "#-1"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.0; 0.0; 0.007042253521126751 ]
+
+[<Fact>]
+let ``evaluation floats of #71`` () =
+    "#71"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 1.0; 1.0; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of #-71`` () =
+    "#-71"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.0; 0.0; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of #20`` () =
+    "#20"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 1.0; 1.0; 0.8591549295774648 ]
+
+[<Fact>]
+let ``evaluation floats of #-40`` () =
+    "#-40"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.0; 0.0; 0.2816901408450704 ]
+
+[<Fact>]
+let ``evaluation floats of #3`` () =
+    "#3"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 1.0; 1.0; 0.9788732394366197 ]
+
+[<Fact>]
+let ``evaluation floats of #-2`` () =
+    "#-2"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.0; 0.0; 0.014084507042253502 ]
+
+[<Fact>]
+let ``evaluation floats of #80`` () =
+    "#80"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 1.0; 1.0; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of #-90`` () =
+    "#-90"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.0; 0.0; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of 160_2`` () =
+    "160.2"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 1.0; 1.0; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of -160_42`` () =
+    "-160.42"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.0; 0.0; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of 5_0`` () =
+    "5.0"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 1.0; 0.516219021668613; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of -5_0`` () =
+    "-5.0"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.0; 0.48378097833138706; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of 100_0`` () =
+    "100.0"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 1.0; 0.8243804333722591; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of -100_0`` () =
+    "-100.0"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.0; 0.17561956662774098; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of 0_0`` () =
+    "0.0"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.5; 0.5; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of 2_5`` () =
+    "2.5"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.75; 0.5081095108343064; 0.5 ]
+
+[<Fact>]
+let ``evaluation floats of -2_5`` () =
+    "-2.5"
+    |> evaluationFloats
+    |> LazyList.toList
+    |> should equal
+                [ 0.25; 0.4918904891656935; 0.5 ]
