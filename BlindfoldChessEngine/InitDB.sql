@@ -21,7 +21,8 @@ CREATE TABLE evaluation (
 );
 
 CREATE TABLE synapses (
+	learning_rate decimal not null,
+	rmse decimal not null,
 	json_string text not null,
-	rmse_before_fit decimal not null,
 	tm timestamp not null default now()
 );

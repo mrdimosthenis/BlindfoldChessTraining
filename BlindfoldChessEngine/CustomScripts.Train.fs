@@ -10,17 +10,15 @@ open Synapses
 open BlindfoldChessEngine.Fitting
 
 let newNeuralNetworkJson(): string =
-    [782; 64; 64; 64; 64; 64; 64; 64; 64; 3]
+    [782; 512; 64; 8; 3]
     |> NeuralNetwork.init
     |> NeuralNetwork.toJson
 
-let learningRate = 1.0
-
-let getLastNetworkJson(conn: NpgsqlConnection, trans: NpgsqlTransaction): string =
+let getBestNetworkJson(conn: NpgsqlConnection, trans: NpgsqlTransaction): string =
     let sql = """
     SELECT json_string
     FROM synapses
-    ORDER BY tm DESC
+    ORDER BY rmse ASC
     LIMIT 1
     """
     let f (dr: DbDataReader) =
@@ -41,21 +39,32 @@ let get100RandomDataPoints (conn: NpgsqlConnection, trans: NpgsqlTransaction): (
         |> List.ofSeq
     Utils.withTransactionalQuery f (conn, trans, sql)
 
-let insertNeworkAndRmse
-    (json_string: string, rmse_before_fit: float)
+let insertSingleNework
+    (learning_rate: float, rmse: float, json_string: string)
     (conn: NpgsqlConnection, trans: NpgsqlTransaction): unit =
-    let sql = "INSERT INTO synapses VALUES(@json_string, @rmse_before_fit)"
+    let sql = "INSERT INTO synapses VALUES(@learning_rate, @rmse, @json_string)"
     let f (cmd: NpgsqlCommand) =
+        cmd.Parameters.AddWithValue("learning_rate", learning_rate) |> ignore
+        cmd.Parameters.AddWithValue("rmse", rmse) |> ignore
         cmd.Parameters.AddWithValue("json_string", json_string) |> ignore
-        cmd.Parameters.AddWithValue("rmse_before_fit", rmse_before_fit) |> ignore
         cmd.Prepare()
     Utils.withTransactionalExecution f (conn, trans, sql)
 
 let fitNetworkAndInsert(): unit =
     let f (conn: NpgsqlConnection, trans: NpgsqlTransaction) =
-        let network = getLastNetworkJson(conn, trans)
+        let learningRate =
+            System.Random().NextDouble()
+            |> (*) (System.Random().NextDouble())
+            |> (*) (System.Random().NextDouble())
+            |> (*) (System.Random().NextDouble())
+            |> (*) (System.Random().NextDouble())
+            |> (*) (System.Random().NextDouble())
+            |> (*) (System.Random().NextDouble())
+            |> (*) (System.Random().NextDouble())
+            |> (*) (System.Random().NextDouble())
+        let network = getBestNetworkJson(conn, trans)
                       |> NeuralNetwork.ofJson
-        let datapoints =
+        let trainDatapoints =
                 get100RandomDataPoints(conn, trans)
                 |> LazyList.ofList
                 |> LazyList.map
@@ -64,21 +73,30 @@ let fitNetworkAndInsert(): unit =
                            let y = e |> Encode.evaluationFloats |> LazyList.toList
                            (x, y)
                        )
-        let xs = LazyList.map fst datapoints
-        let ys = LazyList.map snd datapoints
+        let trainedNetwork =
+            trainDatapoints
+            |> LazyList.fold
+                    (fun acc (x, y) ->
+                        NeuralNetwork.fit(acc, learningRate, x, y)
+                    )
+                    network
+        let testDatapoints =
+            get100RandomDataPoints(conn, trans)
+            |> LazyList.ofList
+            |> LazyList.map
+                   (fun (p, e) ->
+                       let x = p |> Encode.fenFloats |> LazyList.toList
+                       let y = e |> Encode.evaluationFloats |> LazyList.toList
+                       (x, y)
+                   )
+        let xs = LazyList.map fst testDatapoints
+        let ys = LazyList.map snd testDatapoints
         let predictions =
-            LazyList.map (fun x -> NeuralNetwork.prediction(network, x)) xs
-        let rmse_before_fit = LazyList.zip ys predictions
-                              |> Statistics.rootMeanSquareError
-        let trainedNetworkJson =
-                datapoints
-                |> LazyList.fold
-                        (fun acc (x, y) ->
-                            NeuralNetwork.fit(acc, learningRate, x, y)
-                        )
-                        network
-                |> NeuralNetwork.toJson
-        insertNeworkAndRmse(trainedNetworkJson, rmse_before_fit)(conn, trans)
+            LazyList.map (fun x -> NeuralNetwork.prediction(trainedNetwork, x)) xs
+        let rmse = LazyList.zip ys predictions
+                   |> Statistics.rootMeanSquareError
+        let trainedNetworkJson = NeuralNetwork.toJson trainedNetwork
+        insertSingleNework(learningRate, rmse, trainedNetworkJson)(conn, trans)
     Utils.withDBTransaction f
 
 let rec infiniteFit(): unit =
