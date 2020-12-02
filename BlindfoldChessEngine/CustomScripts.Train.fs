@@ -10,15 +10,17 @@ open Synapses
 open BlindfoldChessEngine.Fitting
 
 let newNeuralNetworkJson(): string =
-    [782; 512; 64; 8; 3]
+    [ 782; 600; 400; 200; 100; 3 ]
     |> NeuralNetwork.init
     |> NeuralNetwork.toJson
 
-let getBestNetworkJson(conn: NpgsqlConnection, trans: NpgsqlTransaction): string =
+let learningRate = 0.005
+
+let getLatestNetworkJson(conn: NpgsqlConnection, trans: NpgsqlTransaction): string =
     let sql = """
     SELECT json_string
     FROM synapses
-    ORDER BY rmse ASC
+    ORDER BY tm DESC
     LIMIT 1
     """
     let f (dr: DbDataReader) =
@@ -26,13 +28,15 @@ let getBestNetworkJson(conn: NpgsqlConnection, trans: NpgsqlTransaction): string
         dr.[0] :?> string
     Utils.withTransactionalQuery f (conn, trans, sql)
 
-let get100RandomDataPoints (conn: NpgsqlConnection, trans: NpgsqlTransaction): (string * string) List =
-    let sql = """
-    SELECT pos, ev
-    FROM lichess_2020_10_sample
-    ORDER BY RANDOM()
-    LIMIT 100
-    """
+let getRandomDataPoints (numOf: int) (conn: NpgsqlConnection, trans: NpgsqlTransaction): (string * string) List =
+    let sql =
+        sprintf """
+                SELECT pos, ev
+                FROM lichess_2020_10_sample
+                ORDER BY RANDOM()
+                LIMIT %i
+                """
+                numOf
     let f (dr: DbDataReader) =
         seq{ while dr.Read() do
                     yield (dr.[0] :?> string, dr.[1] :?> string) }
@@ -50,29 +54,19 @@ let insertSingleNework
         cmd.Prepare()
     Utils.withTransactionalExecution f (conn, trans, sql)
 
+let encodedDatapoint(pos: string, eval: string): float list * float list =
+    let x = pos |> Encode.fenFloats |> LazyList.toList
+    let y = eval |> Encode.evaluationFloats |> LazyList.toList
+    (x, y)
+
 let fitNetworkAndInsert(): unit =
     let f (conn: NpgsqlConnection, trans: NpgsqlTransaction) =
-        let learningRate =
-            System.Random().NextDouble()
-            |> (*) (System.Random().NextDouble())
-            |> (*) (System.Random().NextDouble())
-            |> (*) (System.Random().NextDouble())
-            |> (*) (System.Random().NextDouble())
-            |> (*) (System.Random().NextDouble())
-            |> (*) (System.Random().NextDouble())
-            |> (*) (System.Random().NextDouble())
-            |> (*) (System.Random().NextDouble())
-        let network = getBestNetworkJson(conn, trans)
+        let network = getLatestNetworkJson(conn, trans)
                       |> NeuralNetwork.ofJson
         let trainDatapoints =
-                get100RandomDataPoints(conn, trans)
+                getRandomDataPoints 1000 (conn, trans)
                 |> LazyList.ofList
-                |> LazyList.map
-                       (fun (p, e) ->
-                           let x = p |> Encode.fenFloats |> LazyList.toList
-                           let y = e |> Encode.evaluationFloats |> LazyList.toList
-                           (x, y)
-                       )
+                |> LazyList.map encodedDatapoint
         let trainedNetwork =
             trainDatapoints
             |> LazyList.fold
@@ -81,14 +75,9 @@ let fitNetworkAndInsert(): unit =
                     )
                     network
         let testDatapoints =
-            get100RandomDataPoints(conn, trans)
+            getRandomDataPoints 100 (conn, trans)
             |> LazyList.ofList
-            |> LazyList.map
-                   (fun (p, e) ->
-                       let x = p |> Encode.fenFloats |> LazyList.toList
-                       let y = e |> Encode.evaluationFloats |> LazyList.toList
-                       (x, y)
-                   )
+            |> LazyList.map encodedDatapoint
         let xs = LazyList.map fst testDatapoints
         let ys = LazyList.map snd testDatapoints
         let predictions =
