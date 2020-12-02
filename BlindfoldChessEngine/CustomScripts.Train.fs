@@ -64,7 +64,7 @@ let fitNetworkAndInsert(): unit =
         let network = getLatestNetworkJson(conn, trans)
                       |> NeuralNetwork.ofJson
         let trainDatapoints =
-                getRandomDataPoints 1000 (conn, trans)
+                getRandomDataPoints 200 (conn, trans)
                 |> LazyList.ofList
                 |> LazyList.map encodedDatapoint
         let trainedNetwork =
