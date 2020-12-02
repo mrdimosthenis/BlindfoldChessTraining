@@ -10,11 +10,11 @@ open Synapses
 open BlindfoldChessEngine.Fitting
 
 let newNeuralNetworkJson(): string =
-    [782; 64; 8; 3]
+    [782; 64; 64; 64; 64; 64; 64; 64; 64; 3]
     |> NeuralNetwork.init
     |> NeuralNetwork.toJson
 
-let learningRate = 0.05
+let learningRate = 1.0
 
 let getLastNetworkJson(conn: NpgsqlConnection, trans: NpgsqlTransaction): string =
     let sql = """
@@ -74,7 +74,7 @@ let fitNetworkAndInsert(): unit =
                 datapoints
                 |> LazyList.fold
                         (fun acc (x, y) ->
-                            NeuralNetwork.fit(network, learningRate, x, y)
+                            NeuralNetwork.fit(acc, learningRate, x, y)
                         )
                         network
                 |> NeuralNetwork.toJson
