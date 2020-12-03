@@ -88,3 +88,8 @@ let ``parse evals`` () =
 //let ``infinite create fit and insert net`` () =
 //    RandomNet.infiniteCreateFitAndInsertNet()
 //    |> should equal ()
+
+[<Fact>]
+let ``train from data points`` () =
+    TrainWithCsv.trainFromDataPoints()
+    |> should equal ()
