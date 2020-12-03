@@ -10,12 +10,13 @@
 
   <ItemGroup>
     <None Include="InitDB.sql" />
-    <Compile Include="CustomScripts.Utils.fs" />
     <Compile Include="Fitting.Encode.fs" />
+    <Compile Include="CustomScripts.Utils.fs" />
     <Compile Include="CustomScripts.InsertEvaluatedLines.fs" />
     <Compile Include="CustomScripts.InsertPositions.fs" />
     <Compile Include="CustomScripts.InsertEvals.fs" />
     <Compile Include="CustomScripts.Train.fs" />
+    <Compile Include="CustomScripts.RandomNet.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>
 

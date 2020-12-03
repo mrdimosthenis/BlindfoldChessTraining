@@ -79,7 +79,12 @@ let ``parse evals`` () =
 //    Train.newNeuralNetworkJson()
 //    |> should equal ""
 
-[<Fact>]
-let ``infinite fit`` () =
-    Train.infiniteFit()
-    |> should equal ()
+//[<Fact>]
+//let ``infinite fit`` () =
+//    Train.infiniteFit()
+//    |> should equal ()
+
+//[<Fact>]
+//let ``infinite create fit and insert net`` () =
+//    RandomNet.infiniteCreateFitAndInsertNet()
+//    |> should equal ()
