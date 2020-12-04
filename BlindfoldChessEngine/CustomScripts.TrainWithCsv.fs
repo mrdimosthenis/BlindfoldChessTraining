@@ -20,7 +20,7 @@ let ys = LazyList.map snd testDataPoints
 
 let csvSeq =
     CsvFile.Load(
-                    @"C:\Users\MrDIM\Desktop\lichess_2020_10_sample_202012021818.csv",
+                    @"C:\Users\MrDIM\Desktop\lichess_2020_10_sample_202012041017.csv",
                     hasHeaders = true
                 )
 
