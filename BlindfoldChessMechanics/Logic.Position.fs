@@ -21,7 +21,7 @@ type Move = { Piece: Board.Piece
               IsCheck: bool
               IsMate: bool
               IsStalemate: bool
-              SamePieceCoords: Board.Coordinates option }
+              SamePieceCoords: Board.Coordinates array }
 
 type Castling =
     { WhiteKingSideCastle: bool
@@ -32,7 +32,7 @@ type Castling =
 type Position = { Board: Board.Board
                   IsWhiteToMove: bool
                   Castling: Castling
-                  EnPassant: Board.Coordinates Option
+                  EnPassant: Board.Coordinates option
                   Halfmove: int
                   Fullmove: int }
 
@@ -237,7 +237,7 @@ let movesWithResultedPosition (position: Position): (Move * Position) LazyList =
                         valMovements
                         |> LazyList.filter (fun m -> m <> move && m.Piece = move.Piece && m.ToCoords = move.ToCoords)
                         |> LazyList.map (fun m -> m.FromCoords)
-                        |> LazyList.tryHead
+                        |> LazyList.toArray
                     let m = 
                         { Piece = move.Piece
                           FromCoords = move.FromCoords

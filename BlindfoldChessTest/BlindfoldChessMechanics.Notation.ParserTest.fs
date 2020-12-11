@@ -6,6 +6,7 @@ open FSharpx.Collections
 
 open BlindfoldChessMechanics.Notation.Parser
 open BlindfoldChessMechanics.Logic
+open BlindfoldChessMechanics
 
 // tests
 
@@ -277,6 +278,64 @@ let ``Text of small game`` () =
           Game.Result = (Some Game.Draw) }
 
 [<Fact>]
+let ``Text of game without meta tags`` () =
+    let game =
+        """1. Nf3 { [%eval 0.2] } 1... Nh6? { [%eval 1.37] }
+        2. Nc3 { [%eval 0.98] } 2... Ng4?! { [%eval 1.56] }
+        3. Ne4? { [%eval -0.64] } 3... Ne5?? { [%eval 4.99] }
+        4. h3?? { [%eval -0.38] } 4... Ng4?? { [%eval 4.84] }
+        5. g3?? { [%eval 0.35] } 5... Nxf2?? { [%eval 3.93] }
+        6. Rh2?? { [%eval -10.35] } 6... Nxh3?? { [%eval 2.41] }
+        7. Rh1?? { [%eval -2.9] } 7... Nf4?? { [%eval 3.12] }
+        8. Rg1?? { [%eval -2.38] } 8... Nxe2?? { [%eval 1.82] }
+        9. Rh1?? { [%eval -4.42] } 9... Nxg3?? { [%eval 0.16] }
+        10. Rg1?? { [%eval -9.1] } 10... Nxf1?? { [%eval -5.84] }
+        11. Rxf1 { [%eval -6.07] } 11... Nc6 { [%eval -4.94] }
+        12. Rh1 { [%eval -5.95] } 12... Nd4?? { [%eval -1.59] }
+        13. Rf1?? { [%eval -5.91] } 13... Nxf3+ { [%eval -4.64] }
+        14. Kf2?? { [%eval -9.4] } 14... Nh2 { [%eval -9.38] }
+        15. Ke1 { [%eval -11.35] } 15... Nxf1 { [%eval -11.3] }
+        16. Kxf1 { [%eval -11.33] } 16... h5 { [%eval -11.17] }
+        17. Kg1 { [%eval -11.54] } 17... g5 { [%eval -11.3] }
+        18. d3 { [%eval -11.5] } 18... g4 { [%eval -11.47] }
+        19. c3 { [%eval -11.53] } 19... h4 { [%eval -11.56] }
+        20. b3 { [%eval -13.83] } 20... h3 { [%eval -11.59] }
+        21. a3 { [%eval -13.48] } 21... h2+ { [%eval -13.22] }
+        22. Kf1?! { [%eval #-8] } 22... h1=Q+ { [%eval #-7] }
+        23. Ke2 { [%eval #-5] } 23... g3?! { [%eval -27.23] }
+        24. Kd2?! { [%eval #-9] } 24... g2?! { [%eval -38.32] }
+        25. Kc2?! { [%eval #-11] } 25... g1=Q?! { [%eval -40.92] }
+        26. Kb1?! { [%eval #-4] } 26... f5?! { [%eval -44.11] }
+        27. Nc5?! { [%eval #-3] } 27... f4?! { [%eval -40.16] }
+        28. a4?! { [%eval #-6] } 28... f3?! { [%eval -56.9] }
+        29. b4?! { [%eval #-5] } 29... f2 { [%eval #-9] }
+        30. a5 { [%eval #-7] } 30... f1=Q { [%eval #-7] }
+        31. b5 { [%eval #-4] } 31... e5 { [%eval #-6] }
+        32. a6 { [%eval #-4] } 32... e4 { [%eval #-6] }
+        33. b6 { [%eval #-4] } 33... e3 { [%eval #-6] }
+        34. axb7 { [%eval #-4] } 34... e2 { [%eval #-6] }
+        35. bxa7 { [%eval #-4] } 35... e1=Q { [%eval #-6] }
+        36. Ne6 { [%eval #-4] } 36... d5 { [%eval #-6] }
+        37. Nf4 { [%eval #-3] } 37... d4 { [%eval #-6] }
+        38. Ne6 { [%eval #-4] } 38... c5 { [%eval #-7] }
+        39. Nf4 { [%eval #-4] } 39... Bh6 { [%eval #-6] }
+        40. Nd5 { [%eval #-5] } 40... Rg8 { [%eval #-7] }
+        41. Ne3 { [%eval #-4] } 41... dxe3 { [%eval #-5] }
+        42. b8=Q { [%eval #-5] } 42... Qef2 { [%eval #-6] }
+        43. d4 { [%eval #-2] } 43... e2 { [%eval #-7] }
+        44. d5 { [%eval #-4] } 44... e1=Q { [%eval #-5] }
+        45. d6 { [%eval #-2] } 45... Qdh4 { [%eval #-7] }
+        46. d7+ { [%eval #-7] } 46... Kf8?! { [%eval -75.98] }
+        47. d8=Q+?! { [%eval #-7] } 47... Kg7 { [%eval #-7] }
+        48. Q8d2 { [%eval #-5] } 48... Q4h2 { [%eval #-5] }
+        49. Qbb2 { [%eval #-4] } 49... Qf2g2 { [%eval #-7] }
+        50. Qbc2 { [%eval #-5] } 0-1"""
+        |> textOfGame
+    game.Moves
+    |> Array.length
+    |> should equal 99
+
+[<Fact>]
 let ``Text of large valid game`` () =
     let largeGame = textOfGame """[Event "?"]
 [Site "Dusseldorf (09)"]
@@ -311,7 +370,7 @@ let ``Json of example game`` () =
 
 //[<Fact>]
 //let ``Convert endgame puzzles to v300`` () =
-//    "C:\Users\MrDIM\Desktop\old-blindfold\endgame_puzzles.pgn"
+//    @"C:\Users\MrDIM\Desktop\puzzles\endgame_puzzles.pgn"
 //    |> Parser.fileOfGameTexts
 //    |> Utils.lazIndexed
 //    |> LazyList.map
@@ -332,7 +391,7 @@ let ``Json of example game`` () =
 
 //[<Fact>]
 //let ``Convert opening puzzles to v300`` () =
-//    "C:\Users\MrDIM\Desktop\\fixed_opening_puzzles.pgn"
+//    @"C:\Users\MrDIM\Desktop\puzzles\fixed_opening_puzzles.pgn"
 //    |> Parser.fileOfGameTexts
 //    |> Utils.lazIndexed
 //    |> LazyList.map

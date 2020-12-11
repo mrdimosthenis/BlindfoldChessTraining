@@ -25,7 +25,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <OtherFlags>/warnon:1182</OtherFlags>
     <WarningLevel>4</WarningLevel>
-    <SelectedDevice>Xiaomi Redmi 6</SelectedDevice>
+    <SelectedDevice>Android Emulator</SelectedDevice>
     <DefaultDevice>nexus_s_nougat_7_0_-_api_24</DefaultDevice>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -162,7 +162,6 @@
     <Reference Include="SQLitePCLRaw.provider.e_sqlite3">
       <HintPath>..\packages\SQLitePCLRaw.provider.e_sqlite3.2.0.3\lib\netstandard2.0\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
     <Reference Include="System.Buffers">
       <Private>True</Private>
     </Reference>
@@ -170,7 +169,6 @@
     <Reference Include="System.Memory">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
       <Private>True</Private>

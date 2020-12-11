@@ -14,6 +14,7 @@
 	<Compile Include="BlindfoldChessMechanics.Notation.EmitterTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.Notation.ParserTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.NaturalLanguageTest.fs" />
+    <Compile Include="BlindfoldChessTraining.Resources.PuzzlesTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
@@ -35,6 +36,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlindfoldChessMechanics\BlindfoldChessMechanics.fsproj" />
+    <ProjectReference Include="..\BlindfoldChessTraining\BlindfoldChessTraining.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.7.2" />
   </ItemGroup>
 
 </Project>

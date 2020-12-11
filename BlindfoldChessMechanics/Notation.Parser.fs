@@ -49,6 +49,7 @@ let textOfMovesWithResult (text: string): string LazyList * Game.NotedResult opt
                           |> LazyList.ofArray
                           |> LazyList.filter ((<>) "")
                           |> LazyList.rev
+                          |> LazyList.map (fun s -> s.Replace("?", "").Replace("!", ""))
                           |> LazyList.uncons
     let result = match res with
                  | "1-0" -> Some Game.White
