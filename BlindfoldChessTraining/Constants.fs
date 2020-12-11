@@ -2,7 +2,7 @@
 
 open Xamarin.Forms
 
-let version: string = "3.0.0"
+let version: string = "3.0.1"
 
 let introWaitMillis: int = 1000
 

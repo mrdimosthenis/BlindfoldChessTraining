@@ -7,9 +7,11 @@ open SQLite
 open BlindfoldChessMechanics
 open FSharpx.Collections
 
+// PuzzleObject TYPE NAME AND tableName SHOULD BE DIFFERENT FOR NEW VERSIONS WITH NEW CONTENTS
+
 // types
 
-type PuzzleObject() =
+type PuzzleObject_V_3_0_1() =
     member val CategoryId: int = 0 with get, set
     member val Level: int = 0 with get, set
     member val IndexInLevel: int = 0 with get, set
@@ -17,14 +19,14 @@ type PuzzleObject() =
 
 // constants
 
+let tableName: string = "puzzleobject_v_3_0_1"
+
 let connection: SQLiteConnection =
     let folderPath: string =
         Environment.SpecialFolder.LocalApplicationData
         |> Environment.GetFolderPath
     let path: string = Path.Combine(folderPath, "BlindfoldChessTraining.db3")
     new SQLiteConnection(path)
-
-let tableName: string = "puzzleobject"
 
 let indexedColumns : string array = [| "categoryid"; "level"; "indexinlevel" |]
 
@@ -34,7 +36,7 @@ let doesTableExist(): bool =
     connection.GetTableInfo(tableName).Count > 0
 
 let createTable(): unit =
-    connection.CreateTable<PuzzleObject>() |> ignore
+    connection.CreateTable<PuzzleObject_V_3_0_1>() |> ignore
     connection.CreateIndex(tableName, indexedColumns, true) |> ignore
 
 let insertPuzzles(resourceName: string): unit =
@@ -44,7 +46,7 @@ let insertPuzzles(resourceName: string): unit =
     |> LazyList.map
             ( fun s ->
                 let game = Notation.Parser.jsonOfGame s
-                let obj = PuzzleObject()
+                let obj = PuzzleObject_V_3_0_1()
                 obj.CategoryId <- game.MetaTags.Item("category_id") |> int
                 obj.Level <- game.MetaTags.Item("level") |> int
                 obj.IndexInLevel <- game.MetaTags.Item("index_in_level") |> int
@@ -56,7 +58,7 @@ let insertPuzzles(resourceName: string): unit =
 
 let getGameJsonStr(categoryId: int, level: int, indexInLevel: int): string =
     connection
-        .Table<PuzzleObject>()
+        .Table<PuzzleObject_V_3_0_1>()
         .Where(fun obj -> obj.CategoryId = categoryId && obj.Level = level && obj.IndexInLevel = indexInLevel)
         .First()
         .Game
