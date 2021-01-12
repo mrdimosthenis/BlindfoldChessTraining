@@ -4,6 +4,8 @@ open Xamarin.Forms
 
 let isIOSDevice: bool = Device.RuntimePlatform = Device.iOS
 
+let volumePressOrPanGestureDebounceTimeout: int64 = 500L
+
 let version: string = "3.1.0"
 
 let introWaitMillis: int = 1000

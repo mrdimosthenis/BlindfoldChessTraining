@@ -1,5 +1,7 @@
 ﻿module BlindfoldChessTraining.Model
 
+open System
+
 open Xamarin.Essentials
 open FSharpx.Collections
 open BlindfoldChessMechanics
@@ -45,7 +47,8 @@ type Model =
       CurrentMoveIndex: int option
       IsPuzzleSolved: bool
       CurrentAnnouncementIndex: int
-      DidVolumeNoteClicked: bool }
+      DidVolumeNoteClicked: bool
+      LastVolumePressOrPanGestureMillis: int64 }
 
 // default values
 
@@ -177,4 +180,5 @@ let init(): Model =
       CurrentMoveIndex = None
       IsPuzzleSolved = false
       CurrentAnnouncementIndex = 0
-      DidVolumeNoteClicked = Preferences.didVolumeNoteClickedKey |> Preferences.tryGetBool |> Option.defaultValue defaultDidVolumeNoteClicked }
+      DidVolumeNoteClicked = Preferences.didVolumeNoteClickedKey |> Preferences.tryGetBool |> Option.defaultValue defaultDidVolumeNoteClicked
+      LastVolumePressOrPanGestureMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds() }

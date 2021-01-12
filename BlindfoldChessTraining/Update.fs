@@ -1,5 +1,7 @@
 ﻿module BlindfoldChessTraining.Update
 
+open System
+
 open Fabulous
 open BlindfoldChessMechanics
 
@@ -150,30 +152,43 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         { model with SelectedPage = Model.HomePage }, Cmd.none
 
     | Msg.VolumeUpPressed | Msg.PanLeftGesture ->
-        match model.SelectedPage with
-        | Model.OpeningPuzzlesPage | Model.EndgamePuzzlesPage ->
+        let currentMillis =  DateTimeOffset.Now.ToUnixTimeMilliseconds()
+        let isDebounceThresholdOver =
+            currentMillis - model.LastVolumePressOrPanGestureMillis > Constants.volumePressOrPanGestureDebounceTimeout
+        match (isDebounceThresholdOver, model.SelectedPage) with
+        | (true, Model.OpeningPuzzlesPage) | (true, Model.EndgamePuzzlesPage) ->
             let cmd = model.CurrentGame.Announcements.[0] |> Msg.Speak |> Cmd.ofMsg
-            { model with CurrentAnnouncementIndex = 1 }, cmd
+            { model with
+                CurrentAnnouncementIndex = 1
+                LastVolumePressOrPanGestureMillis = currentMillis }, cmd
         | _ ->
             model, Cmd.none
 
     | Msg.VolumeDownPressed | Msg.PanRightGesture ->
-        match model.SelectedPage with
-        | Model.OpeningPuzzlesPage | Model.EndgamePuzzlesPage ->
+        let currentMillis =  DateTimeOffset.Now.ToUnixTimeMilliseconds()
+        let isDebounceThresholdOver =
+            currentMillis - model.LastVolumePressOrPanGestureMillis > Constants.volumePressOrPanGestureDebounceTimeout
+        match (isDebounceThresholdOver, model.SelectedPage) with
+        | (true, Model.OpeningPuzzlesPage) | (true, Model.EndgamePuzzlesPage) ->
             match model.CurrentAnnouncementIndex with
             | v when v = model.CurrentGame.Announcements.Length ->
+                let newModel = { model with LastVolumePressOrPanGestureMillis = currentMillis }
                 let firstCmd = "next puzzle" |> Msg.Speak |> Cmd.ofMsg
                 let secondCmd = Cmd.ofMsg Msg.GoToNextPuzzle
                 let cmd = Cmd.batch [ firstCmd; secondCmd ]
-                model, cmd
+                newModel, cmd
             | v when v = model.CurrentGame.Announcements.Length - 1 ->
-                let newModel = { model with CurrentAnnouncementIndex = v + 1 }
+                let newModel = { model with
+                                    CurrentAnnouncementIndex = v + 1
+                                    LastVolumePressOrPanGestureMillis = currentMillis }
                 let firstCmd = Cmd.ofMsg Msg.ShowSolution
                 let secondCmd = model.CurrentGame.Announcements.[v] |> Msg.Speak |> Cmd.ofMsg
                 let cmd = Cmd.batch [ firstCmd; secondCmd ]
                 newModel, cmd
             | v ->
-                let newModel = { model with CurrentAnnouncementIndex = v + 1 }
+                let newModel = { model with
+                                    CurrentAnnouncementIndex = v + 1
+                                    LastVolumePressOrPanGestureMillis = currentMillis }
                 let cmd = model.CurrentGame.Announcements.[v] |> Msg.Speak |> Cmd.ofMsg
                 newModel, cmd
         | _ ->
