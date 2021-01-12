@@ -31,6 +31,9 @@ let button (title: string) (icon: Image.Value) (isMenuItem: bool) (f: unit -> un
 let imageButton (source: Image.Value) (command: unit -> unit): ViewElement =
     View.ImageButton(
         source  = source,
+        backgroundColor = Color.Transparent,
+        borderWidth = 1.0,
+        borderColor = Color.Black,
         width = 50.0,
         height = 50.0,
         command = command

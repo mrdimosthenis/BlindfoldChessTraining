@@ -26,21 +26,21 @@ let levelNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElemen
             (orientation = StackOrientation.Horizontal,
              horizontalOptions = LayoutOptions.Center,
              children =
-                 [ View.Button(image = Icons.rewind, command = (fun () -> dispatch Msg.GoToPrevLevel))
+                 [ Component.imageButton Icons.rewind (fun () -> dispatch Msg.GoToPrevLevel)
                    levelMainText + " " + levelParenText
                    |> Component.label model false
-                   View.Button(image = Icons.fastForward, command = (fun () -> dispatch Msg.GoToNextLevel)) ])
+                   Component.imageButton Icons.fastForward (fun () -> dispatch Msg.GoToNextLevel) ])
 
     let puzzleInfo =
         View.StackLayout
             (orientation = StackOrientation.Horizontal,
              horizontalOptions = LayoutOptions.Center,
              children =
-                 [ View.Button(image = Icons.arrowCircleLeft, command = (fun () -> dispatch Msg.GoToPrevPuzzle))
+                 [ Component.imageButton Icons.arrowCircleLeft (fun () -> dispatch Msg.GoToPrevPuzzle)
                    model.CurrentGame.IndexInLevel + 1
                    |> sprintf "Puzzle %i"
                    |> Component.label model false
-                   View.Button(image = Icons.arrowCircleRight, command = (fun () -> dispatch Msg.GoToNextPuzzle)) ])
+                   Component.imageButton Icons.arrowCircleRight (fun () -> dispatch Msg.GoToNextPuzzle) ])
 
     View.StackLayout
         (horizontalOptions = LayoutOptions.Center,
