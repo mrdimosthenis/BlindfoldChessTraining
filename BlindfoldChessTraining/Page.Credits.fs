@@ -22,6 +22,6 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     
     [ Component.label model false "Blindfold Chess Training was created by Dimosthenis Michailidis"
       Component.button "Source Code" Icons.code true openGitHub
-      Component.button "Software Developer" Icons.idCard true openLinkedIn
+      Component.button "Developer" Icons.idCard true openLinkedIn
       Constants.version |> sprintf "Version: %s" |> Component.label model false ]
     |> Page.page model dispatch "Credits" Icons.fingerprint
