@@ -159,12 +159,17 @@ let boardNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElemen
     )
 
 let volumeNotification (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+    let label =
+        if Constants.isIOSDevice
+            then "Swipe left and right for audio training"
+            else "Press the volume keys of the device for audio training"
+        |> Component.label model false
     View.StackLayout(
         orientation = StackOrientation.Horizontal,
         horizontalOptions = LayoutOptions.Center,
         verticalOptions = LayoutOptions.Center,
         children = [
-            Component.label model false "Use the volume keys of the device for audio training"
+            label
             View.Button(
                 image = Icons.volume_up,
                 command = (fun () -> dispatch Msg.VolumeNoteClicked)

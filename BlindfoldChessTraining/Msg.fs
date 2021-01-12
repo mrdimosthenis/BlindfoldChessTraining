@@ -27,4 +27,6 @@ type Msg =
     | ResetConfigs
     | VolumeUpPressed
     | VolumeDownPressed
+    | PanLeftGesture
+    | PanRightGesture
     | BackPressed

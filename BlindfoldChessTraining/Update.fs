@@ -149,7 +149,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
             else ()
         { model with SelectedPage = Model.HomePage }, Cmd.none
 
-    | Msg.VolumeUpPressed ->
+    | Msg.VolumeUpPressed | Msg.PanLeftGesture ->
         match model.SelectedPage with
         | Model.OpeningPuzzlesPage | Model.EndgamePuzzlesPage ->
             let cmd = model.CurrentGame.Announcements.[0] |> Msg.Speak |> Cmd.ofMsg
@@ -157,7 +157,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         | _ ->
             model, Cmd.none
 
-    | Msg.VolumeDownPressed ->
+    | Msg.VolumeDownPressed | Msg.PanRightGesture ->
         match model.SelectedPage with
         | Model.OpeningPuzzlesPage | Model.EndgamePuzzlesPage ->
             match model.CurrentAnnouncementIndex with
