@@ -6,7 +6,6 @@ open System
 open System.IO
 open FSharpx.Collections
 open BlindfoldChessMechanics
-open System.Text.Json
 
 exception InvalidColumn of string
 

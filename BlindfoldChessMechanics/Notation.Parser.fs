@@ -6,7 +6,6 @@ open BlindfoldChessMechanics
 open System.Text.RegularExpressions
 open System.IO
 open FSharpx.Collections
-open System.Text.Json
 
 exception InvalidMove of string
 exception InvalidResult of string
