@@ -7,10 +7,9 @@ open SQLite
 open BlindfoldChessMechanics
 open FSharpx.Collections
 
-// PuzzleObject TYPE NAME AND tableName SHOULD BE DIFFERENT FOR NEW VERSIONS WITH NEW CONTENTS
-
 // types
 
+//TODO: change it on version updates
 type PuzzleObject_V_3_1_0() =
     member val CategoryId: int = 0 with get, set
     member val Level: int = 0 with get, set
@@ -19,6 +18,7 @@ type PuzzleObject_V_3_1_0() =
 
 // constants
 
+//TODO: change it on version updates
 let tableName: string = "puzzleobject_v_3_1_0"
 
 let connection: SQLiteConnection =
