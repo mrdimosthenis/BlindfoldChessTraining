@@ -262,7 +262,7 @@ let gameFileTexts(filePath: string) (games: Game.Game LazyList): unit =
     w.Close()
 
 let gameJson (game: Game.Game): string =
-    JsonSerializer.Serialize(game, Game.jsonOptions)
+    Newtonsoft.Json.JsonConvert.SerializeObject(game)
 
 let gameFileJsons(filePath: string) (games: Game.Game LazyList): unit =
     let w = File.AppendText filePath

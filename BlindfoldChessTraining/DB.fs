@@ -11,7 +11,7 @@ open FSharpx.Collections
 
 // types
 
-type PuzzleObject_V_3_0_1() =
+type PuzzleObject_V_3_1_0() =
     member val CategoryId: int = 0 with get, set
     member val Level: int = 0 with get, set
     member val IndexInLevel: int = 0 with get, set
@@ -19,7 +19,7 @@ type PuzzleObject_V_3_0_1() =
 
 // constants
 
-let tableName: string = "puzzleobject_v_3_0_1"
+let tableName: string = "puzzleobject_v_3_1_0"
 
 let connection: SQLiteConnection =
     let folderPath: string =
@@ -36,7 +36,7 @@ let doesTableExist(): bool =
     connection.GetTableInfo(tableName).Count > 0
 
 let createTable(): unit =
-    connection.CreateTable<PuzzleObject_V_3_0_1>() |> ignore
+    connection.CreateTable<PuzzleObject_V_3_1_0>() |> ignore
     connection.CreateIndex(tableName, indexedColumns, true) |> ignore
 
 let insertPuzzles(resourceName: string): unit =
@@ -46,7 +46,7 @@ let insertPuzzles(resourceName: string): unit =
     |> LazyList.map
             ( fun s ->
                 let game = Notation.Parser.jsonOfGame s
-                let obj = PuzzleObject_V_3_0_1()
+                let obj = PuzzleObject_V_3_1_0()
                 obj.CategoryId <- game.MetaTags.Item("category_id") |> int
                 obj.Level <- game.MetaTags.Item("level") |> int
                 obj.IndexInLevel <- game.MetaTags.Item("index_in_level") |> int
@@ -58,7 +58,7 @@ let insertPuzzles(resourceName: string): unit =
 
 let getGameJsonStr(categoryId: int, level: int, indexInLevel: int): string =
     connection
-        .Table<PuzzleObject_V_3_0_1>()
+        .Table<PuzzleObject_V_3_1_0>()
         .Where(fun obj -> obj.CategoryId = categoryId && obj.Level = level && obj.IndexInLevel = indexInLevel)
         .First()
         .Game

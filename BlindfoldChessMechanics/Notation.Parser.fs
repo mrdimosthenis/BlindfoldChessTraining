@@ -165,7 +165,7 @@ let fileOfGameTexts(filePath: string): Game.Game LazyList =
     |> LazyList.map textOfGame
 
 let jsonOfGame (json: string): Game.Game =
-    JsonSerializer.Deserialize(json, Game.jsonOptions)
+    Newtonsoft.Json.JsonConvert.DeserializeObject<Game.Game>(json)
 
 let fileOfGameJsons(filePath: string): Game.Game LazyList =
     filePath
