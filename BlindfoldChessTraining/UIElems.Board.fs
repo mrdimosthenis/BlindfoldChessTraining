@@ -55,7 +55,8 @@ let imgWr: ViewElement = image "wr"
 let bottomRow: ViewElement LazyList =
     [ imgEmpty; imgA; imgB; imgC; imgD; imgE; imgF; imgG; imgH ]
     |> LazyList.ofList
-    |> Utils.lazIndexed
+    |> Seq.indexed
+    |> LazyList.ofSeq
     |> LazyList.map (fun (i, v) -> v.Row(8).Column(i))
 
 let emptyRow (areCoordsEnabled: bool) (r: int): ViewElement LazyList =
@@ -78,15 +79,19 @@ let emptyRow (areCoordsEnabled: bool) (r: int): ViewElement LazyList =
                            | _ -> raise (InvalidRow r)
              innerRowElems
              |> Utils.prependedLaz fstElem
-             |> Utils.lazIndexed
+             |> Seq.indexed
+             |> LazyList.ofSeq
              |> LazyList.map (fun (i, v) -> v.Row(7 - r).Column(i))
     else
         innerRowElems
-        |> Utils.lazIndexed
+        |> Seq.indexed
+        |> LazyList.ofSeq
         |> LazyList.map (fun (i, v) -> v.Row(7 - r).Column(i))
 
 let emptyBoard (areCoordsEnabled: bool): ViewElement LazyList =
-    let middleRowElems = Utils.lazInfinite
+    let middleRowElems = id
+                         |> Seq.initInfinite
+                         |> LazyList.ofSeq
                          |> LazyList.take 8
                          |> LazyList.map (emptyRow areCoordsEnabled)
                          |> LazyList.concat
@@ -99,11 +104,13 @@ let emptyBoard (areCoordsEnabled: bool): ViewElement LazyList =
 let pieces (areCoordsEnabled: bool) (board: Board.Board): ViewElement LazyList =
     board
     |> Utils.lazOfArrays
-    |> Utils.lazIndexed
+    |> Seq.indexed
+    |> LazyList.ofSeq
     |> LazyList.map
         (fun (rowIndex, row) ->
             row
-            |> Utils.lazIndexed
+            |> Seq.indexed
+            |> LazyList.ofSeq
             |> LazyList.map
                 (fun (columnIndex, resident) ->
                     match resident with

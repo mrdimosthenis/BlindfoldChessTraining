@@ -151,7 +151,8 @@ let fileOfGameTexts(filePath: string): Game.Game LazyList =
             )
             ("", "", None)
     |> LazyList.rev
-    |> Utils.lazIndexed
+    |> Seq.indexed
+    |> LazyList.ofSeq
     |> LazyList.map
             (fun (i, (accLines, _, accGameStrOpt)) ->
                      match (i, accGameStrOpt) with
