@@ -154,6 +154,7 @@ let mechanicToCurrentGame (areSymbolsEnabled: bool) (selectedPage: SelectedPage)
 
 let resetConfigOptions(): unit =
     Preferences.removeIfExists Preferences.areCoordsEnabledKey
+    Preferences.removeIfExists Preferences.boardSizeKey
     Preferences.removeIfExists Preferences.areSymbolsEnabledKey
     Preferences.removeIfExists Preferences.fontSizeKey
     Preferences.removeIfExists Preferences.selectedLocaleKey
