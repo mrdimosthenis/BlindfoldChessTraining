@@ -1,15 +1,13 @@
 ﻿module BlindfoldChessTraining.Constants
 
 open Xamarin.Forms
+open Xamarin.Essentials
 
 let isIOSDevice: bool = Device.RuntimePlatform = Device.iOS
 
 let volumePressOrPanGestureDebounceTimeout: int64 = 500L
 
-//TODO: change it on version updates
-let version: string = "3.1.0"
-
-let introWaitMillis: int = 1000
+let version: string = VersionTracking.CurrentVersion
 
 let titleSizeRatio: float = 1.5
 

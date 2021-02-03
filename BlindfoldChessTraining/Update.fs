@@ -43,11 +43,7 @@ let getNewGameFromDBAndModel (model: Model.Model) (categoryId: int, level: int, 
 let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     match msg with
     | Msg.LocalesLoaded v ->
-        let cmd = async {
-                    do! Async.Sleep Constants.introWaitMillis
-                    return Msg.SelectPage Model.HomePage
-                  } |> Cmd.ofAsyncMsg
-        { model with Locales = v }, cmd
+        { model with Locales = v }, Cmd.none
 
     | Msg.SelectPage v ->
         let newCurrentGame =

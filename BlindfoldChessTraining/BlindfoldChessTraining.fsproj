@@ -10,7 +10,6 @@
     <EmbeddedResource Include="resources\puzzles\endgame_puzzles.jsonl" />
     <EmbeddedResource Include="resources\puzzles\opening_puzzles.jsonl" />
     <EmbeddedResource Include="resources\images\logos\main.png" />
-    <EmbeddedResource Include="resources\images\logos\fabulous.png" />
     <EmbeddedResource Include="resources\images\icons\empty.png" />
     <EmbeddedResource Include="resources\images\icons\cube.png" />
     <EmbeddedResource Include="resources\images\icons\library.png" />
@@ -70,12 +69,10 @@
     <Compile Include="Msg.fs" />
     <Compile Include="Update.fs" />
     <Compile Include="UIElems.Icons.fs" />
-    <Compile Include="UIElems.Images.fs" />
     <Compile Include="UIElems.Board.fs" />
     <Compile Include="Template.Component.fs" />
     <Compile Include="Template.GameNavigator.fs" />
     <Compile Include="Template.Page.fs" />
-    <Compile Include="Page.Intro.fs" />
     <Compile Include="Page.Home.fs" />
     <Compile Include="Page.EndgamePuzzles.fs" />
     <Compile Include="Page.OpeningPuzzles.fs" />
