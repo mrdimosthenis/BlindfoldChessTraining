@@ -3,6 +3,17 @@
 open Xamarin.Essentials
 open FSharpx.Collections
 
+type ExternalUrl =
+    | GitHub
+    | LinkedIn
+    | GooglePlay
+    | AppleStore
+    | PrivacyPolicy
+
+type SharableUrl =
+    | AppOnGooglePlay
+    | AppOnAppleStore
+
 type Msg = 
     | LocalesLoaded of Locale LazyList
     | SelectPage of Model.SelectedPage
@@ -30,3 +41,5 @@ type Msg =
     | PanLeftGesture
     | PanRightGesture
     | BackPressed
+    | UrlClick of ExternalUrl
+    | UrlShare of SharableUrl

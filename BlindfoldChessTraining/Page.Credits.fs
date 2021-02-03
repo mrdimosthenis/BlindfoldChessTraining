@@ -1,27 +1,28 @@
 ﻿module BlindfoldChessTraining.Page.Credits
 
-open System
 open Fabulous
-open Xamarin.Essentials
 
 open BlindfoldChessTraining
 open BlindfoldChessTraining.UIElems
 open BlindfoldChessTraining.Template
 
-let openGitHub() = new Uri("https://github.com/mrdimosthenis/BlindfoldChessTraining")
-                   |> Launcher.OpenAsync
-                   |> Async.AwaitTask
-                   |> Async.StartImmediate
+let codeBtn (dispatch: Msg.Msg -> unit): ViewElement =
+    fun () -> Msg.GitHub |> Msg.UrlClick |> dispatch
+    |> Component.button "Code on GitHub" Icons.code true
 
-let openLinkedIn() = new Uri("https://www.linkedin.com/in/mrdimosthenis/")
-                     |> Launcher.OpenAsync
-                     |> Async.AwaitTask
-                     |> Async.StartImmediate
+let devBtn (dispatch: Msg.Msg -> unit): ViewElement =
+    fun () -> Msg.LinkedIn |> Msg.UrlClick |> dispatch
+    |> Component.button "Developer on LinkedIn" Icons.idCard true
+
+let versionLbl (model: Model.Model): ViewElement =
+    Constants.version
+    |> sprintf "Version: %s"
+    |> Component.label model false
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
-    
+
     [ Component.label model false "Blindfold Chess Training was created by Dimosthenis Michailidis"
-      Component.button "Source Code" Icons.code true openGitHub
-      Component.button "Developer" Icons.idCard true openLinkedIn
-      Constants.version |> sprintf "Version: %s" |> Component.label model false ]
+      codeBtn dispatch
+      devBtn dispatch
+      versionLbl model ]
     |> Page.page model dispatch "Credits" Icons.fingerprint
