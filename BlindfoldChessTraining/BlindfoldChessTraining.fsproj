@@ -31,6 +31,10 @@
     <EmbeddedResource Include="resources\images\icons\eye.png" />
     <EmbeddedResource Include="resources\images\icons\volume_up.png" />
     <EmbeddedResource Include="resources\images\icons\annotation.png" />
+    <EmbeddedResource Include="resources\images\icons\document.png" />
+    <EmbeddedResource Include="resources\images\icons\share.png" />
+    <EmbeddedResource Include="resources\images\icons\info.png" />
+    <EmbeddedResource Include="resources\images\icons\play.png" />
     <EmbeddedResource Include="resources\images\board\empty.png" />
     <EmbeddedResource Include="resources\images\board\1.png" />
     <EmbeddedResource Include="resources\images\board\2.png" />
