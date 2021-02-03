@@ -44,6 +44,10 @@ let appleAppStoreHorizontalLayout (dispatch: Msg.Msg -> unit): ViewElement =
          horizontalOptions = LayoutOptions.Center,
          children = [ storeBtn; shareBtn ])
 
+let privacyPolicyBtn (dispatch: Msg.Msg -> unit): ViewElement =
+    fun () -> Msg.PrivacyPolicy |> Msg.UrlClick |> dispatch
+    |> Component.button "Privacy Policy" Icons.document true
+
 let versionLbl (model: Model.Model): ViewElement =
     Constants.version
     |> sprintf "Version: %s"
@@ -54,7 +58,11 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     [ Component.label model false "Blindfold Chess Training was created by Dimosthenis Michailidis"
       codeBtn dispatch
       devBtn dispatch
+      Component.separator ()
       googleAppStoreHorizontalLayout dispatch
       appleAppStoreHorizontalLayout dispatch
+      Component.separator ()
+      privacyPolicyBtn dispatch
+      Component.separator ()
       versionLbl model ]
     |> Page.page model dispatch "Credits" Icons.fingerprint
