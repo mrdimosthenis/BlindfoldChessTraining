@@ -2,10 +2,59 @@
 
 open System
 
+open FSharpx.Collections
+
 open Fabulous
 open Xamarin.Essentials
 
 open BlindfoldChessMechanics
+
+// analytics
+
+let modelTrackingSubMap (model: Model.Model): Map<string, string> =
+    [ ("selectedPage", string model.SelectedPage)
+      ("boardSize", string model.ConfigOptions.BoardSize)
+      ("fontSize", string model.ConfigOptions.FontSize)
+      ("selectedLocale",
+       match model.ConfigOptions.SelectedLocale with
+       | Some i when i < LazyList.length model.Locales ->
+           model.Locales
+           |> Speech.localeNames
+           |> Seq.item i
+       | _ ->
+           "Default")
+      ("speechPitch", string model.ConfigOptions.SpeechPitch)
+      ("userId", model.UserId)
+      ("sessionId", model.SessionId) ]
+    |> Map.ofList
+
+let maybeTrackEvent (msg: Msg.Msg) (model: Model.Model): unit =
+    if model.AreAnalyticsEnabled then
+        match msg with
+        | Msg.GoToNextLevel
+        | Msg.GoToPrevLevel
+        | Msg.GoToNextPuzzle
+        | Msg.GoToPrevPuzzle
+        | Msg.VolumeNoteClicked
+        | Msg.ShowSolution
+        | Msg.SelectDisplayBoardOption _
+        | Msg.SelectCoordsConfig _
+        | Msg.SelectPieceSymbolConfig _
+        | Msg.ResetConfigs
+        | Msg.UrlClick _
+        | Msg.UrlShare _
+        | Msg.SwitchAnalytics ->
+            let modelSubMap = modelTrackingSubMap model
+
+            let eventJsonString =
+                Newtonsoft.Json.JsonConvert.SerializeObject msg
+
+            Tracking.track modelSubMap eventJsonString
+        | _ -> ()
+    else
+        ()
+        
+// update related functions
 
 let cmdInit (): Cmd<Msg.Msg> =
     async {
@@ -55,6 +104,8 @@ let getNewGameFromDBAndModel (model: Model.Model) (categoryId: int, level: int, 
               CurrentAnnouncementIndex = 0 }
 
 let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
+    maybeTrackEvent msg model
+    
     match msg with
     | Msg.LocalesLoaded v -> { model with Locales = v }, Cmd.none
 
@@ -392,3 +443,13 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         |> Async.StartImmediate
 
         model, Cmd.none
+        
+    | Msg.SwitchAnalytics ->
+        let areAnalyticsEnabled = not model.AreAnalyticsEnabled
+        Preferences.setBool Preferences.areAnalyticsEnabledKey areAnalyticsEnabled
+
+        if areAnalyticsEnabled then Tracking.initialize () else Tracking.stop ()
+
+        { model with
+              AreAnalyticsEnabled = areAnalyticsEnabled },
+        Cmd.none

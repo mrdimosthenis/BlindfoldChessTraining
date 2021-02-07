@@ -47,7 +47,10 @@ type Model =
       IsPuzzleSolved: bool
       CurrentAnnouncementIndex: int
       DidVolumeNoteClicked: bool
-      LastVolumePressOrPanGestureMillis: int64 }
+      LastVolumePressOrPanGestureMillis: int64
+      AreAnalyticsEnabled: bool
+      UserId: string
+      SessionId: string }
 
 // default values
 
@@ -63,6 +66,8 @@ let defaultDidVolumeNoteClicked: bool = false
 
 let defaultEndgameJsonStr: string = DB.getGameJsonStr(0, 0, 0)
 let defaultOpeningJsonStr: string = DB.getGameJsonStr(1, 0, 0)
+
+let defaultAreAnalyticsEnabled: bool = false
 
 // functions
 
@@ -170,6 +175,14 @@ let initConfigOptions(): ConfigOptions =
 let init(): Model =
     let initCfgOpts = initConfigOptions()
     let endgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
+    let userId =
+        match Preferences.tryGetString Preferences.userIdKey with
+        | Some str -> str
+        | None ->
+            let newUserId = Tracking.randomAlphanumeric ()
+            Preferences.setString Preferences.userIdKey newUserId
+            newUserId
+    let sessionId = Tracking.randomAlphanumeric ()
     { SelectedPage = HomePage
       Locales = LazyList.empty
       IsDisplayBoardOptionEnabled = Preferences.isDisplayBoardOptionEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultIsDisplayBoardOptionEnabled
@@ -181,4 +194,7 @@ let init(): Model =
       IsPuzzleSolved = false
       CurrentAnnouncementIndex = 0
       DidVolumeNoteClicked = Preferences.didVolumeNoteClickedKey |> Preferences.tryGetBool |> Option.defaultValue defaultDidVolumeNoteClicked
-      LastVolumePressOrPanGestureMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds() }
+      LastVolumePressOrPanGestureMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds()
+      AreAnalyticsEnabled = Preferences.areAnalyticsEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultAreAnalyticsEnabled
+      UserId = userId
+      SessionId = sessionId }

@@ -47,6 +47,22 @@ let googleAppStoreHorizontalLayout (dispatch: Msg.Msg -> unit): ViewElement =
 let privacyPolicyBtn (dispatch: Msg.Msg -> unit): ViewElement =
     fun () -> Msg.PrivacyPolicy |> Msg.UrlClick |> dispatch
     |> Component.button "Privacy Policy" Icons.document true
+    
+let analyticsHorizontalLayout (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+    let shortDescriptionLbl =
+        "Send anonymous usage statistics"
+        |> Component.label model false
+
+    let checkBox =
+        View.CheckBox(
+            isChecked = model.AreAnalyticsEnabled,
+            checkedChanged = (fun _ -> dispatch Msg.SwitchAnalytics)
+        )
+
+    View.StackLayout
+        (orientation = StackOrientation.Horizontal,
+         horizontalOptions = LayoutOptions.Center,
+         children = [ shortDescriptionLbl; checkBox ])
 
 let versionLbl (model: Model.Model): ViewElement =
     Constants.version
@@ -63,6 +79,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
       //appleAppStoreHorizontalLayout dispatch
       Component.separator ()
       privacyPolicyBtn dispatch
+      analyticsHorizontalLayout model dispatch
       Component.separator ()
       versionLbl model ]
     |> Page.page model dispatch "Credits" Icons.fingerprint

@@ -351,3 +351,4 @@ MigrationBackup/
 
 # JetBrains
 /.idea/
+BlindfoldChessTraining/Secrets.fs

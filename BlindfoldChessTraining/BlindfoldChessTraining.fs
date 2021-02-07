@@ -33,6 +33,9 @@ type App () as app =
         |> Program.withConsoleTrace
 #endif
         |> XamarinFormsProgram.run app
+    
+    override this.OnStart() =
+        Tracking.initialize ()
 
 #if DEBUG
     // Uncomment this line to enable live update in debug mode. 

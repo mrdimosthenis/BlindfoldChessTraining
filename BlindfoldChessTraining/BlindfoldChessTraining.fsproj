@@ -64,10 +64,12 @@
     <EmbeddedResource Include="resources\images\board\wp.png" />
     <EmbeddedResource Include="resources\images\board\wq.png" />
     <EmbeddedResource Include="resources\images\board\wr.png" />
+    <Compile Include="Secrets.fs" />
     <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
     <Compile Include="DB.fs" />
     <Compile Include="Preferences.fs" />
+    <Compile Include="Tracking.fs" />
     <Compile Include="Speech.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="Msg.fs" />
@@ -88,6 +90,9 @@
 
   <ItemGroup />
   <ItemGroup>
+    <PackageReference Include="Microsoft.AppCenter" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.1.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />

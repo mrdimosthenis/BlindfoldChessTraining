@@ -74,6 +74,30 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Java.Interop" />
+    <Reference Include="Microsoft.AppCenter, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Microsoft.AppCenter.4.1.0\lib\MonoAndroid50\Microsoft.AppCenter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Analytics, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.4.1.0\lib\MonoAndroid50\Microsoft.AppCenter.Analytics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Analytics.Android.Bindings, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.4.1.0\lib\MonoAndroid50\Microsoft.AppCenter.Analytics.Android.Bindings.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Android.Bindings, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Microsoft.AppCenter.4.1.0\lib\MonoAndroid50\Microsoft.AppCenter.Android.Bindings.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Crashes, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.4.1.0\lib\MonoAndroid50\Microsoft.AppCenter.Crashes.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AppCenter.Crashes.Android.Bindings, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.4.1.0\lib\MonoAndroid50\Microsoft.AppCenter.Crashes.Android.Bindings.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="SQLite-net, Version=1.7.335.0, Culture=neutral, PublicKeyToken=null">

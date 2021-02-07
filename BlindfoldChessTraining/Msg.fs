@@ -43,3 +43,4 @@ type Msg =
     | BackPressed
     | UrlClick of ExternalUrl
     | UrlShare of SharableUrl
+    | SwitchAnalytics
