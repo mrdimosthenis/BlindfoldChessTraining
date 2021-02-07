@@ -64,9 +64,9 @@ let specialKingMovements (coordinates: Board.Coordinates) (position: Position): 
                              ability && isWh = isWhite
                              && Board.resident (rowIndex, op columnIndex 1) position.Board = None
                              && Board.resident (rowIndex, op columnIndex 2) position.Board = None
-                             && (Utils.lazForAll ((<>) coordinates) controlledCoordsByOpponent)
-                             && (Utils.lazForAll ((<>) (rowIndex, op columnIndex 1)) controlledCoordsByOpponent)
-                             && (Utils.lazForAll ((<>) (rowIndex, op columnIndex 2)) controlledCoordsByOpponent)
+                             && (Seq.forall ((<>) coordinates) controlledCoordsByOpponent)
+                             && (Seq.forall ((<>) (rowIndex, op columnIndex 1)) controlledCoordsByOpponent)
+                             && (Seq.forall ((<>) (rowIndex, op columnIndex 2)) controlledCoordsByOpponent)
                         )
         |> LazyList.zip (LazyList.ofList [ (rowIndex, columnIndex + 2)
                                            (rowIndex, columnIndex - 2)

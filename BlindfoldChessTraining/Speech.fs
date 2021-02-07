@@ -21,7 +21,7 @@ let speak (pitch: float) (locales: Locale LazyList) (localesIndex: int option) (
     let pitch = new System.Nullable<float32>(float32 pitch)
     let settings = match localesIndex with
                    | Some i when i < LazyList.length locales ->
-                        new SpeechOptions(Pitch = pitch, Locale = Utils.lazItem i locales)
+                        new SpeechOptions(Pitch = pitch, Locale = Seq.item i locales)
                    | _ ->
                         new SpeechOptions(Pitch = pitch)
     TextToSpeech.SpeakAsync(text, settings)

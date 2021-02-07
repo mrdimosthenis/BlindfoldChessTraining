@@ -95,53 +95,69 @@ let areValidCoordinates(coordinates: Coordinates): bool =
 
 let upCoordinates (coordinates: Coordinates): Coordinates LazyList =
     let (rowIndex, columnIndex) = coordinates
-    Utils.lazInfinite
+    id
+    |> Seq.initInfinite
+    |> LazyList.ofSeq
     |> LazyList.take (7 - rowIndex)
     |> LazyList.map (fun i -> (rowIndex + i + 1, columnIndex))
 
 let downCoordinates (coordinates: Coordinates): Coordinates LazyList =
     let (rowIndex, columnIndex) = coordinates
-    Utils.lazInfinite
+    id
+    |> Seq.initInfinite
+    |> LazyList.ofSeq
     |> LazyList.take rowIndex
     |> LazyList.map (fun i -> (rowIndex - i - 1, columnIndex))
 
 let leftCoordinates (coordinates: Coordinates): Coordinates LazyList =
     let (rowIndex, columnIndex) = coordinates
-    Utils.lazInfinite
+    id
+    |> Seq.initInfinite
+    |> LazyList.ofSeq
     |> LazyList.take columnIndex
     |> LazyList.map (fun i -> (rowIndex, columnIndex - i - 1))
 
 let rightCoordinates (coordinates: Coordinates): Coordinates LazyList =
     let (rowIndex, columnIndex) = coordinates
-    Utils.lazInfinite
+    id
+    |> Seq.initInfinite
+    |> LazyList.ofSeq
     |> LazyList.take (7 - columnIndex)
     |> LazyList.map (fun i -> (rowIndex, columnIndex + i + 1))
 
 let upRightDiagonal (coordinates: Coordinates): Coordinates LazyList =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min (7 - rowIndex) (7 - columnIndex)
-    Utils.lazInfinite
+    id
+    |> Seq.initInfinite
+    |> LazyList.ofSeq
     |> LazyList.take minDist
     |> LazyList.map (fun i -> (rowIndex + i + 1, columnIndex + i + 1))
 
 let downRightDiagonal (coordinates: Coordinates): Coordinates LazyList =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min rowIndex (7 - columnIndex)
-    Utils.lazInfinite
+    id
+    |> Seq.initInfinite
+    |> LazyList.ofSeq
     |> LazyList.take minDist
     |> LazyList.map (fun i -> (rowIndex - i - 1, columnIndex + i + 1))
 
 let upLeftDiagonal (coordinates: Coordinates): Coordinates LazyList =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min (7 - rowIndex) columnIndex
-    Utils.lazInfinite
+    id
+    |> Seq.initInfinite
+    |> LazyList.ofSeq
     |> LazyList.take minDist
     |> LazyList.map (fun i -> (rowIndex + i + 1, columnIndex - i - 1))
 
 let downLeftDiagonal (coordinates: Coordinates): Coordinates LazyList =
     let (rowIndex, columnIndex) = coordinates
     let minDist = min rowIndex columnIndex
-    Utils.lazInfinite
+    id
+    |> Seq.initInfinite
+    |> LazyList.ofSeq
     |> LazyList.take minDist
     |> LazyList.map (fun i -> (rowIndex - i - 1, columnIndex - i - 1))
 
@@ -297,12 +313,13 @@ let coordinatesControlledByColor (isWhite: bool) (board: Board): Coordinates Laz
         | _ -> false)
     |> LazyList.map (fun coords -> coordinatesControlledByPiece coords board)
     |> LazyList.concat
-    |> Utils.lazDistinct
+    |> Seq.distinct
+    |> LazyList.ofSeq
 
 let isKingInDanger (isWhite: bool) (board: Board): bool =
     board
     |> coordinatesControlledByColor (not isWhite)
-    |> Utils.lazExists
+    |> Seq.exists
             (fun coords ->
                     match resident coords board with
                     | Some { PieceType = King; IsWhite = isWh } when isWh = isWhite -> true

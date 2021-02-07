@@ -6,7 +6,6 @@ open System
 open System.IO
 open FSharpx.Collections
 open BlindfoldChessMechanics
-open System.Text.Json
 
 exception InvalidColumn of string
 
@@ -139,13 +138,17 @@ let moveText (isWhite: bool) (areFigures: bool) (m: Position.Move): string =
            piece + clarification + takes + targetSquare + promotion + checkOrMate
 
 let moveTextsWithNumberIndicators  (areFigures: bool) (isWhiteToMove: bool) (moves: Position.Move LazyList): (string * bool) LazyList =
-    let indices = Utils.lazInfinite
+    let indices = id
+                  |> Seq.initInfinite
+                  |> LazyList.ofSeq
                   |> LazyList.map (fun i -> [ i + 1; i + 1 ])
                   |> LazyList.map LazyList.ofList
                   |> LazyList.concat
                   |> (if isWhiteToMove then id else LazyList.tail)
     let isWhiteToMoveBools =
-        Utils.lazInfinite
+        id
+        |> Seq.initInfinite
+        |> LazyList.ofSeq
         |> LazyList.map (fun _ ->
              if isWhiteToMove then [ true; false ]
              else [ false; true ]
@@ -262,7 +265,7 @@ let gameFileTexts(filePath: string) (games: Game.Game LazyList): unit =
     w.Close()
 
 let gameJson (game: Game.Game): string =
-    JsonSerializer.Serialize(game, Game.jsonOptions)
+    Newtonsoft.Json.JsonConvert.SerializeObject(game)
 
 let gameFileJsons(filePath: string) (games: Game.Game LazyList): unit =
     let w = File.AppendText filePath

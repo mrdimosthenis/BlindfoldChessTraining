@@ -38,3 +38,8 @@ let chevronLeft: Image.Value = Resources.image "icons.chevron_left"
 let chevronRight: Image.Value = Resources.image "icons.chevron_right"
 let chevronDoubleLeft: Image.Value = Resources.image "icons.chevron_double_left"
 let chevronDoubleRight: Image.Value = Resources.image "icons.chevron_double_right"
+
+let document: Image.Value = Resources.image "icons.document"
+let share: Image.Value = Resources.image "icons.share"
+let info: Image.Value = Resources.image "icons.info"
+let play: Image.Value = Resources.image "icons.play"

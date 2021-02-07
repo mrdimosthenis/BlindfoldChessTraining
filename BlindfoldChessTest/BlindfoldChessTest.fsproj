@@ -9,6 +9,7 @@
 
   <ItemGroup>
 	<Compile Include="ResourcesAsCode.fs" />
+	<Compile Include="BlindfoldChessCustomScripts.ReadPGNsAndCreateJSONs.fs" />
 	<Compile Include="BlindfoldChessMechanics.Logic.BoardTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.Logic.PositionTest.fs" />
 	<Compile Include="BlindfoldChessMechanics.Notation.EmitterTest.fs" />
@@ -19,8 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharp.SystemTextJson" Version="0.14.8" />
-    <PackageReference Include="FSharpx.Collections" Version="2.1.3" />
     <PackageReference Include="FsUnit.xUnit" Version="4.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -37,10 +36,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BlindfoldChessMechanics\BlindfoldChessMechanics.fsproj" />
     <ProjectReference Include="..\BlindfoldChessTraining\BlindfoldChessTraining.fsproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.7.2" />
   </ItemGroup>
 
 </Project>

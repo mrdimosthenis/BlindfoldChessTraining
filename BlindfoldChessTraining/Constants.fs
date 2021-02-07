@@ -1,10 +1,13 @@
 ﻿module BlindfoldChessTraining.Constants
 
 open Xamarin.Forms
+open Xamarin.Essentials
 
-let version: string = "3.0.1"
+let isIOSDevice: bool = Device.RuntimePlatform = Device.iOS
 
-let introWaitMillis: int = 1000
+let volumePressOrPanGestureDebounceTimeout: int64 = 500L
+
+let version: string = VersionTracking.CurrentVersion
 
 let titleSizeRatio: float = 1.5
 
@@ -17,3 +20,11 @@ let lightSquareColor: Color = Color.LightCyan
 
 let numOfLevelsPerCategory: int = 10
 let numOfPuzzlesPerLevel: int = 50
+
+let gitHubUrl: string = "https://github.com/mrdimosthenis/BlindfoldChessTraining"
+let linkedInUrl: string = "https://www.linkedin.com/in/mrdimosthenis/"
+let googlePlayUrl: string = "https://play.google.com/store/apps/details?id=com.github.mrdimosthenis.blindfoldchesstraining"
+//TODO replace with actual apple id
+let appleStoreUrl: string = "https://apps.apple.com/us/app/apple-store/id0000000000"
+//TODO create privacy policy file
+let privacyPolicyUrl: string = "https://github.com/mrdimosthenis/BlindfoldChessTraining/blob/master/privacy_policy.md"

@@ -20,9 +20,23 @@ let button (title: string) (icon: Image.Value) (isMenuItem: bool) (f: unit -> un
         text = title,
         textTransform = TextTransform.None,
         fontAttributes = attributes,
+        backgroundColor = Color.Transparent,
+        borderWidth = 1.0,
+        borderColor = Color.Black,
         horizontalOptions = horizOpts,
         command = f,
         image = icon
+    )
+    
+let imageButton (source: Image.Value) (command: unit -> unit): ViewElement =
+    View.ImageButton(
+        source  = source,
+        backgroundColor = Color.Transparent,
+        borderWidth = 1.0,
+        borderColor = Color.Black,
+        width = 50.0,
+        height = 50.0,
+        command = command
     )
 
 let label (model: Model.Model) (isLarge: bool) (title: string): ViewElement =

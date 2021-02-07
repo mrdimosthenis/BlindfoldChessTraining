@@ -1,7 +1,6 @@
 ﻿// Copyright 2018-2019 Fabulous contributors. See LICENSE.md for license.
 namespace BlindfoldChessTraining
 
-open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
@@ -11,7 +10,6 @@ module App =
 
     let view (model: Model.Model) (dispatch: Msg.Msg -> unit) =
         let v =  match model.SelectedPage with
-                 | Model.IntroPage -> Intro.view
                  | Model.HomePage -> Home.view
                  | Model.OpeningPuzzlesPage -> OpeningPuzzles.view
                  | Model.EndgamePuzzlesPage -> EndgamePuzzles.view
@@ -35,6 +33,9 @@ type App () as app =
         |> Program.withConsoleTrace
 #endif
         |> XamarinFormsProgram.run app
+    
+    override this.OnStart() =
+        Tracking.initialize ()
 
 #if DEBUG
     // Uncomment this line to enable live update in debug mode. 

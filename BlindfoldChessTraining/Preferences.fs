@@ -18,6 +18,9 @@ let didVolumeNoteClickedKey: string = "didVolumeNoteClicked"
 let endgameJsonStrKey: string = "endgameJsonStr"
 let openingJsonStrKey: string = "openingJsonStr"
 
+let areAnalyticsEnabledKey: string = "areAnalyticsEnabled"
+let userIdKey: string = "userId"
+
 // functions
 
 let clear(): unit =

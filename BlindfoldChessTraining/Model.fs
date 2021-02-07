@@ -1,5 +1,7 @@
 ﻿module BlindfoldChessTraining.Model
 
+open System
+
 open Xamarin.Essentials
 open FSharpx.Collections
 open BlindfoldChessMechanics
@@ -7,7 +9,6 @@ open BlindfoldChessMechanics
 // types
 
 type SelectedPage =
-    | IntroPage
     | HomePage
     | EndgamePuzzlesPage
     | OpeningPuzzlesPage
@@ -45,7 +46,11 @@ type Model =
       CurrentMoveIndex: int option
       IsPuzzleSolved: bool
       CurrentAnnouncementIndex: int
-      DidVolumeNoteClicked: bool }
+      DidVolumeNoteClicked: bool
+      LastVolumePressOrPanGestureMillis: int64
+      AreAnalyticsEnabled: bool
+      UserId: string
+      SessionId: string }
 
 // default values
 
@@ -61,6 +66,8 @@ let defaultDidVolumeNoteClicked: bool = false
 
 let defaultEndgameJsonStr: string = DB.getGameJsonStr(0, 0, 0)
 let defaultOpeningJsonStr: string = DB.getGameJsonStr(1, 0, 0)
+
+let defaultAreAnalyticsEnabled: bool = false
 
 // functions
 
@@ -151,6 +158,7 @@ let mechanicToCurrentGame (areSymbolsEnabled: bool) (selectedPage: SelectedPage)
 
 let resetConfigOptions(): unit =
     Preferences.removeIfExists Preferences.areCoordsEnabledKey
+    Preferences.removeIfExists Preferences.boardSizeKey
     Preferences.removeIfExists Preferences.areSymbolsEnabledKey
     Preferences.removeIfExists Preferences.fontSizeKey
     Preferences.removeIfExists Preferences.selectedLocaleKey
@@ -167,14 +175,26 @@ let initConfigOptions(): ConfigOptions =
 let init(): Model =
     let initCfgOpts = initConfigOptions()
     let endgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
-    { SelectedPage = IntroPage
+    let userId =
+        match Preferences.tryGetString Preferences.userIdKey with
+        | Some str -> str
+        | None ->
+            let newUserId = Tracking.randomAlphanumeric ()
+            Preferences.setString Preferences.userIdKey newUserId
+            newUserId
+    let sessionId = Tracking.randomAlphanumeric ()
+    { SelectedPage = HomePage
       Locales = LazyList.empty
       IsDisplayBoardOptionEnabled = Preferences.isDisplayBoardOptionEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultIsDisplayBoardOptionEnabled
       ConfigOptions = initCfgOpts
       EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
       OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr
-      CurrentGame = endgameJsonStr |> Notation.Parser.jsonOfGame |> mechanicToCurrentGame initCfgOpts.AreSymbolsEnabled IntroPage
+      CurrentGame = endgameJsonStr |> Notation.Parser.jsonOfGame |> mechanicToCurrentGame initCfgOpts.AreSymbolsEnabled HomePage
       CurrentMoveIndex = None
       IsPuzzleSolved = false
       CurrentAnnouncementIndex = 0
-      DidVolumeNoteClicked = Preferences.didVolumeNoteClickedKey |> Preferences.tryGetBool |> Option.defaultValue defaultDidVolumeNoteClicked }
+      DidVolumeNoteClicked = Preferences.didVolumeNoteClickedKey |> Preferences.tryGetBool |> Option.defaultValue defaultDidVolumeNoteClicked
+      LastVolumePressOrPanGestureMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds()
+      AreAnalyticsEnabled = Preferences.areAnalyticsEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultAreAnalyticsEnabled
+      UserId = userId
+      SessionId = sessionId }

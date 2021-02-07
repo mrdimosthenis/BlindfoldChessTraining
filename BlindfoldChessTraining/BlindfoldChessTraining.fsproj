@@ -10,7 +10,6 @@
     <EmbeddedResource Include="resources\puzzles\endgame_puzzles.jsonl" />
     <EmbeddedResource Include="resources\puzzles\opening_puzzles.jsonl" />
     <EmbeddedResource Include="resources\images\logos\main.png" />
-    <EmbeddedResource Include="resources\images\logos\fabulous.png" />
     <EmbeddedResource Include="resources\images\icons\empty.png" />
     <EmbeddedResource Include="resources\images\icons\cube.png" />
     <EmbeddedResource Include="resources\images\icons\library.png" />
@@ -32,6 +31,10 @@
     <EmbeddedResource Include="resources\images\icons\eye.png" />
     <EmbeddedResource Include="resources\images\icons\volume_up.png" />
     <EmbeddedResource Include="resources\images\icons\annotation.png" />
+    <EmbeddedResource Include="resources\images\icons\document.png" />
+    <EmbeddedResource Include="resources\images\icons\share.png" />
+    <EmbeddedResource Include="resources\images\icons\info.png" />
+    <EmbeddedResource Include="resources\images\icons\play.png" />
     <EmbeddedResource Include="resources\images\board\empty.png" />
     <EmbeddedResource Include="resources\images\board\1.png" />
     <EmbeddedResource Include="resources\images\board\2.png" />
@@ -61,21 +64,21 @@
     <EmbeddedResource Include="resources\images\board\wp.png" />
     <EmbeddedResource Include="resources\images\board\wq.png" />
     <EmbeddedResource Include="resources\images\board\wr.png" />
+    <Compile Include="Secrets.fs" />
     <Compile Include="Constants.fs" />
     <Compile Include="Resources.fs" />
     <Compile Include="DB.fs" />
     <Compile Include="Preferences.fs" />
+    <Compile Include="Tracking.fs" />
     <Compile Include="Speech.fs" />
     <Compile Include="Model.fs" />
     <Compile Include="Msg.fs" />
     <Compile Include="Update.fs" />
     <Compile Include="UIElems.Icons.fs" />
-    <Compile Include="UIElems.Images.fs" />
     <Compile Include="UIElems.Board.fs" />
     <Compile Include="Template.Component.fs" />
     <Compile Include="Template.GameNavigator.fs" />
     <Compile Include="Template.Page.fs" />
-    <Compile Include="Page.Intro.fs" />
     <Compile Include="Page.Home.fs" />
     <Compile Include="Page.EndgamePuzzles.fs" />
     <Compile Include="Page.OpeningPuzzles.fs" />
@@ -87,16 +90,14 @@
 
   <ItemGroup />
   <ItemGroup>
-    <PackageReference Include="FSharp.SystemTextJson" Version="0.14.8" />
-    <PackageReference Include="FSharpx.Collections" Version="2.1.3" />
+    <PackageReference Include="Microsoft.AppCenter" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.1.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
-    <PackageReference Include="Fabulous.XamarinForms" Version="0.57.0" />
-    <PackageReference Include="Fabulous.XamarinForms.LiveUpdate" Version="0.57.0" />
-    <PackageReference Include="FSharp.Core" Version="4.7.1" />
-    <PackageReference Update="FSharp.Core" Version="4.7.2" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 --> 
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Fabulous.XamarinForms" Version="0.60.0" />
+    <PackageReference Include="Fabulous.XamarinForms.LiveUpdate" Version="0.60.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BlindfoldChessMechanics\BlindfoldChessMechanics.fsproj" />

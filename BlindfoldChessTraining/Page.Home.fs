@@ -9,7 +9,7 @@ open BlindfoldChessTraining.Template
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let innerElems =
-            [ View.Image(source = Images.main)
+            [ View.Image(source = Resources.image "logos.main")
               Component.button "Endgame Puzzles" Icons.cube true (fun () -> Model.EndgamePuzzlesPage |> Msg.SelectPage |> dispatch)
               Component.button "Opening Puzzles" Icons.library true (fun () -> Model.OpeningPuzzlesPage |> Msg.SelectPage |> dispatch)
               Component.button "Description" Icons.annotation true (fun () -> Model.DescriptionPage |> Msg.SelectPage |> dispatch)
