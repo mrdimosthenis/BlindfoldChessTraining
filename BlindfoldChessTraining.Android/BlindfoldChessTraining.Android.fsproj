@@ -72,11 +72,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BlindfoldChessTraining\BlindfoldChessTraining.fsproj">
-      <Project>{6017D679-9899-451A-A1FC-3153A32270DC}</Project>
+      <Project>{80B018F4-A681-4D00-A1CA-D28E82C36328}</Project>
       <Name>BlindfoldChessTraining</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="FSharp.Core, Version=4.7.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\FSharp.Core.4.7.1\lib\netstandard2.0\FSharp.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FSharpx.Collections, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\FSharpx.Collections.2.1.3\lib\net45\FSharpx.Collections.dll</HintPath>
       <Private>True</Private>
@@ -281,9 +285,6 @@
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml">
       <HintPath>..\packages\Xamarin.Forms.4.8.0.1687\lib\MonoAndroid10.0\Xamarin.Forms.Xaml.dll</HintPath>
-    </Reference>
-    <Reference Include="FSharp.Core">
-      <HintPath>..\packages\FSharp.Core.5.0.0\lib\netstandard2.0\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Android.FSharp.ResourceProvider.Runtime">
       <HintPath>..\packages\Xamarin.Android.FSharp.ResourceProvider.1.0.0.28\lib\monoandroid81\Xamarin.Android.FSharp.ResourceProvider.Runtime.dll</HintPath>
