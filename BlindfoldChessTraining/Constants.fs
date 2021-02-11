@@ -24,7 +24,5 @@ let numOfPuzzlesPerLevel: int = 50
 let gitHubUrl: string = "https://github.com/mrdimosthenis/BlindfoldChessTraining"
 let linkedInUrl: string = "https://www.linkedin.com/in/mrdimosthenis/"
 let googlePlayUrl: string = "https://play.google.com/store/apps/details?id=com.github.mrdimosthenis.blindfoldchesstraining"
-//TODO replace with actual apple id
-let appleStoreUrl: string = "https://apps.apple.com/us/app/apple-store/id0000000000"
-//TODO create privacy policy file
+let appleStoreUrl: string = "https://apps.apple.com/us/app/apple-store/id1553271236"
 let privacyPolicyUrl: string = "https://github.com/mrdimosthenis/BlindfoldChessTraining/blob/master/privacy_policy.md"
