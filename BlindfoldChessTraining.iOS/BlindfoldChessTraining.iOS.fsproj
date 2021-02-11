@@ -73,6 +73,7 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchFloat32>true</MtouchFloat32>
+    <CodesignProvision>Blindfold Chess Training N6Y3632N8B profile</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -206,10 +207,10 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ios-marketing.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-76x76@1x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-76x76@2x.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-60x60@3x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-76x76@1x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-60x60@2x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-60x60@3x.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-83.5x83.5@2x.png" />
     <Compile Include="Properties\AssemblyInfo.fs" />
     <Compile Include="AppDelegate.fs" />
