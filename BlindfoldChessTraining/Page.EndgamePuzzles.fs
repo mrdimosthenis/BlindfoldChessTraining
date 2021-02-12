@@ -37,7 +37,7 @@ let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
               []
           else
               [ Component.separator ()
-                GameNavigator.volumeNotification model dispatch ] ]
+                GameNavigator.speechNotification model dispatch ] ]
         |> List.concat
 
     Template.Page.page model dispatch "Endgame Puzzles" Icons.cube innerElems
