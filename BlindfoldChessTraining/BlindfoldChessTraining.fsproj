@@ -35,6 +35,8 @@
     <EmbeddedResource Include="resources\images\icons\share.png" />
     <EmbeddedResource Include="resources\images\icons\info.png" />
     <EmbeddedResource Include="resources\images\icons\play.png" />
+    <EmbeddedResource Include="resources\images\icons\play_left.png" />
+    <EmbeddedResource Include="resources\images\icons\exit.png" />
     <EmbeddedResource Include="resources\images\board\empty.png" />
     <EmbeddedResource Include="resources\images\board\1.png" />
     <EmbeddedResource Include="resources\images\board\2.png" />

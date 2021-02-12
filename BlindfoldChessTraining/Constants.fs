@@ -9,7 +9,7 @@ let volumePressOrPanGestureDebounceTimeout: int64 = 500L
 
 let version: string = VersionTracking.CurrentVersion
 
-let titleSizeRatio: float = 1.5
+let titleSizeRatio: float = 1.2
 
 let backgroundColor: Color = Color.LightSteelBlue
 let lineColor: Color = Color.DarkSlateGray

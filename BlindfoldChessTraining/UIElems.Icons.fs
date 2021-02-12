@@ -43,3 +43,6 @@ let document: Image.Value = Resources.image "icons.document"
 let share: Image.Value = Resources.image "icons.share"
 let info: Image.Value = Resources.image "icons.info"
 let play: Image.Value = Resources.image "icons.play"
+
+let play_left: Image.Value = Resources.image "icons.play_left"
+let exit: Image.Value = Resources.image "icons.exit"
