@@ -158,7 +158,7 @@ let volumeNotification (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewEle
     let label =
         if Constants.isIOSDevice
         then "Swipe left and right for audio training"
-        else "Press the volume keys of the device for audio training"
+        else "Press the volume keys of the device (or swipe left and right on the chessboard) for audio training"
         |> Component.label model false
 
     View.StackLayout
