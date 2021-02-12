@@ -185,8 +185,8 @@ let grid (dispatch: Msg.Msg -> unit) (areCoordsEnabled: bool) (boardSize: float)
                   panUpdated =
                       (fun panArgs ->
                           match (panArgs.StatusType = GestureStatus.Running, panArgs.TotalX > 0.0) with
-                          | (true, true) -> dispatch Msg.PanLeftGesture
-                          | (true, false) -> dispatch Msg.PanRightGesture
+                          | (true, true) -> dispatch Msg.PanRightGesture
+                          | (true, false) -> dispatch Msg.PanLeftGesture
                           | _ -> ())
 
                  ) ],

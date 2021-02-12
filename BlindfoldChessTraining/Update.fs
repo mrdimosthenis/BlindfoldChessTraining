@@ -274,7 +274,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         Cmd.none
 
     | Msg.VolumeUpPressed
-    | Msg.PanLeftGesture ->
+    | Msg.PanRightGesture ->
         let currentMillis =
             DateTimeOffset.Now.ToUnixTimeMilliseconds()
 
@@ -297,7 +297,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         | _ -> model, Cmd.none
 
     | Msg.VolumeDownPressed
-    | Msg.PanRightGesture ->
+    | Msg.PanLeftGesture ->
         let currentMillis =
             DateTimeOffset.Now.ToUnixTimeMilliseconds()
 
