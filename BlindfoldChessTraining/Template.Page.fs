@@ -7,21 +7,6 @@ open Xamarin.Forms
 open BlindfoldChessTraining
 open BlindfoldChessTraining.UIElems
 
-let panGestureRecognizers (dispatch: Msg.Msg -> unit): ViewElement list =
-    if Constants.isIOSDevice then
-        [ View.PanGestureRecognizer
-            (touchPoints = 1,
-             panUpdated =
-                 (fun panArgs ->
-                     match (panArgs.StatusType = GestureStatus.Running, panArgs.TotalX > 0.0) with
-                     | (true, true) -> dispatch Msg.PanRightGesture
-                     | (true, false) -> dispatch Msg.PanLeftGesture
-                     | _ -> ())
-
-            ) ]
-    else
-        []
-
 let page (model: Model.Model)
          (dispatch: Msg.Msg -> unit)
          (title: string)
@@ -57,5 +42,4 @@ let page (model: Model.Model)
                       View.StackLayout
                           (horizontalOptions = LayoutOptions.Center,
                            verticalOptions = LayoutOptions.Center,
-                           gestureRecognizers = panGestureRecognizers dispatch,
                            children = childElems)))
