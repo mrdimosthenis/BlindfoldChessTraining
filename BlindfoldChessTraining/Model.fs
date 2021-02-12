@@ -58,7 +58,7 @@ type Model =
 let defaultIsDisplayBoardOptionEnabled: bool = true
 
 let defaultAreCoordsEnabled: bool = true
-let defaultBoardSize: float = 1.0
+let defaultBoardSize: float = 0.5
 let defaultAreSymbolsEnabled: bool = false
 let defaultFontSize: float = 17.0
 let defaultSpeechPitch: float = 1.0
