@@ -37,6 +37,7 @@
     <EmbeddedResource Include="resources\images\icons\play.png" />
     <EmbeddedResource Include="resources\images\icons\play_left.png" />
     <EmbeddedResource Include="resources\images\icons\exit.png" />
+    <EmbeddedResource Include="resources\images\icons\list.png" />
     <EmbeddedResource Include="resources\images\board\empty.png" />
     <EmbeddedResource Include="resources\images\board\1.png" />
     <EmbeddedResource Include="resources\images\board\2.png" />
@@ -81,6 +82,7 @@
     <Compile Include="Template.Component.fs" />
     <Compile Include="Template.GameNavigator.fs" />
     <Compile Include="Template.Page.fs" />
+    <Compile Include="Page.Intro.fs" />
     <Compile Include="Page.Home.fs" />
     <Compile Include="Page.EndgamePuzzles.fs" />
     <Compile Include="Page.OpeningPuzzles.fs" />

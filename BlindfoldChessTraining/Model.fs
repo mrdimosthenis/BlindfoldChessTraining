@@ -9,6 +9,7 @@ open BlindfoldChessMechanics
 // types
 
 type SelectedPage =
+    | IntroPage
     | HomePage
     | EndgamePuzzlesPage
     | OpeningPuzzlesPage
@@ -183,13 +184,13 @@ let init(): Model =
             Preferences.setString Preferences.userIdKey newUserId
             newUserId
     let sessionId = Tracking.randomAlphanumeric ()
-    { SelectedPage = HomePage
+    { SelectedPage = IntroPage
       Locales = LazyList.empty
       IsDisplayBoardOptionEnabled = Preferences.isDisplayBoardOptionEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultIsDisplayBoardOptionEnabled
       ConfigOptions = initCfgOpts
       EndgameJsonStr = Preferences.endgameJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultEndgameJsonStr
       OpeningJsonStr = Preferences.openingJsonStrKey |> Preferences.tryGetString |> Option.defaultValue defaultOpeningJsonStr
-      CurrentGame = endgameJsonStr |> Notation.Parser.jsonOfGame |> mechanicToCurrentGame initCfgOpts.AreSymbolsEnabled HomePage
+      CurrentGame = endgameJsonStr |> Notation.Parser.jsonOfGame |> mechanicToCurrentGame initCfgOpts.AreSymbolsEnabled IntroPage
       CurrentMoveIndex = None
       IsPuzzleSolved = false
       CurrentAnnouncementIndex = 0

@@ -9,6 +9,8 @@ let volumePressOrPanGestureDebounceTimeout: int64 = 500L
 
 let version: string = VersionTracking.CurrentVersion
 
+let introWaitMillis: int = 3000
+
 let titleSizeRatio: float = 1.2
 
 let backgroundColor: Color = Color.LightSteelBlue
