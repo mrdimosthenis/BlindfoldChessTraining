@@ -17,12 +17,8 @@ let modelTrackingSubMap (model: Model.Model): Map<string, string> =
       ("fontSize", string model.ConfigOptions.FontSize)
       ("selectedLocale",
        match model.ConfigOptions.SelectedLocale with
-       | Some i when i < LazyList.length model.Locales ->
-           model.Locales
-           |> Speech.localeNames
-           |> Seq.item i
-       | _ ->
-           "Default")
+       | Some i when i < LazyList.length model.Locales -> model.Locales |> Speech.localeNames |> Seq.item i
+       | _ -> "Default")
       ("speechPitch", string model.ConfigOptions.SpeechPitch)
       ("userId", model.UserId)
       ("sessionId", model.SessionId) ]
@@ -53,7 +49,7 @@ let maybeTrackEvent (msg: Msg.Msg) (model: Model.Model): unit =
         | _ -> ()
     else
         ()
-        
+
 // update related functions
 
 let cmdInit (): Cmd<Msg.Msg> =
@@ -105,9 +101,17 @@ let getNewGameFromDBAndModel (model: Model.Model) (categoryId: int, level: int, 
 
 let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
     maybeTrackEvent msg model
-    
+
     match msg with
-    | Msg.LocalesLoaded v -> { model with Locales = v }, Cmd.none
+    | Msg.LocalesLoaded v ->
+        let cmd =
+            async {
+                do! Async.Sleep Constants.introWaitMillis
+                return Msg.SelectPage Model.HomePage
+            }
+            |> Cmd.ofAsyncMsg
+
+        { model with Locales = v }, cmd
 
     | Msg.SelectPage v ->
         let newCurrentGame =
@@ -270,7 +274,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         Cmd.none
 
     | Msg.VolumeUpPressed
-    | Msg.PanLeftGesture ->
+    | Msg.PanRightGesture ->
         let currentMillis =
             DateTimeOffset.Now.ToUnixTimeMilliseconds()
 
@@ -293,7 +297,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         | _ -> model, Cmd.none
 
     | Msg.VolumeDownPressed
-    | Msg.PanRightGesture ->
+    | Msg.PanLeftGesture ->
         let currentMillis =
             DateTimeOffset.Now.ToUnixTimeMilliseconds()
 
@@ -443,7 +447,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         |> Async.StartImmediate
 
         model, Cmd.none
-        
+
     | Msg.SwitchAnalytics ->
         let areAnalyticsEnabled = not model.AreAnalyticsEnabled
         Preferences.setBool Preferences.areAnalyticsEnabledKey areAnalyticsEnabled

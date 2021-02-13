@@ -35,6 +35,9 @@
     <EmbeddedResource Include="resources\images\icons\share.png" />
     <EmbeddedResource Include="resources\images\icons\info.png" />
     <EmbeddedResource Include="resources\images\icons\play.png" />
+    <EmbeddedResource Include="resources\images\icons\play_left.png" />
+    <EmbeddedResource Include="resources\images\icons\exit.png" />
+    <EmbeddedResource Include="resources\images\icons\list.png" />
     <EmbeddedResource Include="resources\images\board\empty.png" />
     <EmbeddedResource Include="resources\images\board\1.png" />
     <EmbeddedResource Include="resources\images\board\2.png" />
@@ -79,6 +82,7 @@
     <Compile Include="Template.Component.fs" />
     <Compile Include="Template.GameNavigator.fs" />
     <Compile Include="Template.Page.fs" />
+    <Compile Include="Page.Intro.fs" />
     <Compile Include="Page.Home.fs" />
     <Compile Include="Page.EndgamePuzzles.fs" />
     <Compile Include="Page.OpeningPuzzles.fs" />
@@ -90,6 +94,8 @@
 
   <ItemGroup />
   <ItemGroup>
+    <PackageReference Include="FSharp.Core" Version="4.7.1" />
+    <PackageReference Update="FSharp.Core" Version="4.7.1" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 -->
     <PackageReference Include="Microsoft.AppCenter" Version="4.1.0" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.1.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.1.0" />

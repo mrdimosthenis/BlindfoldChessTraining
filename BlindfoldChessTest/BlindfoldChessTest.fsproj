@@ -20,7 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FsUnit.xUnit" Version="4.0.1" />
+      <PackageReference Include="FSharp.Core" Version="4.7.1" />
+      <PackageReference Update="FSharp.Core" Version="4.7.1" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 -->
+      <PackageReference Include="FsUnit.xUnit" Version="4.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">

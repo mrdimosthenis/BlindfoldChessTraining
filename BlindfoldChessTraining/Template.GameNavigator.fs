@@ -91,11 +91,11 @@ let displayBoardOption (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewEle
                           |> dispatch))
                Component.label model false "Chessboard" ])
 
-let chessboard (model: Model.Model): ViewElement =
+let chessboard (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     match model.CurrentMoveIndex with
     | None -> model.CurrentGame.InitBoard
     | Some i -> model.CurrentGame.Boards.[i]
-    |> UIElems.Board.grid model.ConfigOptions.AreCoordsEnabled model.ConfigOptions.BoardSize
+    |> UIElems.Board.grid dispatch model.ConfigOptions.AreCoordsEnabled model.ConfigOptions.BoardSize
 
 let notation (model: Model.Model): ViewElement =
     let flexChildren =
@@ -154,11 +154,11 @@ let boardNavigation (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElemen
                     else
                         Icons.empty) (fun () -> dispatch Msg.GoToLastPos) ])
 
-let volumeNotification (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
+let speechNotification (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let label =
         if Constants.isIOSDevice
-        then "Swipe left and right for audio training"
-        else "Press the volume keys of the device for audio training"
+        then "Swipe left and right on the chessboard for audio training"
+        else "Press the volume keys of the device (or swipe left and right on the chessboard) for audio training"
         |> Component.label model false
 
     View.StackLayout

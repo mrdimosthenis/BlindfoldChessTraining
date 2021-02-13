@@ -86,7 +86,7 @@ let accentPicker (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
 
 let view (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     let innerElems =
-            [ Board.grid model.ConfigOptions.AreCoordsEnabled model.ConfigOptions.BoardSize Logic.Board.init
+            [ Board.grid dispatch model.ConfigOptions.AreCoordsEnabled model.ConfigOptions.BoardSize Logic.Board.init
               View.StackLayout(
                   orientation = StackOrientation.Horizontal,
                   horizontalOptions = LayoutOptions.Center,
