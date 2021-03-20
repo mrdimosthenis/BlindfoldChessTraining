@@ -1,4 +1,4 @@
-﻿# Xamarin.Android
+# Xamarin.Android
 # Build a Xamarin.Android app and Xamarin.UITest assembly.
 # Add steps that test, sign, and distribute the app, save build artifacts, and more:
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/xamarin
