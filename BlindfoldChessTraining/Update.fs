@@ -34,7 +34,6 @@ let maybeTrackEvent (msg: Msg.Msg) (model: Model.Model): unit =
         | Msg.VolumeNoteClicked
         | Msg.ShowSolution
         | Msg.SelectDisplayBoardOption _
-        | Msg.SelectCoordsConfig _
         | Msg.SelectPieceSymbolConfig _
         | Msg.ResetConfigs
         | Msg.UrlClick _
@@ -353,20 +352,7 @@ let update (msg: Msg.Msg) (model: Model.Model): Model.Model * Cmd<Msg.Msg> =
         { model with
               IsDisplayBoardOptionEnabled = v },
         Cmd.none
-
-    | Msg.SelectCoordsConfig v ->
-        Preferences.setBool Preferences.areCoordsEnabledKey v
-
-        let newConfigOptions =
-            { model.ConfigOptions with
-                  AreCoordsEnabled = v }
-
-        let cmd =
-            model.SelectedPage |> Msg.SelectPage |> Cmd.ofMsg
-
-        { model with
-              ConfigOptions = newConfigOptions },
-        cmd
+        
     | Msg.SelectBoardSizeConfig v ->
         Preferences.setFloat Preferences.boardSizeKey v
 

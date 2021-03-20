@@ -29,7 +29,6 @@ type Msg =
     | VolumeNoteClicked
     | ShowSolution
     | SelectDisplayBoardOption of bool
-    | SelectCoordsConfig of bool
     | SelectBoardSizeConfig of float
     | SelectPieceSymbolConfig of bool
     | SelectFontSizeConfig of float
