@@ -95,7 +95,7 @@ let chessboard (model: Model.Model) (dispatch: Msg.Msg -> unit): ViewElement =
     match model.CurrentMoveIndex with
     | None -> model.CurrentGame.InitBoard
     | Some i -> model.CurrentGame.Boards.[i]
-    |> UIElems.Board.grid dispatch model.ConfigOptions.AreCoordsEnabled model.ConfigOptions.BoardSize
+    |> UIElems.Board.grid dispatch model.ConfigOptions.BoardSize
 
 let notation (model: Model.Model): ViewElement =
     let flexChildren =

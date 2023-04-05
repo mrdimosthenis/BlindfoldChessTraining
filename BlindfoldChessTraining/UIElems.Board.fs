@@ -70,52 +70,46 @@ let bottomRow: ViewElement LazyList =
     |> LazyList.ofSeq
     |> LazyList.map (fun (i, v) -> v.Row(8).Column(i))
 
-let emptyRow (areCoordsEnabled: bool) (r: int): ViewElement LazyList =
+let emptyRow (r: int): ViewElement LazyList =
     let innerRowElems =
         if r % 2 = 0 then [ imgBl; imgWh ] else [ imgWh; imgBl ]
         |> LazyList.ofList
         |> LazyList.repeat
         |> LazyList.take 4
         |> LazyList.concat
+        
+    let fstElem =
+        match r with
+        | 0 -> img1
+        | 1 -> img2
+        | 2 -> img3
+        | 3 -> img4
+        | 4 -> img5
+        | 5 -> img6
+        | 6 -> img7
+        | 7 -> img8
+        | _ -> raise (InvalidRow r)
 
-    if areCoordsEnabled then
-        let fstElem =
-            match r with
-            | 0 -> img1
-            | 1 -> img2
-            | 2 -> img3
-            | 3 -> img4
-            | 4 -> img5
-            | 5 -> img6
-            | 6 -> img7
-            | 7 -> img8
-            | _ -> raise (InvalidRow r)
+    innerRowElems
+    |> Utils.prependedLaz fstElem
+    |> Seq.indexed
+    |> LazyList.ofSeq
+    |> LazyList.map (fun (i, v) -> v.Row(7 - r).Column(i))
 
-        innerRowElems
-        |> Utils.prependedLaz fstElem
-        |> Seq.indexed
-        |> LazyList.ofSeq
-        |> LazyList.map (fun (i, v) -> v.Row(7 - r).Column(i))
-    else
-        innerRowElems
-        |> Seq.indexed
-        |> LazyList.ofSeq
-        |> LazyList.map (fun (i, v) -> v.Row(7 - r).Column(i))
-
-let emptyBoard (areCoordsEnabled: bool): ViewElement LazyList =
+let emptyBoard (): ViewElement LazyList =
     let middleRowElems =
         id
         |> Seq.initInfinite
         |> LazyList.ofSeq
         |> LazyList.take 8
-        |> LazyList.map (emptyRow areCoordsEnabled)
+        |> LazyList.map emptyRow
         |> LazyList.concat
 
-    if areCoordsEnabled then [ middleRowElems; bottomRow ] else [ middleRowElems ]
+    [ middleRowElems; bottomRow ]
     |> LazyList.ofList
     |> LazyList.concat
 
-let pieces (areCoordsEnabled: bool) (board: Board.Board): ViewElement LazyList =
+let pieces (board: Board.Board): ViewElement LazyList =
     board
     |> Utils.lazOfArrays
     |> Seq.indexed
@@ -155,15 +149,12 @@ let pieces (areCoordsEnabled: bool) (board: Board.Board): ViewElement LazyList =
             |> LazyList.map (fun v ->
                 let r = 7 - rowIndex
 
-                let c =
-                    if areCoordsEnabled then columnIndex + 1 else columnIndex
-
-                v.Row(r).Column(c)))
+                v.Row(r).Column(columnIndex + 1)))
         |> LazyList.concat)
     |> LazyList.concat
 
-let grid (dispatch: Msg.Msg -> unit) (areCoordsEnabled: bool) (boardSize: float) (board: Board.Board): ViewElement =
-    let maxColumn = if areCoordsEnabled then 8 else 7
+let grid (dispatch: Msg.Msg -> unit) (boardSize: float) (board: Board.Board): ViewElement =
+    let maxColumn = 8
 
     let sizeNom =
         Device.info.PixelScreenSize.Width
@@ -192,6 +183,6 @@ let grid (dispatch: Msg.Msg -> unit) (areCoordsEnabled: bool) (boardSize: float)
                  ) ],
          children =
              (board
-              |> pieces areCoordsEnabled
-              |> LazyList.append (emptyBoard areCoordsEnabled)
+              |> pieces
+              |> LazyList.append (emptyBoard ())
               |> LazyList.toList))

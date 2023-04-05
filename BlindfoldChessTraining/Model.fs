@@ -17,8 +17,7 @@ type SelectedPage =
     | OptionsPage
     | CreditsPage
 
-type ConfigOptions = { AreCoordsEnabled: bool
-                       BoardSize: float
+type ConfigOptions = { BoardSize: float
                        AreSymbolsEnabled: bool
                        FontSize: float
                        SelectedLocale: int option
@@ -57,7 +56,6 @@ type Model =
 
 let defaultIsDisplayBoardOptionEnabled: bool = true
 
-let defaultAreCoordsEnabled: bool = true
 let defaultBoardSize: float = 0.5
 let defaultAreSymbolsEnabled: bool = false
 let defaultFontSize: float = 17.0
@@ -158,7 +156,6 @@ let mechanicToCurrentGame (areSymbolsEnabled: bool) (selectedPage: SelectedPage)
       Announcements  = announcements }
 
 let resetConfigOptions(): unit =
-    Preferences.removeIfExists Preferences.areCoordsEnabledKey
     Preferences.removeIfExists Preferences.boardSizeKey
     Preferences.removeIfExists Preferences.areSymbolsEnabledKey
     Preferences.removeIfExists Preferences.fontSizeKey
@@ -166,8 +163,7 @@ let resetConfigOptions(): unit =
     Preferences.removeIfExists Preferences.speechPitchKey
 
 let initConfigOptions(): ConfigOptions =
-    { AreCoordsEnabled = Preferences.areCoordsEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultAreCoordsEnabled
-      BoardSize = Preferences.boardSizeKey |> Preferences.tryGetFloat |> Option.defaultValue defaultBoardSize
+    { BoardSize = Preferences.boardSizeKey |> Preferences.tryGetFloat |> Option.defaultValue defaultBoardSize
       AreSymbolsEnabled = Preferences.areSymbolsEnabledKey |> Preferences.tryGetBool |> Option.defaultValue defaultAreSymbolsEnabled
       FontSize = Preferences.fontSizeKey |> Preferences.tryGetFloat |> Option.defaultValue defaultFontSize
       SelectedLocale = Preferences.selectedLocaleKey |> Preferences.tryGetInt
