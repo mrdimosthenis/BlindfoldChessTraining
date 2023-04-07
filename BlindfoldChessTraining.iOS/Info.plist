@@ -10,28 +10,29 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>9.0</string>
+	<string>15.0</string>
 	<key>CFBundleDisplayName</key>
-	<string>Blindfold Chess Training</string>
+	<string>BlindfoldChessTraining</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.github.mrdimosthenis.blindfoldchesstraining</string>
+	<string>com.companyname.BlindfoldChessTraining</string>
 	<key>CFBundleVersion</key>
-	<string>18.0</string>
+	<string>1</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>BlindfoldChessTraining</string>
-	<key>CFBundleShortVersionString</key>
-	<string>3.1.5</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
-	<key>UIRequiresFullScreen</key>
-	<true/>
 </dict>
 </plist>

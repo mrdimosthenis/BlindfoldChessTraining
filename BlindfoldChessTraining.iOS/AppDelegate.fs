@@ -1,25 +1,25 @@
-﻿// Copyright 2018 Fabulous contributors. See LICENSE.md for license.
 namespace BlindfoldChessTraining.iOS
 
 open System
 open UIKit
 open Foundation
+open Xamarin.Essentials
 open Xamarin.Forms
 open Xamarin.Forms.Platform.iOS
+open Fabulous.XamarinForms
+open BlindfoldChessTraining
 
-[<Register ("AppDelegate")>]
-type AppDelegate () =
-    inherit FormsApplicationDelegate ()
+[<Register("AppDelegate")>]
+type AppDelegate() =
+    inherit FormsApplicationDelegate()
 
-    override this.FinishedLaunching (app, options) =
+    override this.FinishedLaunching(app, options) =
         Forms.Init()
-        let appcore = new BlindfoldChessTraining.App()
-        this.LoadApplication (appcore)
+        this.LoadApplication(Program.startApplication App.program)
         base.FinishedLaunching(app, options)
 
 module Main =
     [<EntryPoint>]
     let main args =
-        UIApplication.Main(args, null, "AppDelegate")
+        UIApplication.Main(args, null, typeof<AppDelegate>)
         0
-
