@@ -5,12 +5,19 @@
         <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="FSharpx.Collections" Version="3.1.0" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
         <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
         <PackageReference Include="FSharp.Core" Version="7.0.0" />
         <PackageReference Include="Fabulous.XamarinForms" Version="2.2.0" />
     </ItemGroup>
     <ItemGroup>
+      <EmbeddedResource Include="resources\puzzles\endgame_puzzles.jsonl" />
+      <EmbeddedResource Include="resources\puzzles\opening_puzzles.jsonl" />
+      <Compile Include="Resources.fs" />
       <Compile Include="App.fs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\BlindfoldChessMechanics\BlindfoldChessMechanics.fsproj" />
     </ItemGroup>
 </Project>
