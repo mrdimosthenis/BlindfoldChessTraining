@@ -1,8 +1,13 @@
 ﻿module BlindfoldChessTraining.Resources
 
 open FSharpx.Collections
-open System.IO
 open System.Reflection
+open System.IO
+open Xamarin.Forms
+
+let image name =
+    $"BlindfoldChessTraining.resources.images.%s{name}.png"
+    |> ImageSource.FromResource
 
 let lines resourceName =
     seq {
