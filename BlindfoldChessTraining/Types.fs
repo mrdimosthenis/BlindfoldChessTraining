@@ -33,7 +33,7 @@ type ConfigOptions =
       BoardSize: float
       FontSizeRatio: float
       SelectedLocaleIndex: int option
-      SpeechPitch: float }
+      SpeechPitch: float32 }
 
 type CurrentGame =
     { CategoryId: int
@@ -64,8 +64,8 @@ type ConfigMsg =
     | SwitchAreSymbolsEnabled
     | SetBoardSize of float
     | SetFontSizeRatio of float
+    | SetSpeechPitch of float32
     | SetSelectedLocaleIndex of int
-    | SetSpeechPitch of float
     | Reset
 
 type ExternalUrl =
@@ -74,17 +74,20 @@ type ExternalUrl =
     | AppStore
     | PrivacyPolicy
 
+type GoToTarget =
+    | NextLevel
+    | PrevLevel
+    | NextPuzzle
+    | PrevPuzzle
+    | NextMove
+    | PrevMove
+    | InitPos
+    | LastPos
+
 type Msg =
     | LocalesLoaded of Locale LazyList
     | SelectPage of SelectedPage
-    | GoToNextLevel
-    | GoToPrevLevel
-    | GoToNextPuzzle
-    | GoToPrevPuzzle
-    | GoToNextMove
-    | GoToPrevMove
-    | GoToInitPos
-    | GoToLastPos
+    | GoToMsg of GoToTarget
     | Speak of string
     | VolumeNoteClicked
     | ShowSolution

@@ -4,7 +4,7 @@ open Xamarin.Essentials
 
 // functions
 
-let clearPrefs () = Preferences.Clear()
+let reset () = Preferences.Clear()
 
 let removeIfExists k =
     if Preferences.ContainsKey(k) then
@@ -15,6 +15,8 @@ let setBool k (v: bool) = Preferences.Set(k, v)
 let setInt k (v: int) = Preferences.Set(k, v)
 
 let setFloat k (v: float) = Preferences.Set(k, v)
+
+let setFloat32 k (v: float32) = Preferences.Set(k, v)
 
 let setString k (v: string) = Preferences.Set(k, v)
 
@@ -55,7 +57,7 @@ let getLocaleIndex () =
     else
         None
 
-let getSpeechPitch () = Preferences.Get(speechPitchKey, 1.0)
+let getSpeechPitch () = Preferences.Get(speechPitchKey, 1.0f)
 
 let getDidVolumeNoteClicked () =
     Preferences.Get(didVolumeNoteClickedKey, false)
