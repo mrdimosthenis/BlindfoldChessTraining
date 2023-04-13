@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
 
         <IsPackable>false</IsPackable>
         <GenerateProgramFile>false</GenerateProgramFile>
@@ -15,7 +15,6 @@
         <Compile Include="BlindfoldChessMechanics\Logic\PositionTest.fs" />
         <Compile Include="BlindfoldChessMechanics\Notation\EmitterTest.fs" />
         <Compile Include="BlindfoldChessMechanics\Notation\ParserTest.fs" />
-        <Compile Include="BlindfoldChessTraining\ResourcesTest.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
@@ -30,7 +29,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BlindfoldChessMechanics\BlindfoldChessMechanics.fsproj" />
-      <ProjectReference Include="..\BlindfoldChessTraining\BlindfoldChessTraining.fsproj" />
     </ItemGroup>
 
 </Project>

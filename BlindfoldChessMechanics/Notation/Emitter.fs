@@ -167,8 +167,8 @@ let moveTextsWithNumberIndicators areFigures isWhiteToMove moves =
     |> LazyList.map (fun (m, (i, b)) ->
         let numberIndicators =
             match (b, i, isWhiteToMove) with
-            | true, _, _ -> [ ($"%i{i}.", true) ]
-            | false, 1, false -> [ ($"%i{i}...", true) ]
+            | true, _, _ -> [ ($"{i}.", true) ]
+            | false, 1, false -> [ ($"{i}...", true) ]
             | false, _, _ -> []
             |> LazyList.ofList
 
@@ -227,7 +227,7 @@ let positionText (position: Position.Position) =
 
     let halfMove = string position.HalfMove
     let fullMove = string position.FullMove
-    $"%s{board} %s{color} %s{castling} %s{enPassant} %s{halfMove} %s{fullMove}"
+    $"{board} {color} {castling} {enPassant} {halfMove} {fullMove}"
 
 let metaTagsText (fen, metaTags) =
     let fenKVs =
@@ -240,7 +240,7 @@ let metaTagsText (fen, metaTags) =
         metaTags
         |> Map.toSeq
         |> Seq.append fenKVs
-        |> Seq.map (fun (k, v) -> $"""[%s{k} "%s{v}"]""")
+        |> Seq.map (fun (k, v) -> $"""[{k} "{v}"]""")
         |> Seq.cache
 
     String.Join("\n", lines)
@@ -261,7 +261,7 @@ let gameText (game: Game.Game) =
         | Some Game.Black -> "0-1"
         | Some Game.Draw -> "1/2-1/2"
 
-    $"%s{metaTags}\n\n%s{moves}  %s{result}"
+    $"{metaTags}\n\n{moves}  {result}"
 
 let gameFileTexts filePath games =
     let w = File.AppendText filePath
