@@ -351,3 +351,5 @@ MigrationBackup/
 
 # JetBrains
 /.idea/
+
+Resources/Resource.designer.cs

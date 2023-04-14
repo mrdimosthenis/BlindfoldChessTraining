@@ -31,6 +31,7 @@ type SelectedPage =
 type ConfigOptions =
     { AreCoordsEnabled: bool
       AreSymbolsEnabled: bool
+      BoardSizeRatio: float
       FontSizeRatio: float
       LocaleIndex: int option
       SpeechPitch: float32 }
@@ -62,6 +63,7 @@ type Model =
 type ConfigMsg =
     | SwitchAreCoordsEnabled
     | SwitchAreSymbolsEnabled
+    | SetBoardSizeRatio of float
     | SetFontSizeRatio of float
     | SetSpeechPitch of float32
     | SetSelectedLocaleIndex of int

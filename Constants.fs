@@ -11,6 +11,9 @@ let os =
     | v when v = DevicePlatform.iOS -> IOS
     | _ -> raise UnknownOS
 
+let visualWidth =
+    DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density
+
 let volumePressOrPanGestureDebounceTimeout = 500L
 
 let version = VersionTracking.CurrentVersion
@@ -20,8 +23,12 @@ let introWaitMillis = 3000
 let numOfLevelsPerCategory = 10
 let numOfPuzzlesPerLevel = 50
 
-let lightSquareColor = Colors.AntiqueWhite
-let darkSquareColor = Colors.MidnightBlue
+let lightSquareColor = Color.FromRgb(238, 237, 211)
+let darkSquareColor = Color.FromRgb(121, 149, 88)
+let lightPieceColor = Color.FromRgb(248, 248, 248)
+let darkPieceColor = Color.FromRgb(86, 83, 82)
+
+let darkestColor = Color.FromRgb(31, 30, 27)
 
 let appStoreUrl =
     match os with

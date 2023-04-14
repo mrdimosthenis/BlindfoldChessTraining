@@ -11,9 +11,9 @@ open type Fabulous.Maui.View
 open Types
 
 module App =
-    
+
     // maybe setup
-    
+
     if DB.doesTableExist () then
         ()
     else
@@ -25,6 +25,7 @@ module App =
     let initConfigOptions () =
         { AreCoordsEnabled = Preferences.getAreCoordsEnabled ()
           AreSymbolsEnabled = Preferences.getAreSymbolsEnabled ()
+          BoardSizeRatio = Preferences.getBoardSizeRatio ()
           FontSizeRatio = Preferences.getFontSizeRatio ()
           LocaleIndex = Preferences.getLocaleIndex ()
           SpeechPitch = Preferences.getSpeechPitch () }
@@ -47,7 +48,7 @@ module App =
           CurrentAnnouncementIndex = 0
           DidVolumeNoteClicked = Preferences.getDidVolumeNoteClicked ()
           LastVolumePressOrPanGestureMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds() }
-        
+
     let cmd =
         async {
             let! locales = Speech.loadLocales ()
@@ -327,6 +328,12 @@ module App =
                     { configOptionsOld with
                         AreSymbolsEnabled = v }
 
+                | SetBoardSizeRatio v ->
+                    Preferences.setBoardSizeRatio v
+
+                    { configOptionsOld with
+                        BoardSizeRatio = v }
+
                 | SetFontSizeRatio v ->
                     Preferences.setFontSizeRatio v
 
@@ -365,15 +372,17 @@ module App =
             modelOld, Cmd.none
 
         | ShareApp ->
-            Constants.appStoreUrl
-            |> Share.RequestAsync
-            |> ignore
+            Constants.appStoreUrl |> Share.RequestAsync |> ignore
 
             modelOld, Cmd.none
 
     // view model
 
-    let view _model =
+    let view model =
+        let { AreCoordsEnabled = areCoordsEnable
+              BoardSizeRatio = boardSizeRatio } =
+            model.ConfigOptions
+
         Application(
             ContentPage(
                 ScrollView(
@@ -387,6 +396,9 @@ module App =
                             .semantics(description = "Cute dotnet bot waving hi to you!")
                             .height(200.)
                             .centerHorizontal ()
+
+                        UIElems.Board.grid false boardSizeRatio
+                        UIElems.Board.grid true boardSizeRatio
 
                         Label("Hello , World!")
                             .semantics(SemanticHeadingLevel.Level1)

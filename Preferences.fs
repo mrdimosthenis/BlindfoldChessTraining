@@ -12,6 +12,7 @@ let isDisplayBoardEnabledKey = "isDisplayBoardEnabled"
 
 let areCoordsEnabledKey = "areCoordsEnabled"
 let areSymbolsEnabledKey = "areSymbolsEnabled"
+let boardSizeRatioKey = "boardSizeRatio"
 let fontSizeRatioKey = "fontSizeRatio"
 let localeIndexKey = "localeIndex"
 let speechPitchKey = "speechPitch"
@@ -32,6 +33,9 @@ let getAreCoordsEnabled () =
 
 let getAreSymbolsEnabled () =
     Preferences.Get(areSymbolsEnabledKey, false)
+
+let getBoardSizeRatio () =
+    Preferences.Get(boardSizeRatioKey, 0.75)
 
 let getFontSizeRatio () = Preferences.Get(fontSizeRatioKey, 1.)
 
@@ -59,6 +63,8 @@ let setAreCoordsEnabled (v: bool) = Preferences.Set(areCoordsEnabledKey, v)
 
 let setAreSymbolsEnabled (v: bool) =
     Preferences.Set(areSymbolsEnabledKey, v)
+
+let setBoardSizeRatio (v: float) = Preferences.Set(boardSizeRatioKey, v)
 
 let setFontSizeRatio (v: float) = Preferences.Set(fontSizeRatioKey, v)
 
