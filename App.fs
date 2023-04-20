@@ -1,5 +1,6 @@
 namespace BlindfoldChessTraining
 
+open BlindfoldChessMechanics
 open FSharpx.Collections
 open Fabulous
 open Fabulous.Maui
@@ -87,6 +88,7 @@ module App =
             currentGameOld
 
         match msg with
+        | NoOp -> modelOld, Cmd.none
         | LocalesLoaded v ->
             let cmd =
                 async {
@@ -397,8 +399,12 @@ module App =
                             .height(200.)
                             .centerHorizontal ()
 
-                        UIElems.Board.grid false boardSizeRatio
-                        UIElems.Board.grid true boardSizeRatio
+                        Template.PuzzleElems.levelNavigation model
+                        Template.PuzzleElems.puzzleNavigation model
+                        Template.PuzzleElems.piecesDescription model
+                        Template.PuzzleElems.boardOption model
+                        UIElems.Board.grid true boardSizeRatio Logic.Board.init
+                        UIElems.Board.grid false boardSizeRatio Logic.Board.init
 
                         Label("Hello , World!")
                             .semantics(SemanticHeadingLevel.Level1)

@@ -40,8 +40,10 @@
     <Compile Include="DB.fs" />
     <Compile Include="Preferences.fs" />
     <Compile Include="Speech.fs" />
+    <Compile Include="UIElems\Components.fs" />
     <Compile Include="UIElems\Icons.fs" />
     <Compile Include="UIElems\Board.fs" />
+    <Compile Include="Template\PuzzleElems.fs" />
     <Compile Include="App.fs" />
     <Compile Include="MauiProgram.fs" />
   </ItemGroup>
@@ -61,34 +63,34 @@
     <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
     <MauiImage Include="Resources\Images\logos\main.png" />
-    <MauiImage Include="Resources\Images\icons\empty.png" />
-    <MauiImage Include="Resources\Images\icons\cube.png" />
-    <MauiImage Include="Resources\Images\icons\library.png" />
-    <MauiImage Include="Resources\Images\icons\fingerprint.png" />
-    <MauiImage Include="Resources\Images\icons\arrow_circle_left.png" />
-    <MauiImage Include="Resources\Images\icons\arrow_circle_right.png" />
-    <MauiImage Include="Resources\Images\icons\fast_forward.png" />
-    <MauiImage Include="Resources\Images\icons\rewind.png" />
-    <MauiImage Include="Resources\Images\icons\chevron_double_left.png" />
-    <MauiImage Include="Resources\Images\icons\chevron_double_right.png" />
-    <MauiImage Include="Resources\Images\icons\chevron_left.png" />
-    <MauiImage Include="Resources\Images\icons\chevron_right.png" />
-    <MauiImage Include="Resources\Images\icons\chip.png" />
-    <MauiImage Include="Resources\Images\icons\home.png" />
-    <MauiImage Include="Resources\Images\icons\speaker.png" />
-    <MauiImage Include="Resources\Images\icons\options.png" />
-    <MauiImage Include="Resources\Images\icons\code.png" />
-    <MauiImage Include="Resources\Images\icons\id_card.png" />
-    <MauiImage Include="Resources\Images\icons\eye.png" />
-    <MauiImage Include="Resources\Images\icons\volume_up.png" />
-    <MauiImage Include="Resources\Images\icons\annotation.png" />
-    <MauiImage Include="Resources\Images\icons\document.png" />
-    <MauiImage Include="Resources\Images\icons\share.png" />
-    <MauiImage Include="Resources\Images\icons\info.png" />
-    <MauiImage Include="Resources\Images\icons\play.png" />
-    <MauiImage Include="Resources\Images\icons\play_left.png" />
-    <MauiImage Include="Resources\Images\icons\exit.png" />
-    <MauiImage Include="Resources\Images\icons\list.png" />
+    <MauiImage Include="Resources\Images\icons\empty.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\cube.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\library.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\fingerprint.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\arrow_circle_left.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\arrow_circle_right.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\fast_forward.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\rewind.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\chevron_double_left.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\chevron_double_right.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\chevron_left.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\chevron_right.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\chip.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\home.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\speaker.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\options.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\code.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\id_card.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\eye.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\volume_up.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\annotation.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\document.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\share.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\info.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\play.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\play_left.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\exit.png" BaseSize="20,20" />
+    <MauiImage Include="Resources\Images\icons\list.png" BaseSize="20,20" />
     <MauiImage Include="Resources\Images\board\empty.png" />
     <MauiImage Include="Resources\Images\board\img1.png" />
     <MauiImage Include="Resources\Images\board\img2.png" />

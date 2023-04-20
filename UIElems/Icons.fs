@@ -1,53 +1,64 @@
 ﻿module BlindfoldChessTraining.UIElems.Icons
 
-open Fabulous.Maui
-open type Fabulous.Maui.View
+let empty msg = Components.btnIcon "icons/empty" msg
 
-let empty () = Image("icons/empty.png")
+let home msg = Components.btnIcon "icons/home" msg
 
-let home () = Image("icons/home.png")
+let library msg = Components.btnIcon "icons/library" msg
 
-let library () = Image("icons/library.png")
+let annotation msg =
+    Components.btnIcon "icons/annotation" msg
 
-let annotation: Fabulous.WidgetBuilder<obj, IFabImage> =
-    Image("icons/annotation.png")
+let fingerprint msg =
+    Components.btnIcon "icons/fingerprint" msg
 
-let fingerprint: Fabulous.WidgetBuilder<obj, IFabImage> =
-    Image("icons/fingerprint.png")
+let cube msg = Components.btnIcon "icons/cube" msg
 
-let cube () = Image("icons/cube.png")
+let options msg = Components.btnIcon "icons/options" msg
 
-let options () = Image("icons/options.png")
+let speaker msg = Components.btnIcon "icons/speaker" msg
 
-let speaker () = Image("icons/speaker.png")
+let chip msg = Components.btnIcon "icons/chip" msg
 
-let chip () = Image("icons/chip.png")
+let code msg = Components.btnIcon "icons/code" msg
+let idCard msg = Components.btnIcon "icons/id_card" msg
 
-let code () = Image("icons/code.png")
-let idCard () = Image("icons/id_card.png")
+let eye msg = Components.btnIcon "icons/eye" msg
 
-let eye () = Image("icons/eye.png")
+let volume_up msg =
+    Components.btnIcon "icons/volume_up" msg
 
-let volume_up () = Image("icons/volume_up.png")
+let arrowCircleLeft msg =
+    Components.btnIcon "icons/arrow_circle_left" msg
 
-let arrowCircleLeft () = Image("icons/arrow_circle_left.png")
-let arrowCircleRight () = Image("icons/arrow_circle_right.png")
+let arrowCircleRight msg =
+    Components.btnIcon "icons/arrow_circle_right" msg
 
-let fastForward () = Image("icons/fast_forward.png")
-let rewind () = Image("icons/rewind.png")
+let fastForward msg =
+    Components.btnIcon "icons/fast_forward" msg
 
-let chevronLeft () = Image("icons/chevron_left.png")
-let chevronRight () = Image("icons/chevron_right.png")
+let rewind msg = Components.btnIcon "icons/rewind" msg
 
-let chevronDoubleLeft () = Image("icons/chevron_double_left.png")
-let chevronDoubleRight () = Image("icons/chevron_double_right.png")
+let chevronLeft msg =
+    Components.btnIcon "icons/chevron_left" msg
 
-let document () = Image("icons/document.png")
-let share () = Image("icons/share.png")
-let info () = Image("icons/info.png")
-let play () = Image("icons/play.png")
+let chevronRight msg =
+    Components.btnIcon "icons/chevron_right" msg
 
-let play_left () = Image("icons/play_left.png")
-let exit () = Image("icons/exit.png")
+let chevronDoubleLeft msg =
+    Components.btnIcon "icons/chevron_double_left" msg
 
-let list () = Image("icons/list.png")
+let chevronDoubleRight msg =
+    Components.btnIcon "icons/chevron_double_right" msg
+
+let document msg = Components.btnIcon "icons/document" msg
+let share msg = Components.btnIcon "icons/share" msg
+let info msg = Components.btnIcon "icons/info" msg
+let play msg = Components.btnIcon "icons/play" msg
+
+let play_left msg =
+    Components.btnIcon "icons/play_left" msg
+
+let exit msg = Components.btnIcon "icons/exit" msg
+
+let list msg = Components.btnIcon "icons/list" msg

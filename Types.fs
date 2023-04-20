@@ -86,6 +86,7 @@ type GoToTarget =
     | LastPos
 
 type Msg =
+    | NoOp
     | LocalesLoaded of Locale LazyList
     | SelectPage of SelectedPage
     | GoToMsg of GoToTarget

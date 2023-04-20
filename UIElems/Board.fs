@@ -1,8 +1,11 @@
 ﻿module BlindfoldChessTraining.UIElems.Board
 
+open BlindfoldChessMechanics
 open BlindfoldChessTraining
 open Fabulous.Maui
+open Microsoft.Maui
 open type Fabulous.Maui.View
+open Types
 
 let imgEmpty () = Image("board/empty.png")
 
@@ -58,33 +61,35 @@ let imgWp () = Image("board/wp")
 let imgWq () = Image("board/wq")
 let imgWr () = Image("board/wr")
 
-//             match resident with
-//             | Some { PieceType = Board.King
-//                      IsWhite = true } -> [ imgWk ]
-//             | Some { PieceType = Board.Queen
-//                      IsWhite = true } -> [ imgWq ]
-//             | Some { PieceType = Board.Rook
-//                      IsWhite = true } -> [ imgWr ]
-//             | Some { PieceType = Board.Bishop
-//                      IsWhite = true } -> [ imgWb ]
-//             | Some { PieceType = Board.Knight
-//                      IsWhite = true } -> [ imgWn ]
-//             | Some { PieceType = Board.Pawn
-//                      IsWhite = true } -> [ imgWp ]
-//             | Some { PieceType = Board.King
-//                      IsWhite = false } -> [ imgBk ]
-//             | Some { PieceType = Board.Queen
-//                      IsWhite = false } -> [ imgBq ]
-//             | Some { PieceType = Board.Rook
-//                      IsWhite = false } -> [ imgBr ]
-//             | Some { PieceType = Board.Bishop
-//                      IsWhite = false } -> [ imgBb ]
-//             | Some { PieceType = Board.Knight
-//                      IsWhite = false } -> [ imgBn ]
-//             | Some { PieceType = Board.Pawn
-//                      IsWhite = false } -> [ imgBp ]
+let residentImg (resident: Logic.Board.Resident) =
+    match resident with
+    | None -> imgEmpty
+    | Some { PieceType = Logic.Board.King
+             IsWhite = true } -> imgWk
+    | Some { PieceType = Logic.Board.Queen
+             IsWhite = true } -> imgWq
+    | Some { PieceType = Logic.Board.Rook
+             IsWhite = true } -> imgWr
+    | Some { PieceType = Logic.Board.Bishop
+             IsWhite = true } -> imgWb
+    | Some { PieceType = Logic.Board.Knight
+             IsWhite = true } -> imgWn
+    | Some { PieceType = Logic.Board.Pawn
+             IsWhite = true } -> imgWp
+    | Some { PieceType = Logic.Board.King
+             IsWhite = false } -> imgBk
+    | Some { PieceType = Logic.Board.Queen
+             IsWhite = false } -> imgBq
+    | Some { PieceType = Logic.Board.Rook
+             IsWhite = false } -> imgBr
+    | Some { PieceType = Logic.Board.Bishop
+             IsWhite = false } -> imgBb
+    | Some { PieceType = Logic.Board.Knight
+             IsWhite = false } -> imgBn
+    | Some { PieceType = Logic.Board.Pawn
+             IsWhite = false } -> imgBp
 
-let boardGrid areCoordsEnable boardSizeRatio =
+let boardGrid areCoordsEnable boardSizeRatio (board: Logic.Board.Board) =
     let maxRowColIndex = if areCoordsEnable then 8 else 7
 
     let squareWidth =
@@ -97,8 +102,6 @@ let boardGrid areCoordsEnable boardSizeRatio =
             for col in rowColRange do
                 let image =
                     match areCoordsEnable, row, col with
-                    | false, r, c when (r + c) % 2 = 0 -> imgWh
-                    | false, r, c when (r + c) % 2 = 1 -> imgBl
                     | true, 8, 0 -> imgEmpty
                     | true, 8, 1 -> imgA
                     | true, 8, 2 -> imgB
@@ -118,11 +121,32 @@ let boardGrid areCoordsEnable boardSizeRatio =
                     | true, 0, 0 -> img8
                     | true, r, c when (r + c) % 2 = 0 -> imgBl
                     | true, r, c when (r + c) % 2 = 1 -> imgWh
+                    | false, r, c when (r + c) % 2 = 0 -> imgWh
+                    | false, r, c when (r + c) % 2 = 1 -> imgBl
                     | _ -> imgBl
 
                 image().gridRow(row).gridColumn(col).width(squareWidth).height squareWidth
+
+        for row in rowColRange do
+            for col in rowColRange do
+                let image =
+                    match areCoordsEnable, row, col with
+                    | true, 8, _ -> imgEmpty
+                    | true, _, 0 -> imgEmpty
+                    | true, r, c -> residentImg (board[7 - r][c - 1])
+                    | false, r, c -> residentImg (board[7 - r][c])
+
+                image().gridRow(row).gridColumn(col).width(squareWidth).height squareWidth
     })
-        .centerHorizontal ()
+        .centerHorizontal()
+        .gestureRecognizers () {
+        PanGestureRecognizer(fun panArgs ->
+            match panArgs.StatusType = GestureStatus.Running, panArgs.TotalX > 0.0 with
+            | true, true -> PanRightGesture
+            | true, false -> PanLeftGesture
+            | _ -> NoOp)
+            .touchPoints 1
+    }
 
 let grid areCoordsEnable boardSizeRatio =
     boardGrid areCoordsEnable boardSizeRatio
