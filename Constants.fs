@@ -26,6 +26,8 @@ let numOfPuzzlesPerLevel = 50
 let lightSquareColor = Color.FromRgb(216, 208, 246)
 let darkSquareColor = Color.FromRgb(160, 142, 231)
 
+let fontSize = 20.
+
 let appStoreUrl =
     match os with
     | Android -> "https://play.google.com/store/apps/details?id=com.github.mrdimosthenis.blindfoldchesstraining"

@@ -2,7 +2,7 @@
 
 let empty msg = Components.btnIcon "icons/empty" msg
 
-let home msg = Components.btnIcon "icons/home" msg
+let home () = Image("icons/home")
 
 let library msg = Components.btnIcon "icons/library" msg
 

@@ -1,6 +1,5 @@
 namespace BlindfoldChessTraining
 
-open BlindfoldChessMechanics
 open FSharpx.Collections
 open Fabulous
 open Fabulous.Maui
@@ -167,12 +166,12 @@ module App =
 
             let currentMoveIndexNew =
                 match goToTarget with
-                | NextMove ->
+                | NextPos ->
                     match currentMoveIndexOld with
                     | None -> Some 0
                     | Some i when i = boardsOld.Length - 1 -> currentMoveIndexOld
                     | Some i -> Some(i + 1)
-                | PrevMove ->
+                | PrevPos ->
                     match currentMoveIndexOld with
                     | None -> None
                     | Some 0 -> None
@@ -381,50 +380,22 @@ module App =
     // view model
 
     let view model =
-        let { AreCoordsEnabled = areCoordsEnable
-              BoardSizeRatio = boardSizeRatio } =
-            model.ConfigOptions
 
         Application(
             ContentPage(
                 ScrollView(
-                    (VStack(spacing = 25.) {
-                        Image("dotnet_bot.png")
-                            .semantics(description = "Cute dotnet bot waving hi to you!")
-                            .height(200.)
-                            .centerHorizontal ()
-
-                        Image("logos/main.png")
-                            .semantics(description = "Cute dotnet bot waving hi to you!")
-                            .height(200.)
-                            .centerHorizontal ()
-
-                        Template.PuzzleElems.levelNavigation model
-                        Template.PuzzleElems.puzzleNavigation model
-                        Template.PuzzleElems.piecesDescription model
-                        Template.PuzzleElems.boardOption model
-                        UIElems.Board.grid true boardSizeRatio Logic.Board.init
-                        UIElems.Board.grid false boardSizeRatio Logic.Board.init
-
-                        Label("Hello , World!")
-                            .semantics(SemanticHeadingLevel.Level1)
-                            .font(size = 32.)
-                            .centerTextHorizontal ()
-
-                        Label("Welcome to .NET Multi-platform App UI powered by Fabulous")
-                            .semantics(
-                                SemanticHeadingLevel.Level2,
-                                "Welcome to dot net Multi platform App U I powered by Fabulous"
-                            )
-                            .font(size = 18.)
-                            .centerTextHorizontal ()
-
-                        Button("Share", UrlClick GitHub)
-                            .semantics(hint = "Shares the app")
-                            .centerHorizontal ()
-                    })
-                        .padding(30., 0., 30., 0.)
-                        .centerVertical ()
+                    UIElems.Page.template
+                        model
+                        "Blind"
+                        (UIElems.Icons.home ())
+                        [ UIElems.PuzzleElems.levelNavigation model
+                          UIElems.PuzzleElems.puzzleNavigation model
+                          UIElems.PuzzleElems.piecesDescription model
+                          UIElems.PuzzleElems.boardOption model
+                          UIElems.PuzzleElems.notation model
+                          UIElems.Board.grid model
+                          UIElems.PuzzleElems.boardNavigation model
+                          UIElems.PuzzleElems.speechNotification model ]
                 )
             )
         )

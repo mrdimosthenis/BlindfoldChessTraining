@@ -89,8 +89,8 @@ let residentImg (resident: Logic.Board.Resident) =
     | Some { PieceType = Logic.Board.Pawn
              IsWhite = false } -> imgBp
 
-let boardGrid areCoordsEnable boardSizeRatio (board: Logic.Board.Board) =
-    let maxRowColIndex = if areCoordsEnable then 8 else 7
+let boardGrid areCoordsEnabled boardSizeRatio (board: Logic.Board.Board) =
+    let maxRowColIndex = if areCoordsEnabled then 8 else 7
 
     let squareWidth =
         boardSizeRatio * Constants.visualWidth / (float maxRowColIndex + 1.)
@@ -101,7 +101,7 @@ let boardGrid areCoordsEnable boardSizeRatio (board: Logic.Board.Board) =
         for row in rowColRange do
             for col in rowColRange do
                 let image =
-                    match areCoordsEnable, row, col with
+                    match areCoordsEnabled, row, col with
                     | true, 8, 0 -> imgEmpty
                     | true, 8, 1 -> imgA
                     | true, 8, 2 -> imgB
@@ -130,7 +130,7 @@ let boardGrid areCoordsEnable boardSizeRatio (board: Logic.Board.Board) =
         for row in rowColRange do
             for col in rowColRange do
                 let image =
-                    match areCoordsEnable, row, col with
+                    match areCoordsEnabled, row, col with
                     | true, 8, _ -> imgEmpty
                     | true, _, 0 -> imgEmpty
                     | true, r, c -> residentImg (board[7 - r][c - 1])
@@ -145,8 +145,12 @@ let boardGrid areCoordsEnable boardSizeRatio (board: Logic.Board.Board) =
             | true, true -> PanRightGesture
             | true, false -> PanLeftGesture
             | _ -> NoOp)
-            .touchPoints 1
+            .touchPoints
+            1
     }
 
-let grid areCoordsEnable boardSizeRatio =
-    boardGrid areCoordsEnable boardSizeRatio
+let grid model =
+    match model.CurrentMoveIndex with
+    | None -> model.CurrentGame.InitBoard
+    | Some i -> model.CurrentGame.Boards[i]
+    |> boardGrid model.ConfigOptions.AreCoordsEnabled model.ConfigOptions.BoardSizeRatio

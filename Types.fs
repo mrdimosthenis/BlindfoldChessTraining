@@ -80,8 +80,8 @@ type GoToTarget =
     | PrevLevel
     | NextPuzzle
     | PrevPuzzle
-    | NextMove
-    | PrevMove
+    | NextPos
+    | PrevPos
     | InitPos
     | LastPos
 
