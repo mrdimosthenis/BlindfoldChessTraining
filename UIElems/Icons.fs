@@ -1,20 +1,22 @@
 ﻿module BlindfoldChessTraining.UIElems.Icons
 
+open BlindfoldChessTraining.Types
+open Fabulous.Maui
+open type Fabulous.Maui.View
+
 let empty msg = Components.btnIcon "icons/empty" msg
 
-let home () = Image("icons/home")
+let home: WidgetFabImage = Image("icons/home")
 
-let library msg = Components.btnIcon "icons/library" msg
+let library: WidgetFabImage = Image("icons/library")
 
-let annotation msg =
-    Components.btnIcon "icons/annotation" msg
+let annotation: WidgetFabImage = Image("icons/annotation")
 
-let fingerprint msg =
-    Components.btnIcon "icons/fingerprint" msg
+let fingerprint: WidgetFabImage = Image("icons/fingerprint")
 
-let cube msg = Components.btnIcon "icons/cube" msg
+let cube: WidgetFabImage = Image("icons/cube")
 
-let options msg = Components.btnIcon "icons/options" msg
+let options: WidgetFabImage = Image("icons/options")
 
 let speaker msg = Components.btnIcon "icons/speaker" msg
 
@@ -24,9 +26,6 @@ let code msg = Components.btnIcon "icons/code" msg
 let idCard msg = Components.btnIcon "icons/id_card" msg
 
 let eye msg = Components.btnIcon "icons/eye" msg
-
-let volume_up msg =
-    Components.btnIcon "icons/volume_up" msg
 
 let arrowCircleLeft msg =
     Components.btnIcon "icons/arrow_circle_left" msg
@@ -53,12 +52,10 @@ let chevronDoubleRight msg =
 
 let document msg = Components.btnIcon "icons/document" msg
 let share msg = Components.btnIcon "icons/share" msg
-let info msg = Components.btnIcon "icons/info" msg
+
 let play msg = Components.btnIcon "icons/play" msg
 
 let play_left msg =
     Components.btnIcon "icons/play_left" msg
 
 let exit msg = Components.btnIcon "icons/exit" msg
-
-let list msg = Components.btnIcon "icons/list" msg

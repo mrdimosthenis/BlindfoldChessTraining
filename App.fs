@@ -382,22 +382,18 @@ module App =
     let view model =
 
         Application(
-            ContentPage(
-                ScrollView(
-                    UIElems.Page.template
-                        model
-                        "Blind"
-                        (UIElems.Icons.home ())
-                        [ UIElems.PuzzleElems.levelNavigation model
-                          UIElems.PuzzleElems.puzzleNavigation model
-                          UIElems.PuzzleElems.piecesDescription model
-                          UIElems.PuzzleElems.boardOption model
-                          UIElems.PuzzleElems.notation model
-                          UIElems.Board.grid model
-                          UIElems.PuzzleElems.boardNavigation model
-                          UIElems.PuzzleElems.speechNotification model ]
-                )
-            )
+            UIElems.Page.template
+                model
+                "Blind"
+                UIElems.Icons.home
+                [ HorizSt(UIElems.PuzzleElems.levelNavigation model)
+                  HorizSt(UIElems.PuzzleElems.puzzleNavigation model)
+                  VertSt(UIElems.PuzzleElems.piecesDescription model)
+                  HorizSt(UIElems.PuzzleElems.boardOption model)
+                  Flx(UIElems.PuzzleElems.notation model)
+                  Grd(UIElems.Board.grid model)
+                  HorizSt(UIElems.PuzzleElems.boardNavigation model)
+                  Lbl(UIElems.PuzzleElems.speechNotification model) ]
         )
 
     let program = Program.statefulWithCmd init update view

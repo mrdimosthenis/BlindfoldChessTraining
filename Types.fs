@@ -1,8 +1,11 @@
 ﻿module BlindfoldChessTraining.Types
 
 open BlindfoldChessMechanics
+open Fabulous
+open Fabulous.Maui
 open FSharpx.Collections
 open Microsoft.Maui.Media
+open type Fabulous.Maui.View
 
 exception UnknownOS
 exception WrongCategoryId
@@ -102,3 +105,12 @@ type Msg =
     | SetConfig of ConfigMsg
     | UrlClick of ExternalUrl
     | ShareApp
+
+type WidgetFabImage = WidgetBuilder<Msg, IFabImage>
+
+type WidgetFabLayout =
+    | HorizSt of WidgetBuilder<Msg,IFabHorizontalStackLayout>
+    | VertSt of WidgetBuilder<Msg,IFabVerticalStackLayout>
+    | Flx of WidgetBuilder<Msg,IFabFlexLayout>
+    | Grd of WidgetBuilder<Msg,IFabGrid>
+    | Lbl of WidgetBuilder<Msg,IFabLabel>

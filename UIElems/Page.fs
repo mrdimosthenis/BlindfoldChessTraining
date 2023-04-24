@@ -4,7 +4,7 @@ open BlindfoldChessTraining.Types
 open Fabulous.Maui
 open type Fabulous.Maui.View
 
-let template model title icon innerElems =
+let template model title (icon: WidgetFabImage) (innerElems: WidgetFabLayout list) =
     let backBtn =
         match model.SelectedPage with
         | HomePage -> Icons.exit BackPressed
@@ -12,16 +12,25 @@ let template model title icon innerElems =
 
     let header =
         (HStack() {
-            backBtn
+            backBtn.alignStartHorizontal()
             Components.label model.ConfigOptions.FontSizeRatio title
-            icon
-        })
-            .centerHorizontal ()
+            icon.alignEndHorizontal()
+        }).centerHorizontal()
 
-    (VStack() {
-        header
+    ContentPage(
+        ScrollView(
+            (VStack(spacing = 25.) {
+                header
 
-        for el in innerElems do
-            el
-    })
-        .centerHorizontal ()
+                for el in innerElems do
+                    match el with
+                    | HorizSt layout -> layout
+                    | VertSt layout -> layout
+                    | Flx layout -> layout
+                    | Grd layout -> layout
+                    | Lbl layout -> layout
+            })
+                .padding(30., 0., 30., 0.)
+                .centerVertical ()
+        )
+    )

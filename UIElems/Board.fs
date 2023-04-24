@@ -7,59 +7,59 @@ open Microsoft.Maui
 open type Fabulous.Maui.View
 open Types
 
-let imgEmpty () = Image("board/empty.png")
+let imgEmpty = Image("board/empty.png")
 
-let imgWh () =
-    (imgEmpty ()).background Constants.lightSquareColor
+let imgWh =
+    imgEmpty.background Constants.lightSquareColor
 
-let imgBl () =
-    (imgEmpty ()).background Constants.darkSquareColor
+let imgBl =
+    imgEmpty.background Constants.darkSquareColor
 
 
-let img1 () = Image("board/img1")
+let img1 = Image("board/img1")
 
-let img2 () = Image("board/img2")
+let img2 = Image("board/img2")
 
-let img3 () = Image("board/img3")
+let img3 = Image("board/img3")
 
-let img4 () = Image("board/img4")
+let img4 = Image("board/img4")
 
-let img5 () = Image("board/img5")
+let img5 = Image("board/img5")
 
-let img6 () = Image("board/img6")
+let img6 = Image("board/img6")
 
-let img7 () = Image("board/img7")
+let img7 = Image("board/img7")
 
-let img8 () = Image("board/img8")
+let img8 = Image("board/img8")
 
-let imgA () = Image("board/img_a")
+let imgA = Image("board/img_a")
 
-let imgB () = Image("board/img_b")
+let imgB = Image("board/img_b")
 
-let imgC () = Image("board/img_c")
+let imgC = Image("board/img_c")
 
-let imgD () = Image("board/img_d")
+let imgD = Image("board/img_d")
 
-let imgE () = Image("board/img_e")
+let imgE = Image("board/img_e")
 
-let imgF () = Image("board/img_f")
+let imgF = Image("board/img_f")
 
-let imgG () = Image("board/img_g")
+let imgG = Image("board/img_g")
 
-let imgH () = Image("board/img_h")
+let imgH = Image("board/img_h")
 
-let imgBb () = Image("board/bb")
-let imgBk () = Image("board/bk")
-let imgBn () = Image("board/bn")
-let imgBp () = Image("board/bp")
-let imgBq () = Image("board/bq")
-let imgBr () = Image("board/br")
-let imgWb () = Image("board/wb")
-let imgWk () = Image("board/wk")
-let imgWn () = Image("board/wn")
-let imgWp () = Image("board/wp")
-let imgWq () = Image("board/wq")
-let imgWr () = Image("board/wr")
+let imgBb = Image("board/bb")
+let imgBk = Image("board/bk")
+let imgBn = Image("board/bn")
+let imgBp = Image("board/bp")
+let imgBq = Image("board/bq")
+let imgBr = Image("board/br")
+let imgWb = Image("board/wb")
+let imgWk = Image("board/wk")
+let imgWn = Image("board/wn")
+let imgWp = Image("board/wp")
+let imgWq = Image("board/wq")
+let imgWr = Image("board/wr")
 
 let residentImg (resident: Logic.Board.Resident) =
     match resident with
@@ -125,7 +125,7 @@ let boardGrid areCoordsEnabled boardSizeRatio (board: Logic.Board.Board) =
                     | false, r, c when (r + c) % 2 = 1 -> imgBl
                     | _ -> imgBl
 
-                image().gridRow(row).gridColumn(col).width(squareWidth).height squareWidth
+                image.gridRow(row).gridColumn(col).width(squareWidth).height squareWidth
 
         for row in rowColRange do
             for col in rowColRange do
@@ -136,7 +136,7 @@ let boardGrid areCoordsEnabled boardSizeRatio (board: Logic.Board.Board) =
                     | true, r, c -> residentImg (board[7 - r][c - 1])
                     | false, r, c -> residentImg (board[7 - r][c])
 
-                image().gridRow(row).gridColumn(col).width(squareWidth).height squareWidth
+                image.gridRow(row).gridColumn(col).width(squareWidth).height squareWidth
     })
         .centerHorizontal()
         .gestureRecognizers () {

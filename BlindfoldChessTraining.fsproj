@@ -83,15 +83,12 @@
         <MauiImage Include="Resources\Images\icons\code.png" BaseSize="20,20" />
         <MauiImage Include="Resources\Images\icons\id_card.png" BaseSize="20,20" />
         <MauiImage Include="Resources\Images\icons\eye.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\volume_up.png" BaseSize="20,20" />
         <MauiImage Include="Resources\Images\icons\annotation.png" BaseSize="20,20" />
         <MauiImage Include="Resources\Images\icons\document.png" BaseSize="20,20" />
         <MauiImage Include="Resources\Images\icons\share.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\info.png" BaseSize="20,20" />
         <MauiImage Include="Resources\Images\icons\play.png" BaseSize="20,20" />
         <MauiImage Include="Resources\Images\icons\play_left.png" BaseSize="20,20" />
         <MauiImage Include="Resources\Images\icons\exit.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\list.png" BaseSize="20,20" />
         <MauiImage Include="Resources\Images\board\empty.png" />
         <MauiImage Include="Resources\Images\board\img1.png" />
         <MauiImage Include="Resources\Images\board\img2.png" />
