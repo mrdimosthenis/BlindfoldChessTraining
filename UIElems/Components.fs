@@ -6,6 +6,8 @@ open type Fabulous.Maui.View
 
 let btnIcon (imPath: string) msg = Button("", msg).image imPath
 
+let btnIconText (imPath: string) text msg = Button(text, msg).image imPath
+
 let label fontSizeRatio str =
     Label(str)
         .centerText()

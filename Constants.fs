@@ -1,9 +1,9 @@
 ﻿module BlindfoldChessTraining.Constants
 
+open BlindfoldChessTraining.Types
 open Microsoft.Maui.ApplicationModel
 open Microsoft.Maui.Devices
 open Microsoft.Maui.Graphics
-open Types
 
 let os =
     match DeviceInfo.Current.Platform with

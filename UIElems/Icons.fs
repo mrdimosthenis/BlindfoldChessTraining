@@ -4,19 +4,40 @@ open BlindfoldChessTraining.Types
 open Fabulous.Maui
 open type Fabulous.Maui.View
 
+let mainLogo: WidgetFabImage = Image("logos/main")
+
 let empty msg = Components.btnIcon "icons/empty" msg
 
 let home: WidgetFabImage = Image("icons/home")
+let homeColored: WidgetFabImage = Image("icons/home_colored")
 
-let library: WidgetFabImage = Image("icons/library")
+let cube text msg =
+    Components.btnIconText "icons/cube" text msg
 
-let annotation: WidgetFabImage = Image("icons/annotation")
+let cubeColored: WidgetFabImage = Image("icons/cube_colored")
 
-let fingerprint: WidgetFabImage = Image("icons/fingerprint")
+let library text msg =
+    Components.btnIconText "icons/library" text msg
 
-let cube: WidgetFabImage = Image("icons/cube")
+let libraryColored: WidgetFabImage = Image("icons/library_colored")
 
-let options: WidgetFabImage = Image("icons/options")
+let annotation text msg =
+    Components.btnIconText "icons/annotation" text msg
+
+let annotationColored: WidgetFabImage = Image("icons/annotation_colored")
+
+let options text msg =
+    Components.btnIconText "icons/options" text msg
+
+let optionsColored: WidgetFabImage = Image("icons/annotation_colored")
+
+let fingerprint text msg =
+    Components.btnIconText "icons/fingerprint" text msg
+
+let fingerprintColored: WidgetFabImage = Image("icons/annotation_colored")
+
+let eye text msg =
+    Components.btnIconText "icons/eye" text msg
 
 let speaker msg = Components.btnIcon "icons/speaker" msg
 
@@ -24,8 +45,6 @@ let chip msg = Components.btnIcon "icons/chip" msg
 
 let code msg = Components.btnIcon "icons/code" msg
 let idCard msg = Components.btnIcon "icons/id_card" msg
-
-let eye msg = Components.btnIcon "icons/eye" msg
 
 let arrowCircleLeft msg =
     Components.btnIcon "icons/arrow_circle_left" msg

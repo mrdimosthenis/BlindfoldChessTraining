@@ -1,12 +1,12 @@
 ﻿module BlindfoldChessTraining.DB
 
 open BlindfoldChessMechanics
+open BlindfoldChessTraining.Types
 open FSharpx.Collections
 open Microsoft.Maui.Storage
 open SQLite
 open System
 open System.IO
-open Types
 
 // constants
 

@@ -122,14 +122,13 @@ let boardNavigation model =
 
     let doubleLeftIcon, leftIcon =
         match model.CurrentMoveIndex with
-        | Some _ -> Icons.chevronDoubleLeft (GoToMsg InitPos), Icons.chevronLeft (GoToMsg PrevPos)
         | None -> noOpIcon, noOpIcon
+        | Some _ -> Icons.chevronDoubleLeft (GoToMsg InitPos), Icons.chevronLeft (GoToMsg PrevPos)
 
     let rightIcon, doubleRightIcon =
         match model.CurrentMoveIndex with
-        | Some i when i <> model.CurrentGame.Boards.Length - 1 ->
-            Icons.chevronRight (GoToMsg NextPos), Icons.chevronDoubleRight (GoToMsg LastPos)
-        | _ -> noOpIcon, noOpIcon
+        | Some i when i = model.CurrentGame.Boards.Length - 1 -> noOpIcon, noOpIcon
+        | _ -> Icons.chevronRight (GoToMsg NextPos), Icons.chevronDoubleRight (GoToMsg LastPos)
 
     (HStack() {
         doubleLeftIcon

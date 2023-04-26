@@ -114,3 +114,5 @@ type WidgetFabLayout =
     | Flx of WidgetBuilder<Msg,IFabFlexLayout>
     | Grd of WidgetBuilder<Msg,IFabGrid>
     | Lbl of WidgetBuilder<Msg,IFabLabel>
+    | Btn of WidgetBuilder<Msg,IFabButton>
+    | Img of WidgetFabImage

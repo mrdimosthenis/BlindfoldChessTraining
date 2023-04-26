@@ -2,10 +2,10 @@
 
 open BlindfoldChessMechanics
 open BlindfoldChessTraining
+open BlindfoldChessTraining.Types
 open Fabulous.Maui
 open Microsoft.Maui
 open type Fabulous.Maui.View
-open Types
 
 let imgEmpty = Image("board/empty.png")
 

@@ -1,14 +1,13 @@
 namespace BlindfoldChessTraining
 
+open BlindfoldChessTraining.Types
 open FSharpx.Collections
 open Fabulous
 open Fabulous.Maui
-open Microsoft.Maui
 open Microsoft.Maui.ApplicationModel
 open Microsoft.Maui.ApplicationModel.DataTransfer
 open System
 open type Fabulous.Maui.View
-open Types
 
 module App =
 
@@ -30,12 +29,7 @@ module App =
           LocaleIndex = Preferences.getLocaleIndex ()
           SpeechPitch = Preferences.getSpeechPitch () }
 
-    let initCurrentGame =
-        DB.currentGame
-            (Preferences.getAreSymbolsEnabled ())
-            (Preferences.getCategoryId ())
-            (Preferences.getLevel ())
-            (Preferences.getIndexInLevel ())
+    let initCurrentGame = DB.currentGame false 0 0 0
 
     let initModel =
         { SelectedPage = IntroPage
@@ -105,13 +99,19 @@ module App =
                 | OpeningPuzzlesPage -> 1
                 | _ -> categoryIdOld
 
+            let levelNew, indexInLevelNew =
+                match categoryIdNew with
+                | 0 -> Preferences.getLevelEndgame (), Preferences.getIndexInLevelEndgame ()
+                | 1 -> Preferences.getLevelOpening (), Preferences.getIndexInLevelOpening ()
+                | _ -> raise WrongCategoryId
+
             let modelNew =
                 { modelOld with
                     SelectedPage = v
                     CurrentMoveIndex = None
                     IsPuzzleSolved = false
                     CurrentAnnouncementIndex = 0
-                    CurrentGame = DB.currentGame areSymbolsEnabledOld categoryIdNew levelOld indexInLevelOld }
+                    CurrentGame = DB.currentGame areSymbolsEnabledOld categoryIdNew levelNew indexInLevelNew }
 
             modelNew, Cmd.none
 
@@ -177,20 +177,31 @@ module App =
                     | Some 0 -> None
                     | Some i -> Some(i - 1)
                 | LastPos -> Some(boardsOld.Length - 1)
+                | InitPos -> None
                 | _ -> None
 
-            let currentGameNew =
+            let currentGameNew, isPuzzleSolvedNew =
                 match goToTarget with
                 | NextLevel
                 | PrevLevel
                 | NextPuzzle
-                | PrevPuzzle -> DB.currentGame areSymbolsEnabledOld categoryIdOld levelNew indexInLevelNew
-                | _ -> currentGameOld
+                | PrevPuzzle -> DB.currentGame areSymbolsEnabledOld categoryIdOld levelNew indexInLevelNew, false
+                | _ -> currentGameOld, true
+
+            match categoryIdOld with
+            | 0 ->
+                Preferences.setLevelEndgame levelNew
+                Preferences.setIndexInLevelEndgame indexInLevelNew
+            | 1 ->
+                Preferences.setLevelOpening levelNew
+                Preferences.setIndexInLevelOpening indexInLevelNew
+            | _ -> raise WrongCategoryId
 
             let modelNew =
                 { modelOld with
                     CurrentMoveIndex = currentMoveIndexNew
-                    CurrentGame = currentGameNew }
+                    CurrentGame = currentGameNew
+                    IsPuzzleSolved = isPuzzleSolvedNew }
 
             modelNew, Cmd.none
 
@@ -382,18 +393,10 @@ module App =
     let view model =
 
         Application(
-            UIElems.Page.template
-                model
-                "Blind"
-                UIElems.Icons.home
-                [ HorizSt(UIElems.PuzzleElems.levelNavigation model)
-                  HorizSt(UIElems.PuzzleElems.puzzleNavigation model)
-                  VertSt(UIElems.PuzzleElems.piecesDescription model)
-                  HorizSt(UIElems.PuzzleElems.boardOption model)
-                  Flx(UIElems.PuzzleElems.notation model)
-                  Grd(UIElems.Board.grid model)
-                  HorizSt(UIElems.PuzzleElems.boardNavigation model)
-                  Lbl(UIElems.PuzzleElems.speechNotification model) ]
+            match model.SelectedPage with
+            | EndgamePuzzlesPage -> Pages.EndgamePuzzles.view model
+            | OpeningPuzzlesPage -> Pages.OpeningPuzzles.view model
+            | _ -> Pages.Home.view model
         )
 
     let program = Program.statefulWithCmd init update view

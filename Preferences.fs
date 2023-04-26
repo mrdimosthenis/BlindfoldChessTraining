@@ -19,9 +19,10 @@ let speechPitchKey = "speechPitch"
 
 let didVolumeNoteClickedKey = "didVolumeNoteClicked"
 
-let categoryIdKey = "categoryId"
-let levelKey = "level"
-let indexInLevelKey = "indexInLevel"
+let levelEndgameKey = "levelEndgame"
+let indexInLevelEndgameKey = "indexInLevelEndgame"
+let levelOpeningKey = "level"
+let indexInLevelOpeningKey = "indexInLevelOpening"
 
 // getters
 
@@ -50,9 +51,15 @@ let getSpeechPitch () = Preferences.Get(speechPitchKey, 1.f)
 let getDidVolumeNoteClicked () =
     Preferences.Get(didVolumeNoteClickedKey, false)
 
-let getCategoryId () = Preferences.Get(categoryIdKey, 0)
-let getLevel () = Preferences.Get(levelKey, 0)
-let getIndexInLevel () = Preferences.Get(indexInLevelKey, 0)
+let getLevelEndgame () = Preferences.Get(levelEndgameKey, 0)
+
+let getIndexInLevelEndgame () =
+    Preferences.Get(indexInLevelEndgameKey, 0)
+
+let getLevelOpening () = Preferences.Get(levelOpeningKey, 0)
+
+let getIndexInLevelOpening () =
+    Preferences.Get(indexInLevelOpeningKey, 0)
 
 // setters
 
@@ -75,6 +82,12 @@ let setSpeechPitch (v: float32) = Preferences.Set(speechPitchKey, v)
 let setDidVolumeNoteClicked (v: bool) =
     Preferences.Set(didVolumeNoteClickedKey, v)
 
-let setCategoryId (v: int) = Preferences.Set(categoryIdKey, v)
-let setLevel (v: int) = Preferences.Set(levelKey, v)
-let setIndexInLevel (v: int) = Preferences.Set(indexInLevelKey, v)
+let setLevelEndgame (v: int) = Preferences.Set(levelEndgameKey, v)
+
+let setIndexInLevelEndgame (v: int) =
+    Preferences.Set(indexInLevelEndgameKey, v)
+
+let setLevelOpening (v: int) = Preferences.Set(levelOpeningKey, v)
+
+let setIndexInLevelOpening (v: int) =
+    Preferences.Set(indexInLevelOpeningKey, v)

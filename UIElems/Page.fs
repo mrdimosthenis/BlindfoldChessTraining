@@ -10,12 +10,14 @@ let template model title (icon: WidgetFabImage) (innerElems: WidgetFabLayout lis
         | HomePage -> Icons.exit BackPressed
         | _ -> Icons.play_left BackPressed
 
+    let label = Components.label model.ConfigOptions.FontSizeRatio title
+
     let header =
-        (HStack() {
-            backBtn.alignStartHorizontal()
-            Components.label model.ConfigOptions.FontSizeRatio title
-            icon.alignEndHorizontal()
-        }).centerHorizontal()
+        Grid(rowdefs = [ Auto ], coldefs = [ Auto; Star; Auto ]) {
+            backBtn.gridColumn 0
+            label.gridColumn 1
+            icon.gridColumn 2
+        }
 
     ContentPage(
         ScrollView(
@@ -28,9 +30,10 @@ let template model title (icon: WidgetFabImage) (innerElems: WidgetFabLayout lis
                     | VertSt layout -> layout
                     | Flx layout -> layout
                     | Grd layout -> layout
-                    | Lbl layout -> layout
+                    | Lbl lbl -> lbl
+                    | Btn btn -> btn
+                    | Img img -> img
             })
-                .padding(30., 0., 30., 0.)
-                .centerVertical ()
+                .padding (30., 30., 30., 30.)
         )
     )
