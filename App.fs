@@ -356,11 +356,11 @@ module App =
 
                     { configOptionsOld with
                         SpeechPitch = v }
-                | SetSelectedLocaleIndex v ->
+                | SetLocaleIndex v ->
                     Preferences.setLocaleIndex v
 
                     { configOptionsOld with
-                        LocaleIndex = Some v }
+                        LocaleIndex = v }
                 | Reset ->
                     Preferences.reset ()
                     initConfigOptions ()
@@ -396,6 +396,8 @@ module App =
             match model.SelectedPage with
             | EndgamePuzzlesPage -> Pages.EndgamePuzzles.view model
             | OpeningPuzzlesPage -> Pages.OpeningPuzzles.view model
+            | DescriptionPage -> Pages.Description.view model
+            | OptionsPage -> Pages.Options.view model
             | _ -> Pages.Home.view model
         )
 

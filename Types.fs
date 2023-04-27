@@ -36,7 +36,7 @@ type ConfigOptions =
       AreSymbolsEnabled: bool
       BoardSizeRatio: float
       FontSizeRatio: float
-      LocaleIndex: int option
+      LocaleIndex: int
       SpeechPitch: float32 }
 
 type CurrentGame =
@@ -69,7 +69,7 @@ type ConfigMsg =
     | SetBoardSizeRatio of float
     | SetFontSizeRatio of float
     | SetSpeechPitch of float32
-    | SetSelectedLocaleIndex of int
+    | SetLocaleIndex of int
     | Reset
 
 type ExternalUrl =
@@ -113,6 +113,7 @@ type WidgetFabLayout =
     | VertSt of WidgetBuilder<Msg,IFabVerticalStackLayout>
     | Flx of WidgetBuilder<Msg,IFabFlexLayout>
     | Grd of WidgetBuilder<Msg,IFabGrid>
+    | Sld of WidgetBuilder<Msg,IFabSlider>
     | Lbl of WidgetBuilder<Msg,IFabLabel>
     | Btn of WidgetBuilder<Msg,IFabButton>
     | Img of WidgetFabImage

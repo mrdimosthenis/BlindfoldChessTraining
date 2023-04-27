@@ -39,9 +39,11 @@ let fingerprintColored: WidgetFabImage = Image("icons/annotation_colored")
 let eye text msg =
     Components.btnIconText "icons/eye" text msg
 
-let speaker msg = Components.btnIcon "icons/speaker" msg
+let speaker text msg =
+    Components.btnIconText "icons/speaker" text msg
 
-let chip msg = Components.btnIcon "icons/chip" msg
+let chip text msg =
+    Components.btnIconText "icons/chip" text msg
 
 let code msg = Components.btnIcon "icons/code" msg
 let idCard msg = Components.btnIcon "icons/id_card" msg

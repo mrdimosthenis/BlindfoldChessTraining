@@ -48,6 +48,8 @@
         <Compile Include="Pages\Home.fs" />
         <Compile Include="Pages\EndgamePuzzles.fs" />
         <Compile Include="Pages\OpeningPuzzles.fs" />
+        <Compile Include="Pages\Description.fs" />
+        <Compile Include="Pages\Options.fs" />
         <Compile Include="App.fs" />
         <Compile Include="MauiProgram.fs" />
     </ItemGroup>

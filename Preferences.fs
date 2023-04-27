@@ -41,10 +41,7 @@ let getBoardSizeRatio () =
 let getFontSizeRatio () = Preferences.Get(fontSizeRatioKey, 1.)
 
 let getLocaleIndex () =
-    if Preferences.ContainsKey(localeIndexKey) then
-        Some(Preferences.Get(localeIndexKey, 0))
-    else
-        None
+    Preferences.Get(localeIndexKey, 0)
 
 let getSpeechPitch () = Preferences.Get(speechPitchKey, 1.f)
 

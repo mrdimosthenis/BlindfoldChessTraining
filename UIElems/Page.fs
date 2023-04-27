@@ -30,6 +30,7 @@ let template model title (icon: WidgetFabImage) (innerElems: WidgetFabLayout lis
                     | VertSt layout -> layout
                     | Flx layout -> layout
                     | Grd layout -> layout
+                    | Sld sld -> sld
                     | Lbl lbl -> lbl
                     | Btn btn -> btn
                     | Img img -> img
