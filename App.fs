@@ -180,13 +180,13 @@ module App =
                 | InitPos -> None
                 | _ -> None
 
-            let currentGameNew, isPuzzleSolvedNew =
+            let currentGameNew, isPuzzleSolvedNew, currentAnnouncementIndexNew =
                 match goToTarget with
                 | NextLevel
                 | PrevLevel
                 | NextPuzzle
-                | PrevPuzzle -> DB.currentGame areSymbolsEnabledOld categoryIdOld levelNew indexInLevelNew, false
-                | _ -> currentGameOld, true
+                | PrevPuzzle -> DB.currentGame areSymbolsEnabledOld categoryIdOld levelNew indexInLevelNew, false, 0
+                | _ -> currentGameOld, true, currentAnnouncementIndexOld
 
             match categoryIdOld with
             | 0 ->
@@ -200,6 +200,7 @@ module App =
             let modelNew =
                 { modelOld with
                     CurrentMoveIndex = currentMoveIndexNew
+                    CurrentAnnouncementIndex = currentAnnouncementIndexNew
                     CurrentGame = currentGameNew
                     IsPuzzleSolved = isPuzzleSolvedNew }
 
@@ -398,6 +399,7 @@ module App =
             | OpeningPuzzlesPage -> Pages.OpeningPuzzles.view model
             | DescriptionPage -> Pages.Description.view model
             | OptionsPage -> Pages.Options.view model
+            | CreditsPage -> Pages.Credits.view model
             | _ -> Pages.Home.view model
         )
 

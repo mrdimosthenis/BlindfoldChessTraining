@@ -34,7 +34,7 @@ let optionsColored: WidgetFabImage = Image("icons/annotation_colored")
 let fingerprint text msg =
     Components.btnIconText "icons/fingerprint" text msg
 
-let fingerprintColored: WidgetFabImage = Image("icons/annotation_colored")
+let fingerprintColored: WidgetFabImage = Image("icons/fingerprint_colored")
 
 let eye text msg =
     Components.btnIconText "icons/eye" text msg
@@ -45,8 +45,20 @@ let speaker text msg =
 let chip text msg =
     Components.btnIconText "icons/chip" text msg
 
-let code msg = Components.btnIcon "icons/code" msg
-let idCard msg = Components.btnIcon "icons/id_card" msg
+let share text msg =
+    Components.btnIconText "icons/share" text msg
+
+let star text msg =
+    Components.btnIconText "icons/star" text msg
+
+let code text msg =
+    Components.btnIconText "icons/code" text msg
+
+let idCard text msg =
+    Components.btnIconText "icons/id_card" text msg
+
+let document text msg =
+    Components.btnIconText "icons/document" text msg
 
 let arrowCircleLeft msg =
     Components.btnIcon "icons/arrow_circle_left" msg
@@ -70,11 +82,6 @@ let chevronDoubleLeft msg =
 
 let chevronDoubleRight msg =
     Components.btnIcon "icons/chevron_double_right" msg
-
-let document msg = Components.btnIcon "icons/document" msg
-let share msg = Components.btnIcon "icons/share" msg
-
-let play msg = Components.btnIcon "icons/play" msg
 
 let play_left msg =
     Components.btnIcon "icons/play_left" msg
