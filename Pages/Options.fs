@@ -57,7 +57,7 @@ let pieceNotationExample areSymbolsEnabled =
     |> Notation.Emitter.multipleMovesText areSymbolsEnabled true
 
 let accentPicker locales localeIndex =
-    let accentItems = locales |> Speech.localeNames |> LazyList.toList
+    let accentItems = Speech.localeNamesPreDefaulted locales
 
     let i = Speech.safeLocaleIndex locales localeIndex
 
