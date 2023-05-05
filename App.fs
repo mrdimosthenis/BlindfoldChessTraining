@@ -59,7 +59,8 @@ module App =
 
     let update msg modelOld =
 
-        let { SelectedPage = selectedPageOld
+        let { SponsorDetails = sponsorDetailsOld
+              SelectedPage = selectedPageOld
               Locales = localesOld
               IsDisplayBoardEnabled = isDisplayBoardEnabledOld
               ConfigOptions = configOptionsOld
@@ -95,11 +96,14 @@ module App =
             modelOld, Cmd.ofMsg msgNew
         | LocalesLoaded v ->
             let cmd =
-                async {
-                    do! Async.Sleep 5000
-                    return SelectPage HomePage
-                }
-                |> Cmd.ofAsyncMsg
+                match sponsorDetailsOld with
+                | None -> Cmd.none
+                | _ ->
+                    async {
+                        do! Async.Sleep 5000
+                        return SelectPage HomePage
+                    }
+                    |> Cmd.ofAsyncMsg
 
             { modelOld with Locales = v }, cmd
 
