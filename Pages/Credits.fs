@@ -2,6 +2,7 @@
 
 open BlindfoldChessTraining
 open BlindfoldChessTraining.Types
+open Microsoft.Maui.ApplicationModel
 
 let view model =
 
@@ -16,7 +17,7 @@ let view model =
 
           PrivacyPolicy |> UrlClick |> UIElems.Icons.document "Privacy Policy" |> Btn
 
-          $"Version: {Constants.version}"
+          $"Version: {VersionTracking.CurrentVersion}"
           |> UIElems.Components.label model.ConfigOptions.FontSizeRatio
           |> Lbl ]
 

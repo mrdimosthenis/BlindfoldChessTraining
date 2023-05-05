@@ -9,6 +9,9 @@ open Microsoft.Maui.ApplicationModel.DataTransfer
 open System
 open type Fabulous.Maui.View
 
+module CodeReceivedService =
+    let mutable Instance: IKeyCodeReceivedService = Unchecked.defaultof<_>
+
 module App =
 
     // maybe setup
@@ -29,14 +32,13 @@ module App =
           LocaleIndex = Preferences.getLocaleIndex ()
           SpeechPitch = Preferences.getSpeechPitch () }
 
-    let initCurrentGame = DB.currentGame false 0 0 0
-
     let initModel =
-        { SelectedPage = IntroPage
+        { SponsorDetails = Resources.sponsorDetails ()
+          SelectedPage = SponsorPage
           Locales = LazyList.empty
           IsDisplayBoardEnabled = Preferences.getIsDisplayBoardEnabled ()
           ConfigOptions = initConfigOptions ()
-          CurrentGame = initCurrentGame
+          CurrentGame = DB.currentGame false 0 0 0
           CurrentMoveIndex = None
           IsPuzzleSolved = false
           CurrentAnnouncementIndex = 0
@@ -82,10 +84,19 @@ module App =
 
         match msg with
         | NoOp -> modelOld, Cmd.none
+        | KeyCodeMessage keyCodeResult ->
+            let msgNew =
+                match keyCodeResult with
+                | VolumeUpCodeResult -> VolumeUpPressed
+                | VolumeDownCodeResult -> VolumeDownPressed
+                | BackCodeResult -> BackPressed
+                | UnknownCodeResult -> NoOp
+
+            modelOld, Cmd.ofMsg msgNew
         | LocalesLoaded v ->
             let cmd =
                 async {
-                    do! Async.Sleep Constants.introWaitMillis
+                    do! Async.Sleep 5000
                     return SelectPage HomePage
                 }
                 |> Cmd.ofAsyncMsg
@@ -239,13 +250,19 @@ module App =
 
         | BackPressed ->
             if selectedPageOld = HomePage then
-                System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow() |> ignore
+                Environment.Exit(0)
             else
                 ()
 
+            let selectedPageNew =
+                if selectedPageOld = SponsorPage then
+                    SponsorPage
+                else
+                    HomePage
+
             let modelNew =
                 { modelOld with
-                    SelectedPage = HomePage }
+                    SelectedPage = selectedPageNew }
 
             modelNew, Cmd.none
 
@@ -395,12 +412,20 @@ module App =
 
         Application(
             match model.SelectedPage with
+            | HomePage -> Pages.Home.view model
+            | SponsorPage -> Pages.Sponsor.view model
             | EndgamePuzzlesPage -> Pages.EndgamePuzzles.view model
             | OpeningPuzzlesPage -> Pages.OpeningPuzzles.view model
             | DescriptionPage -> Pages.Description.view model
             | OptionsPage -> Pages.Options.view model
             | CreditsPage -> Pages.Credits.view model
-            | _ -> Pages.Home.view model
         )
 
-    let program = Program.statefulWithCmd init update view
+    let codeReceivedSubscription _model =
+        Cmd.ofSub (fun dispatch ->
+            let codeReceivedService = CodeReceivedService.Instance
+            codeReceivedService.KeyCodeReceived.Add(fun code -> dispatch (KeyCodeMessage code)))
+
+    let program =
+        Program.statefulWithCmd init update view
+        |> Program.withSubscription codeReceivedSubscription

@@ -1,9 +1,7 @@
 ﻿module BlindfoldChessTraining.Constants
 
 open BlindfoldChessTraining.Types
-open Microsoft.Maui.ApplicationModel
 open Microsoft.Maui.Devices
-open Microsoft.Maui.Graphics
 
 let os =
     match DeviceInfo.Current.Platform with
@@ -11,20 +9,10 @@ let os =
     | v when v = DevicePlatform.iOS -> IOS
     | _ -> raise UnknownOS
 
-let visualWidth =
-    DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density
-
 let volumePressOrPanGestureDebounceTimeout = 500L
-
-let version = VersionTracking.CurrentVersion
-
-let introWaitMillis = 3000
 
 let numOfLevelsPerCategory = 10
 let numOfPuzzlesPerLevel = 50
-
-let lightSquareColor = Color.FromRgb(216, 208, 246)
-let darkSquareColor = Color.FromRgb(160, 142, 231)
 
 let fontSize = 20.
 

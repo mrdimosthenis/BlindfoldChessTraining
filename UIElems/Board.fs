@@ -1,19 +1,18 @@
 ﻿module BlindfoldChessTraining.UIElems.Board
 
 open BlindfoldChessMechanics
-open BlindfoldChessTraining
 open BlindfoldChessTraining.Types
 open Fabulous.Maui
 open Microsoft.Maui
+open Microsoft.Maui.Devices
 open type Fabulous.Maui.View
+open Microsoft.Maui.Graphics
 
 let imgEmpty = Image("board/empty.png")
 
-let imgWh =
-    imgEmpty.background Constants.lightSquareColor
+let imgWh = Color.FromRgb(216, 208, 246) |> imgEmpty.background
 
-let imgBl =
-    imgEmpty.background Constants.darkSquareColor
+let imgBl = Color.FromRgb(160, 142, 231) |> imgEmpty.background
 
 
 let img1 = Image("board/img1")
@@ -88,12 +87,14 @@ let residentImg (resident: Logic.Board.Resident) =
              IsWhite = false } -> imgBn
     | Some { PieceType = Logic.Board.Pawn
              IsWhite = false } -> imgBp
+    
+let visualWidth =
+    DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density
 
 let boardGrid areCoordsEnabled boardSizeRatio (board: Logic.Board.Board) =
     let maxRowColIndex = if areCoordsEnabled then 8 else 7
 
-    let squareWidth =
-        boardSizeRatio * Constants.visualWidth / (float maxRowColIndex + 1.)
+    let squareWidth = boardSizeRatio * visualWidth / (float maxRowColIndex + 1.)
 
     let rowColRange = seq { 0..maxRowColIndex }
 

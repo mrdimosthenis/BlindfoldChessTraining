@@ -118,7 +118,7 @@ let notation model =
         .centerHorizontal ()
 
 let boardNavigation model =
-    let noOpIcon = Icons.empty NoOp
+    let noOpIcon = Icons.emptyBtn NoOp
 
     let doubleLeftIcon, leftIcon =
         match model.CurrentMoveIndex with

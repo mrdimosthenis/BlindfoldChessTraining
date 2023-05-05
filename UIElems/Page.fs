@@ -8,6 +8,7 @@ let template model title (icon: WidgetFabImage) (innerElems: WidgetFabLayout lis
     let backBtn =
         match model.SelectedPage with
         | HomePage -> Icons.exit BackPressed
+        | SponsorPage -> Icons.emptyBtn NoOp
         | _ -> Icons.play_left BackPressed
 
     let label = Components.label model.ConfigOptions.FontSizeRatio title
@@ -33,6 +34,7 @@ let template model title (icon: WidgetFabImage) (innerElems: WidgetFabLayout lis
                     | Sld sld -> sld
                     | Lbl lbl -> lbl
                     | Btn btn -> btn
+                    | Ind ind -> ind
                     | Img img -> img
             })
                 .padding (30., 30., 30., 30.)

@@ -3,9 +3,21 @@
 open Android.App
 open Android.Content.PM
 open Android.Views
-open BlindfoldChessTraining
-open Fabulous
+open BlindfoldChessTraining.Types
 open Microsoft.Maui
+
+type KeyCodeReceivedService() =
+    let keyCodeReceived = Event<KeyCodeResult>()
+
+    static let _instance = KeyCodeReceivedService()
+
+    static member Current = _instance
+
+    member this.OnKeyCodeReceivedReceived(code: KeyCodeResult) = keyCodeReceived.Trigger(code)
+
+    interface IKeyCodeReceivedService with
+        [<CLIEvent>]
+        member this.KeyCodeReceived = keyCodeReceived.Publish
 
 [<Activity(Theme = "@style/Maui.SplashTheme",
            MainLauncher = true,
@@ -20,11 +32,14 @@ open Microsoft.Maui
 type MainActivity() =
     inherit MauiAppCompatActivity()
 
-    override this.OnKeyDown(keycode, _) =
-        match keycode with
-        | Keycode.VolumeUp -> Cmd.ofMsg Types.VolumeUpPressed
-        | Keycode.VolumeDown -> Cmd.ofMsg Types.VolumeDownPressed
-        | Keycode.Back -> Cmd.ofMsg Types.BackPressed
-        | _ -> Cmd.ofMsg Types.NoOp
-        |> ignore
-        true
+    override this.OnKeyDown(keyCode: Keycode, eventArgs) =
+        let keyCodeRes, boolRes =
+            match keyCode with
+            | Keycode.VolumeUp -> KeyCodeResult.VolumeUpCodeResult, true
+            | Keycode.VolumeDown -> KeyCodeResult.VolumeDownCodeResult, true
+            | Keycode.Back -> KeyCodeResult.BackCodeResult, true
+            | _ -> KeyCodeResult.UnknownCodeResult, base.OnKeyDown(keyCode, eventArgs)
+
+        KeyCodeReceivedService.Current.OnKeyCodeReceivedReceived(keyCodeRes)
+
+        boolRes

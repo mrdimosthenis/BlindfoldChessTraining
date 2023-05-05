@@ -46,6 +46,7 @@
         <Compile Include="UIElems\PuzzleElems.fs" />
         <Compile Include="UIElems\Page.fs" />
         <Compile Include="Pages\Home.fs" />
+        <Compile Include="Pages\Sponsor.fs" />
         <Compile Include="Pages\EndgamePuzzles.fs" />
         <Compile Include="Pages\OpeningPuzzles.fs" />
         <Compile Include="Pages\Description.fs" />
@@ -57,7 +58,7 @@
 
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+        <MauiIcon Include="Resources\AppIcon\appicon.png" Color="#512BD4"/>
 
         <MauiAsset Include="Resources\Raw\endgame_puzzles.jsonl" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
         <MauiAsset Include="Resources\Raw\opening_puzzles.jsonl" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
@@ -67,7 +68,6 @@
 
         <!-- Images -->
         <MauiImage Include="Resources\Images\*" />
-        <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
         <MauiImage Include="Resources\Images\logos\main.png" />
         <MauiImage Include="Resources\Images\icons\empty.png" BaseSize="20,20" />
@@ -136,7 +136,7 @@
         <MauiAsset Include="Resources\Raw\*" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 
         <!-- Splash Screen -->
-        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+        <MauiSplashScreen Include="Resources\Splash\splash.png" BaseSize="128,128" />
     </ItemGroup>
 
     <ItemGroup Condition="$(TargetPlatformIdentifier) == 'android'">
@@ -181,6 +181,7 @@
         <PackageReference Include="Fabulous" Version="2.2.1" />
         <PackageReference Include="Fabulous.MauiControls" Version="2.5.1" />
         <PackageReference Include="FSharp.Core" Version="7.0.200" />
+        <PackageReference Include="FSharp.Data" Version="6.2.0" />
         <PackageReference Include="FSharpx.Collections" Version="3.1.0" />
         <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
         <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.4" />

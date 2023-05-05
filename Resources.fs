@@ -1,8 +1,10 @@
 ﻿module BlindfoldChessTraining.Resources
 
+open FSharp.Data
 open FSharpx.Collections
 open Microsoft.Maui.Storage
 open System.IO
+open Types
 
 let puzzleLines resourceName =
     async {
@@ -16,3 +18,14 @@ let puzzleLines resourceName =
 
 let endgamePuzzleLines () = puzzleLines "endgame_puzzles.jsonl"
 let openingPuzzleLines () = puzzleLines "opening_puzzles.jsonl"
+
+let sponsorDetails () =
+    let url =
+        "https://raw.githubusercontent.com/mrdimosthenis/BlindfoldChessTraining/master/sponsor.json"
+
+    try
+        Http.RequestString(url, timeout = 3000)
+        |> Newtonsoft.Json.JsonConvert.DeserializeObject<Sponsor>
+        |> Some
+    with _ ->
+        None

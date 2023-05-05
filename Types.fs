@@ -22,8 +22,12 @@ type PuzzleObject_V_4_0_0() =
     member val IndexInLevel = 0 with get, set
     member val Game = "" with get, set
 
+type Sponsor =
+    { SponsorName: string
+      SponsorImage: string }
+
 type SelectedPage =
-    | IntroPage
+    | SponsorPage
     | HomePage
     | EndgamePuzzlesPage
     | OpeningPuzzlesPage
@@ -52,7 +56,8 @@ type CurrentGame =
       Announcements: string array }
 
 type Model =
-    { SelectedPage: SelectedPage
+    { SponsorDetails: Sponsor option
+      SelectedPage: SelectedPage
       Locales: Locale LazyList
       IsDisplayBoardEnabled: bool
       ConfigOptions: ConfigOptions
@@ -87,6 +92,16 @@ type GoToTarget =
     | PrevPos
     | InitPos
     | LastPos
+    
+type KeyCodeResult =
+    | VolumeUpCodeResult
+    | VolumeDownCodeResult
+    | BackCodeResult
+    | UnknownCodeResult
+    
+type IKeyCodeReceivedService =
+    [<CLIEvent>]
+    abstract KeyCodeReceived: IEvent<KeyCodeResult>
 
 type Msg =
     | NoOp
@@ -105,15 +120,17 @@ type Msg =
     | SetConfig of ConfigMsg
     | UrlClick of ExternalUrl
     | ShareApp
+    | KeyCodeMessage of KeyCodeResult
 
 type WidgetFabImage = WidgetBuilder<Msg, IFabImage>
 
 type WidgetFabLayout =
-    | HorizSt of WidgetBuilder<Msg,IFabHorizontalStackLayout>
-    | VertSt of WidgetBuilder<Msg,IFabVerticalStackLayout>
-    | Flx of WidgetBuilder<Msg,IFabFlexLayout>
-    | Grd of WidgetBuilder<Msg,IFabGrid>
-    | Sld of WidgetBuilder<Msg,IFabSlider>
-    | Lbl of WidgetBuilder<Msg,IFabLabel>
-    | Btn of WidgetBuilder<Msg,IFabButton>
+    | HorizSt of WidgetBuilder<Msg, IFabHorizontalStackLayout>
+    | VertSt of WidgetBuilder<Msg, IFabVerticalStackLayout>
+    | Flx of WidgetBuilder<Msg, IFabFlexLayout>
+    | Grd of WidgetBuilder<Msg, IFabGrid>
+    | Sld of WidgetBuilder<Msg, IFabSlider>
+    | Lbl of WidgetBuilder<Msg, IFabLabel>
+    | Btn of WidgetBuilder<Msg, IFabButton>
+    | Ind of WidgetBuilder<Msg, IFabActivityIndicator>
     | Img of WidgetFabImage

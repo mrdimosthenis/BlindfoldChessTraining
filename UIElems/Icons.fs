@@ -1,12 +1,18 @@
 ﻿module BlindfoldChessTraining.UIElems.Icons
 
+open System
 open BlindfoldChessTraining.Types
 open Fabulous.Maui
 open type Fabulous.Maui.View
 
+let webImg src : WidgetFabImage = Image(Uri src)
+
 let mainLogo: WidgetFabImage = Image("logos/main")
 
-let empty msg = Components.btnIcon "icons/empty" msg
+let emptyImg: WidgetFabImage = Image("logos/empty")
+
+let emptyBtn msg =
+    (Components.btnIcon "icons/empty" msg).opacity (0)
 
 let home: WidgetFabImage = Image("icons/home")
 let homeColored: WidgetFabImage = Image("icons/home_colored")
