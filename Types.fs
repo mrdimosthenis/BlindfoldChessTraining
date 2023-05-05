@@ -65,7 +65,7 @@ type Model =
       CurrentMoveIndex: int option
       IsPuzzleSolved: bool
       CurrentAnnouncementIndex: int
-      DidVolumeNoteClicked: bool
+      DidSpeakInPuzzle: bool
       LastVolumePressOrPanGestureMillis: int64 }
 
 type ConfigMsg =
@@ -109,7 +109,6 @@ type Msg =
     | SelectPage of SelectedPage
     | GoToMsg of GoToTarget
     | Speak of string
-    | VolumeNoteClicked
     | ShowSolution
     | BackPressed
     | VolumeUpPressed

@@ -17,7 +17,7 @@ let fontSizeRatioKey = "fontSizeRatio"
 let localeIndexKey = "localeIndex"
 let speechPitchKey = "speechPitch"
 
-let didVolumeNoteClickedKey = "didVolumeNoteClicked"
+let didSpeakInPuzzleKey = "didSpeakInPuzzle"
 
 let levelEndgameKey = "levelEndgame"
 let indexInLevelEndgameKey = "indexInLevelEndgame"
@@ -45,8 +45,8 @@ let getLocaleIndex () =
 
 let getSpeechPitch () = Preferences.Get(speechPitchKey, 1.f)
 
-let getDidVolumeNoteClicked () =
-    Preferences.Get(didVolumeNoteClickedKey, false)
+let getDidSpeakInPuzzle () =
+    Preferences.Get(didSpeakInPuzzleKey, false)
 
 let getLevelEndgame () = Preferences.Get(levelEndgameKey, 0)
 
@@ -76,8 +76,8 @@ let setLocaleIndex (v: int) = Preferences.Set(localeIndexKey, v)
 
 let setSpeechPitch (v: float32) = Preferences.Set(speechPitchKey, v)
 
-let setDidVolumeNoteClicked (v: bool) =
-    Preferences.Set(didVolumeNoteClickedKey, v)
+let setDidSpeakInPuzzle (v: bool) =
+    Preferences.Set(didSpeakInPuzzleKey, v)
 
 let setLevelEndgame (v: int) = Preferences.Set(levelEndgameKey, v)
 

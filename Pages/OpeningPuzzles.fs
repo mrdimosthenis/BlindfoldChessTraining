@@ -9,7 +9,7 @@ let view model =
     let { IsDisplayBoardEnabled = isDisplayBoardEnabled
           ConfigOptions = configOptions
           IsPuzzleSolved = isPuzzleSolved
-          DidVolumeNoteClicked = didVolumeNoteClicked } =
+          DidSpeakInPuzzle = didSpeakInPuzzle } =
         model
 
     let { AreCoordsEnabled = areCoordsEnabled
@@ -39,7 +39,7 @@ let view model =
           else
               ShowSolution |> UIElems.Icons.eye "Solution" |> Btn
 
-          if not didVolumeNoteClicked then
+          if not didSpeakInPuzzle then
               model |> UIElems.PuzzleElems.speechNotification |> Lbl ]
 
     UIElems.Page.template model "Opening Puzzles" UIElems.Icons.libraryColored innerElems

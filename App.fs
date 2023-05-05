@@ -42,7 +42,7 @@ module App =
           CurrentMoveIndex = None
           IsPuzzleSolved = false
           CurrentAnnouncementIndex = 0
-          DidVolumeNoteClicked = Preferences.getDidVolumeNoteClicked ()
+          DidSpeakInPuzzle = Preferences.getDidSpeakInPuzzle ()
           LastVolumePressOrPanGestureMillis = DateTimeOffset.Now.ToUnixTimeMilliseconds() }
 
     let cmd =
@@ -227,13 +227,6 @@ module App =
 
             modelOld, cmd
 
-        | VolumeNoteClicked ->
-            Preferences.setDidVolumeNoteClicked true
-
-            { modelOld with
-                DidVolumeNoteClicked = true },
-            Cmd.ofMsg VolumeUpPressed
-
         | ShowSolution ->
             let currentMoveIndexNew =
                 match categoryIdOld with
@@ -276,10 +269,12 @@ module App =
             match isDebounceThresholdOver, selectedPageOld with
             | true, OpeningPuzzlesPage
             | true, EndgamePuzzlesPage ->
+                Preferences.setDidSpeakInPuzzle true
                 let cmd = announcementsOld[0] |> Speak |> Cmd.ofMsg
 
                 let modelNew =
                     { modelOld with
+                        DidSpeakInPuzzle = true
                         CurrentAnnouncementIndex = 1
                         LastVolumePressOrPanGestureMillis = currentMillis }
 
@@ -300,8 +295,10 @@ module App =
                 | v when v = announcementsOld.Length ->
                     let modelNew =
                         { modelOld with
+                            DidSpeakInPuzzle = true
                             LastVolumePressOrPanGestureMillis = currentMillis }
 
+                    Preferences.setDidSpeakInPuzzle true
                     let firstCmd = "next puzzle" |> Speak |> Cmd.ofMsg
                     let secondCmd = Cmd.ofMsg (GoToMsg NextPuzzle)
                     let cmd = Cmd.batch [ firstCmd; secondCmd ]
@@ -309,11 +306,13 @@ module App =
                 | v when v = announcementsOld.Length - 1 ->
                     let modelNew =
                         { modelOld with
+                            DidSpeakInPuzzle = true
                             CurrentAnnouncementIndex = v + 1
                             LastVolumePressOrPanGestureMillis = currentMillis }
 
                     let firstCmd = Cmd.ofMsg ShowSolution
 
+                    Preferences.setDidSpeakInPuzzle true
                     let secondCmd = announcementsOld[v] |> Speak |> Cmd.ofMsg
 
                     let cmd = Cmd.batch [ firstCmd; secondCmd ]
@@ -321,9 +320,11 @@ module App =
                 | v ->
                     let modelNew =
                         { modelOld with
+                            DidSpeakInPuzzle = true
                             CurrentAnnouncementIndex = v + 1
                             LastVolumePressOrPanGestureMillis = currentMillis }
 
+                    Preferences.setDidSpeakInPuzzle true
                     let cmd = announcementsOld[v] |> Speak |> Cmd.ofMsg
 
                     modelNew, cmd
