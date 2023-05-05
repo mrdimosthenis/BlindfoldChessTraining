@@ -58,7 +58,7 @@
 
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.png" Color="#512BD4"/>
+        <MauiIcon Include="Resources\AppIcon\appicon.png" Color="#512BD4" />
 
         <MauiAsset Include="Resources\Raw\endgame_puzzles.jsonl" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
         <MauiAsset Include="Resources\Raw\opening_puzzles.jsonl" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
