@@ -190,4 +190,12 @@
         <ProjectReference Include="BlindfoldChessMechanics\BlindfoldChessMechanics.fsproj" />
     </ItemGroup>
 
+    <Target Name="ConfigureTrimming" BeforeTargets="PrepareForILLink">
+        <ItemGroup>
+            <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Private.CoreLib'">
+                <IsTrimmable>false</IsTrimmable>
+            </ManagedAssemblyToLink>
+        </ItemGroup>
+    </Target>
+
 </Project>
