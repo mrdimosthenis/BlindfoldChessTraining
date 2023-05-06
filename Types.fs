@@ -27,7 +27,6 @@ type Sponsor =
       SponsorImage: string }
 
 type SelectedPage =
-    | SponsorPage
     | HomePage
     | EndgamePuzzlesPage
     | OpeningPuzzlesPage
@@ -57,6 +56,7 @@ type CurrentGame =
 
 type Model =
     { SponsorDetails: Sponsor option
+      IsSponsorTime: bool
       SelectedPage: SelectedPage
       Locales: Locale LazyList
       IsDisplayBoardEnabled: bool
@@ -106,6 +106,7 @@ type IKeyCodeReceivedService =
 type Msg =
     | NoOp
     | LocalesLoaded of Locale LazyList
+    | StopSponsorDisplay
     | SelectPage of SelectedPage
     | GoToMsg of GoToTarget
     | Speak of string

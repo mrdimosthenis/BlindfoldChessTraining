@@ -32,9 +32,12 @@ module App =
           LocaleIndex = Preferences.getLocaleIndex ()
           SpeechPitch = Preferences.getSpeechPitch () }
 
+    let initSponsorDetails = Resources.sponsorDetails ()
+
     let initModel =
-        { SponsorDetails = Resources.sponsorDetails ()
-          SelectedPage = SponsorPage
+        { SponsorDetails = initSponsorDetails
+          IsSponsorTime = initSponsorDetails.IsSome
+          SelectedPage = HomePage
           Locales = LazyList.empty
           IsDisplayBoardEnabled = Preferences.getIsDisplayBoardEnabled ()
           ConfigOptions = initConfigOptions ()
@@ -59,8 +62,7 @@ module App =
 
     let update msg modelOld =
 
-        let { SponsorDetails = sponsorDetailsOld
-              SelectedPage = selectedPageOld
+        let { SelectedPage = selectedPageOld
               Locales = localesOld
               IsDisplayBoardEnabled = isDisplayBoardEnabledOld
               ConfigOptions = configOptionsOld
@@ -96,16 +98,15 @@ module App =
             modelOld, Cmd.ofMsg msgNew
         | LocalesLoaded v ->
             let cmd =
-                match sponsorDetailsOld with
-                | None -> Cmd.none
-                | _ ->
-                    async {
-                        do! Async.Sleep 5000
-                        return SelectPage HomePage
-                    }
-                    |> Cmd.ofAsyncMsg
+                async {
+                    do! Async.Sleep 5000
+                    return StopSponsorDisplay
+                }
+                |> Cmd.ofAsyncMsg
 
             { modelOld with Locales = v }, cmd
+
+        | StopSponsorDisplay -> { modelOld with IsSponsorTime = false }, Cmd.none
 
         | SelectPage v ->
             let categoryIdNew =
@@ -251,15 +252,9 @@ module App =
             else
                 ()
 
-            let selectedPageNew =
-                if selectedPageOld = SponsorPage then
-                    SponsorPage
-                else
-                    HomePage
-
             let modelNew =
                 { modelOld with
-                    SelectedPage = selectedPageNew }
+                    SelectedPage = HomePage }
 
             modelNew, Cmd.none
 
@@ -418,7 +413,6 @@ module App =
         Application(
             match model.SelectedPage with
             | HomePage -> Pages.Home.view model
-            | SponsorPage -> Pages.Sponsor.view model
             | EndgamePuzzlesPage -> Pages.EndgamePuzzles.view model
             | OpeningPuzzlesPage -> Pages.OpeningPuzzles.view model
             | DescriptionPage -> Pages.Description.view model

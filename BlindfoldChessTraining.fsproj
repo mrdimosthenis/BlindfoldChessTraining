@@ -46,7 +46,6 @@
         <Compile Include="UIElems\PuzzleElems.fs" />
         <Compile Include="UIElems\Page.fs" />
         <Compile Include="Pages\Home.fs" />
-        <Compile Include="Pages\Sponsor.fs" />
         <Compile Include="Pages\EndgamePuzzles.fs" />
         <Compile Include="Pages\OpeningPuzzles.fs" />
         <Compile Include="Pages\Description.fs" />

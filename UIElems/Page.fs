@@ -6,9 +6,9 @@ open type Fabulous.Maui.View
 
 let template model title (icon: WidgetFabImage) (innerElems: WidgetFabLayout list) =
     let backBtn =
-        match model.SelectedPage with
-        | HomePage -> Icons.exit BackPressed
-        | SponsorPage -> Icons.emptyBtn NoOp
+        match model.SelectedPage, model.IsSponsorTime with
+        | HomePage, true -> Icons.emptyBtn NoOp
+        | HomePage, false -> Icons.exit BackPressed
         | _ -> Icons.play_left BackPressed
 
     let label = Components.label model.ConfigOptions.FontSizeRatio title
