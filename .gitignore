@@ -353,3 +353,6 @@ MigrationBackup/
 /.idea/
 
 Resources/Resource.designer.cs
+
+# keystore file
+/myapp.keystore

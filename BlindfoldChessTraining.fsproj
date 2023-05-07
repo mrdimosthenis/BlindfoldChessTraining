@@ -33,6 +33,15 @@
         <SupportedOSPlatformVersion Condition="$(TargetPlatformIdentifier) == 'tizen'">6.5</SupportedOSPlatformVersion>
     </PropertyGroup>
 
+    <!-- Signing for Android -->
+    <PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
+        <AndroidKeyStore>True</AndroidKeyStore>
+        <AndroidSigningKeyStore>myapp.keystore</AndroidSigningKeyStore>
+        <AndroidSigningKeyAlias>nov2020_android_keystore</AndroidSigningKeyAlias>
+        <AndroidSigningKeyPass></AndroidSigningKeyPass>
+        <AndroidSigningStorePass></AndroidSigningStorePass>
+    </PropertyGroup>
+
     <ItemGroup>
         <Compile Include="Types.fs" />
         <Compile Include="Constants.fs" />
