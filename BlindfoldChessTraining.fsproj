@@ -1,0 +1,210 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+        <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+        <!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
+        <OutputType>Exe</OutputType>
+        <RootNamespace>BlindfoldChessTraining</RootNamespace>
+        <UseMaui>true</UseMaui>
+        <SingleProject>true</SingleProject>
+        <EnableDefaultItems>false</EnableDefaultItems>
+        <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
+
+        <!-- Display name -->
+        <ApplicationTitle>Blindfold Chess Training</ApplicationTitle>
+
+        <!-- App Identifier -->
+        <ApplicationId>com.github.mrdimosthenis.blindfoldchesstraining</ApplicationId>
+        <ApplicationIdGuid>5F56BE78-8F86-4D87-B049-6785A9B8D629</ApplicationIdGuid>
+
+        <!-- Versions -->
+        <ApplicationDisplayVersion>4.0.0</ApplicationDisplayVersion>
+        <ApplicationVersion>19</ApplicationVersion>
+
+        <TargetPlatformIdentifier Condition=" $(TargetPlatformIdentifier) == '' ">$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
+
+        <SupportedOSPlatformVersion Condition="$(TargetPlatformIdentifier) == 'ios'">14.2</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$(TargetPlatformIdentifier) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$(TargetPlatformIdentifier) == 'android'">21.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$(TargetPlatformIdentifier) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+        <TargetPlatformMinVersion Condition="$(TargetPlatformIdentifier) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+        <SupportedOSPlatformVersion Condition="$(TargetPlatformIdentifier) == 'tizen'">6.5</SupportedOSPlatformVersion>
+    </PropertyGroup>
+
+    <!-- Signing for Android -->
+    <PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
+        <AndroidKeyStore>True</AndroidKeyStore>
+        <AndroidSigningKeyStore>myapp.keystore</AndroidSigningKeyStore>
+        <AndroidSigningKeyAlias>nov2020_android_keystore</AndroidSigningKeyAlias>
+        <AndroidSigningKeyPass></AndroidSigningKeyPass>
+        <AndroidSigningStorePass></AndroidSigningStorePass>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Types.fs" />
+        <Compile Include="Constants.fs" />
+        <Compile Include="Resources.fs" />
+        <Compile Include="DB.fs" />
+        <Compile Include="Preferences.fs" />
+        <Compile Include="Speech.fs" />
+        <Compile Include="UIElems\Components.fs" />
+        <Compile Include="UIElems\Icons.fs" />
+        <Compile Include="UIElems\Board.fs" />
+        <Compile Include="UIElems\PuzzleElems.fs" />
+        <Compile Include="UIElems\Page.fs" />
+        <Compile Include="Pages\Home.fs" />
+        <Compile Include="Pages\EndgamePuzzles.fs" />
+        <Compile Include="Pages\OpeningPuzzles.fs" />
+        <Compile Include="Pages\Description.fs" />
+        <Compile Include="Pages\Options.fs" />
+        <Compile Include="Pages\Credits.fs" />
+        <Compile Include="App.fs" />
+        <Compile Include="MauiProgram.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- App Icon -->
+        <MauiIcon Include="Resources\AppIcon\appicon.png" Color="#512BD4" />
+
+        <MauiAsset Include="Resources\Raw\endgame_puzzles.jsonl" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+        <MauiAsset Include="Resources\Raw\opening_puzzles.jsonl" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+
+        <!-- Custom Fonts -->
+        <MauiFont Include="Resources\Fonts\*" />
+
+        <!-- Images -->
+        <MauiImage Include="Resources\Images\*" />
+
+        <MauiImage Include="Resources\Images\logos\main.png" />
+        <MauiImage Include="Resources\Images\icons\empty.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\home.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\home_colored.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\cube.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\cube_colored.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\library.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\library_colored.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\annotation.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\annotation_colored.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\options.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\options_colored.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\fingerprint.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\fingerprint_colored.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\arrow_circle_left.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\arrow_circle_right.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\fast_forward.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\rewind.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\chevron_double_left.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\chevron_double_right.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\chevron_left.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\chevron_right.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\chip.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\speaker.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\code.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\id_card.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\eye.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\document.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\share.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\play.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\play_left.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\exit.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\icons\star.png" BaseSize="20,20" />
+        <MauiImage Include="Resources\Images\board\empty.png" />
+        <MauiImage Include="Resources\Images\board\img1.png" />
+        <MauiImage Include="Resources\Images\board\img2.png" />
+        <MauiImage Include="Resources\Images\board\img3.png" />
+        <MauiImage Include="Resources\Images\board\img4.png" />
+        <MauiImage Include="Resources\Images\board\img5.png" />
+        <MauiImage Include="Resources\Images\board\img6.png" />
+        <MauiImage Include="Resources\Images\board\img7.png" />
+        <MauiImage Include="Resources\Images\board\img8.png" />
+        <MauiImage Include="Resources\Images\board\img_a.png" />
+        <MauiImage Include="Resources\Images\board\img_b.png" />
+        <MauiImage Include="Resources\Images\board\img_c.png" />
+        <MauiImage Include="Resources\Images\board\img_d.png" />
+        <MauiImage Include="Resources\Images\board\img_e.png" />
+        <MauiImage Include="Resources\Images\board\img_f.png" />
+        <MauiImage Include="Resources\Images\board\img_g.png" />
+        <MauiImage Include="Resources\Images\board\img_h.png" />
+        <MauiImage Include="Resources\Images\board\bb.png" />
+        <MauiImage Include="Resources\Images\board\bk.png" />
+        <MauiImage Include="Resources\Images\board\bn.png" />
+        <MauiImage Include="Resources\Images\board\bp.png" />
+        <MauiImage Include="Resources\Images\board\bq.png" />
+        <MauiImage Include="Resources\Images\board\br.png" />
+        <MauiImage Include="Resources\Images\board\wb.png" />
+        <MauiImage Include="Resources\Images\board\wk.png" />
+        <MauiImage Include="Resources\Images\board\wn.png" />
+        <MauiImage Include="Resources\Images\board\wp.png" />
+        <MauiImage Include="Resources\Images\board\wq.png" />
+        <MauiImage Include="Resources\Images\board\wr.png" />
+
+        <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+        <MauiAsset Include="Resources\Raw\*" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+
+        <!-- Splash Screen -->
+        <MauiSplashScreen Include="Resources\Splash\splash.png" BaseSize="128,128" />
+    </ItemGroup>
+
+    <ItemGroup Condition="$(TargetPlatformIdentifier) == 'android'">
+        <AndroidResource Include="$(AndroidProjectFolder)Resources/*/*" />
+        <AndroidResource Remove="$(AndroidProjectFolder)Resources/raw/.*" />
+        <AndroidResource Update="$(AndroidProjectFolder)Resources/raw/*" />
+        <AndroidAsset Include="$(AndroidProjectFolder)Assets/**/*" Exclude="$(AndroidProjectFolder)Assets/**/.*/**" />
+        <AndroidManifest Include="$(AndroidProjectFolder)AndroidManifest.xml" />
+        <Compile Include="$(AndroidProjectFolder)MainActivity.fs" />
+        <Compile Include="$(AndroidProjectFolder)MainApplication.fs" />
+
+        <PackageReference Include="FSharp.Android.Resource" Version="1.0.4" />
+    </ItemGroup>
+
+    <ItemGroup Condition="$(TargetPlatformIdentifier) == 'ios'">
+        <None Include="$(iOSProjectFolder)Info.plist" LogicalName="Info.plist" />
+        <Compile Include="$(iOSProjectFolder)AppDelegate.fs" />
+        <Compile Include="$(iOSProjectFolder)Program.fs" />
+    </ItemGroup>
+
+    <ItemGroup Condition="$(TargetPlatformIdentifier) == 'maccatalyst'">
+        <None Include="$(MacCatalystProjectFolder)Info.plist" LogicalName="Info.plist" />
+        <Compile Include="$(MacCatalystProjectFolder)AppDelegate.fs" />
+        <Compile Include="$(MacCatalystProjectFolder)Program.fs" />
+    </ItemGroup>
+
+    <ItemGroup Condition="$(TargetPlatformIdentifier) == 'windows'">
+        <Manifest Include="$(WindowsProjectFolder)app.manifest" />
+        <AppxManifest Include="$(WindowsProjectFolder)Package.appxmanifest" />
+        <Compile Include="$(WindowsProjectFolder)App.fs" />
+        <Compile Include="$(WindowsProjectFolder)Main.fs" />
+
+        <PackageReference Include="FSharp.Maui.WinUICompat" Version="1.1.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="$(TargetPlatformIdentifier) == 'tizen'">
+        <TizenManifestFile Include="$(TizenProjectFolder)tizen-manifest.xml" />
+        <Compile Include="$(TizenProjectFolder)Main.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Fabulous" Version="2.2.1" />
+        <PackageReference Include="Fabulous.MauiControls" Version="2.5.1" />
+        <PackageReference Include="FSharp.Core" Version="7.0.200" />
+        <PackageReference Include="FSharp.Data" Version="6.2.0" />
+        <PackageReference Include="FSharpx.Collections" Version="3.1.0" />
+        <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+        <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="BlindfoldChessMechanics\BlindfoldChessMechanics.fsproj" />
+    </ItemGroup>
+
+    <Target Name="ConfigureTrimming" BeforeTargets="PrepareForILLink">
+        <ItemGroup>
+            <ManagedAssemblyToLink Condition="'%(Filename)' == 'System.Private.CoreLib'">
+                <IsTrimmable>false</IsTrimmable>
+            </ManagedAssemblyToLink>
+        </ItemGroup>
+    </Target>
+
+</Project>

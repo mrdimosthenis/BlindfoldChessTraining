@@ -1,12 +1,10 @@
-# Blindfold Chess Training
-
-![](readme_images/logo.png)
+﻿# Blindfold Chess Training
 
 This is the source code of the **Blindfold Chess Training** mobile application.
 
-![](readme_images/screenshot.jpg)
+![](screenshot.jpg)
 
-It was created with [Fabulous](https://fsprojects.github.io/Fabulous/)!
+It was created with [Fabulous](https://fabulous.dev/)!
 
 <a href='https://play.google.com/store/apps/details?id=com.github.mrdimosthenis.blindfoldchesstraining'>
     <img src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width='200' height='75' />

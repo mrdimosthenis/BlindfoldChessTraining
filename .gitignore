@@ -351,4 +351,8 @@ MigrationBackup/
 
 # JetBrains
 /.idea/
-BlindfoldChessTraining/Secrets.fs
+
+Resources/Resource.designer.cs
+
+# keystore file
+/myapp.keystore

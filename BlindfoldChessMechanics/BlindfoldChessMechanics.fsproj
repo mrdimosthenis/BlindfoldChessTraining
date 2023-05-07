@@ -1,25 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="Utils.fs" />
-    <Compile Include="Logic.Board.fs" />
-	<Compile Include="Logic.Position.fs" />
-	<Compile Include="Logic.Game.fs" />
-	<Compile Include="Notation.Emitter.fs" />
-	<Compile Include="Notation.Parser.fs" />
-	<Compile Include="NaturalLanguage.fs" />
-    <Compile Include="Library.fs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Utils.fs" />
+        <Compile Include="NaturalLanguage.fs" />
+        <Compile Include="Logic\Board.fs" />
+        <Compile Include="Logic\Position.fs" />
+        <Compile Include="Logic\Game.fs" />
+        <Compile Include="Notation\Emitter.fs" />
+        <Compile Include="Notation\Parser.fs" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FSharpx.Collections" Version="2.1.3" />
-    <PackageReference Include="FSharp.Core" Version="4.7.1" />
-    <PackageReference Update="FSharp.Core" Version="4.7.1" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 --> 
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-  </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="FSharpx.Collections" Version="3.1.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
 
 </Project>
