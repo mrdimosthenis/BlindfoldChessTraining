@@ -2,10 +2,6 @@
 
 open Microsoft.Maui.Storage
 
-// functions
-
-let reset () = Preferences.Clear()
-
 // keys
 
 let isDisplayBoardEnabledKey = "isDisplayBoardEnabled"
@@ -40,8 +36,7 @@ let getBoardSizeRatio () =
 
 let getFontSizeRatio () = Preferences.Get(fontSizeRatioKey, 1.)
 
-let getLocaleIndex () =
-    Preferences.Get(localeIndexKey, 0)
+let getLocaleIndex () = Preferences.Get(localeIndexKey, 0)
 
 let getSpeechPitch () = Preferences.Get(speechPitchKey, 1.f)
 
@@ -76,8 +71,7 @@ let setLocaleIndex (v: int) = Preferences.Set(localeIndexKey, v)
 
 let setSpeechPitch (v: float32) = Preferences.Set(speechPitchKey, v)
 
-let setDidSpeakInPuzzle (v: bool) =
-    Preferences.Set(didSpeakInPuzzleKey, v)
+let setDidSpeakInPuzzle (v: bool) = Preferences.Set(didSpeakInPuzzleKey, v)
 
 let setLevelEndgame (v: int) = Preferences.Set(levelEndgameKey, v)
 
@@ -88,3 +82,18 @@ let setLevelOpening (v: int) = Preferences.Set(levelOpeningKey, v)
 
 let setIndexInLevelOpening (v: int) =
     Preferences.Set(indexInLevelOpeningKey, v)
+
+// reset functions
+
+let reset () = Preferences.Clear()
+
+let resetConfig () =
+    let levelEndgame = getLevelEndgame ()
+    let indexInLevelEndgame = getIndexInLevelEndgame ()
+    let levelOpening = getLevelOpening ()
+    let indexInLevelOpening = getIndexInLevelOpening ()
+    reset ()
+    setLevelEndgame levelEndgame
+    setIndexInLevelEndgame indexInLevelEndgame
+    setLevelOpening levelOpening
+    setIndexInLevelOpening indexInLevelOpening

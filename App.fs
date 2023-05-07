@@ -380,7 +380,7 @@ module App =
                     { configOptionsOld with
                         LocaleIndex = v }
                 | Reset ->
-                    Preferences.reset ()
+                    Preferences.resetConfig ()
                     initConfigOptions ()
 
             let modelNew =
