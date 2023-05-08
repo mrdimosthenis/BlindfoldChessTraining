@@ -29,7 +29,7 @@ let view model =
               model |> UIElems.PuzzleElems.boardOption |> HorizSt
 
           if (isDisplayBoardEnabled || Constants.os = IOS) && not isPuzzleSolved then
-              Logic.Board.empty
+              Logic.Board.init
               |> UIElems.Board.boardGrid areCoordsEnabled boardSizeRatio
               |> Grd
 
