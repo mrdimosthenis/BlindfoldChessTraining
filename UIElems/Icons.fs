@@ -35,7 +35,7 @@ let annotationColored: WidgetFabImage = Image("icons/annotation_colored")
 let options text msg =
     Components.btnIconText "icons/options" text msg
 
-let optionsColored: WidgetFabImage = Image("icons/annotation_colored")
+let optionsColored: WidgetFabImage = Image("icons/options_colored")
 
 let fingerprint text msg =
     Components.btnIconText "icons/fingerprint" text msg

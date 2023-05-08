@@ -20,8 +20,8 @@
         <ApplicationIdGuid>5F56BE78-8F86-4D87-B049-6785A9B8D629</ApplicationIdGuid>
 
         <!-- Versions -->
-        <ApplicationDisplayVersion>4.0.0</ApplicationDisplayVersion>
-        <ApplicationVersion>19</ApplicationVersion>
+        <ApplicationDisplayVersion>4.0.1</ApplicationDisplayVersion>
+        <ApplicationVersion>20</ApplicationVersion>
 
         <TargetPlatformIdentifier Condition=" $(TargetPlatformIdentifier) == '' ">$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
 
