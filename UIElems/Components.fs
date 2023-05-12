@@ -1,17 +1,24 @@
 ﻿module BlindfoldChessTraining.UIElems.Components
 
 open BlindfoldChessTraining
+open BlindfoldChessTraining.Types
 open Fabulous.Maui
 open Microsoft.Maui.Controls
 open type Fabulous.Maui.View
 
-let brush = Brush.Purple
+let brush = Brush.DarkBlue
 
 let btnIcon (imPath: string) msg =
-    Button("", msg).image(imPath).background brush
+    let btn = Button("", msg).image imPath
+    match Constants.os with
+    | Android -> btn
+    | IOS -> btn.background brush
 
 let btnIconText (imPath: string) text msg =
-    Button(text, msg).image(imPath).background brush
+    let btn = Button(text, msg).image imPath
+    match Constants.os with
+    | Android -> btn
+    | IOS -> btn.background brush
 
 let label fontSizeRatio str =
     Label(str)
