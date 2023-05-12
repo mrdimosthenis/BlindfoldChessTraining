@@ -1,64 +1,64 @@
 ﻿module BlindfoldChessTraining.UIElems.Board
 
 open BlindfoldChessMechanics
+open BlindfoldChessTraining
 open BlindfoldChessTraining.Types
 open Fabulous.Maui
 open Microsoft.Maui
-open Microsoft.Maui.Devices
 open type Fabulous.Maui.View
 open Microsoft.Maui.Graphics
 
-let imgEmpty = Image("board/empty.png")
+let imgEmpty = Image("empty.png.png")
 
 let imgWh = Color.FromRgb(216, 208, 246) |> imgEmpty.background
 
 let imgBl = Color.FromRgb(160, 142, 231) |> imgEmpty.background
 
 
-let img1 = Image("board/img1")
+let img1 = Image("img1.png")
 
-let img2 = Image("board/img2")
+let img2 = Image("img2.png")
 
-let img3 = Image("board/img3")
+let img3 = Image("img3.png")
 
-let img4 = Image("board/img4")
+let img4 = Image("img4.png")
 
-let img5 = Image("board/img5")
+let img5 = Image("img5.png")
 
-let img6 = Image("board/img6")
+let img6 = Image("img6.png")
 
-let img7 = Image("board/img7")
+let img7 = Image("img7.png")
 
-let img8 = Image("board/img8")
+let img8 = Image("img8.png")
 
-let imgA = Image("board/img_a")
+let imgA = Image("img_a.png")
 
-let imgB = Image("board/img_b")
+let imgB = Image("img_b.png")
 
-let imgC = Image("board/img_c")
+let imgC = Image("img_c.png")
 
-let imgD = Image("board/img_d")
+let imgD = Image("img_d.png")
 
-let imgE = Image("board/img_e")
+let imgE = Image("img_e.png")
 
-let imgF = Image("board/img_f")
+let imgF = Image("img_f.png")
 
-let imgG = Image("board/img_g")
+let imgG = Image("img_g.png")
 
-let imgH = Image("board/img_h")
+let imgH = Image("img_h.png")
 
-let imgBb = Image("board/bb")
-let imgBk = Image("board/bk")
-let imgBn = Image("board/bn")
-let imgBp = Image("board/bp")
-let imgBq = Image("board/bq")
-let imgBr = Image("board/br")
-let imgWb = Image("board/wb")
-let imgWk = Image("board/wk")
-let imgWn = Image("board/wn")
-let imgWp = Image("board/wp")
-let imgWq = Image("board/wq")
-let imgWr = Image("board/wr")
+let imgBb = Image("bb.png")
+let imgBk = Image("bk.png")
+let imgBn = Image("bn.png")
+let imgBp = Image("bp.png")
+let imgBq = Image("bq.png")
+let imgBr = Image("br.png")
+let imgWb = Image("wb.png")
+let imgWk = Image("wk.png")
+let imgWn = Image("wn.png")
+let imgWp = Image("wp.png")
+let imgWq = Image("wq.png")
+let imgWr = Image("wr.png")
 
 let residentImg (resident: Logic.Board.Resident) =
     match resident with
@@ -87,14 +87,12 @@ let residentImg (resident: Logic.Board.Resident) =
              IsWhite = false } -> imgBn
     | Some { PieceType = Logic.Board.Pawn
              IsWhite = false } -> imgBp
-    
-let visualWidth =
-    DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density
 
 let boardGrid areCoordsEnabled boardSizeRatio (board: Logic.Board.Board) =
     let maxRowColIndex = if areCoordsEnabled then 8 else 7
 
-    let squareWidth = boardSizeRatio * visualWidth / (float maxRowColIndex + 1.)
+    let squareWidth =
+        boardSizeRatio * Constants.visualWidth / (float maxRowColIndex + 1.)
 
     let rowColRange = seq { 0..maxRowColIndex }
 

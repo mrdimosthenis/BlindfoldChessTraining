@@ -2,11 +2,16 @@
 
 open BlindfoldChessTraining
 open Fabulous.Maui
+open Microsoft.Maui.Controls
 open type Fabulous.Maui.View
 
-let btnIcon (imPath: string) msg = Button("", msg).image imPath
+let brush = Brush.Purple
 
-let btnIconText (imPath: string) text msg = Button(text, msg).image imPath
+let btnIcon (imPath: string) msg =
+    Button("", msg).image(imPath).background brush
+
+let btnIconText (imPath: string) text msg =
+    Button(text, msg).image(imPath).background brush
 
 let label fontSizeRatio str =
     Label(str)

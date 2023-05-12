@@ -20,8 +20,8 @@
         <ApplicationIdGuid>5F56BE78-8F86-4D87-B049-6785A9B8D629</ApplicationIdGuid>
 
         <!-- Versions -->
-        <ApplicationDisplayVersion>4.0.2</ApplicationDisplayVersion>
-        <ApplicationVersion>21</ApplicationVersion>
+        <ApplicationDisplayVersion>4.0.3</ApplicationDisplayVersion>
+        <ApplicationVersion>22</ApplicationVersion>
 
         <TargetPlatformIdentifier Condition=" $(TargetPlatformIdentifier) == '' ">$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
 
@@ -77,68 +77,66 @@
         <!-- Images -->
         <MauiImage Include="Resources\Images\*" />
 
-        <MauiImage Include="Resources\Images\logos\main.png" />
-        <MauiImage Include="Resources\Images\icons\empty.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\home.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\home_colored.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\cube.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\cube_colored.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\library.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\library_colored.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\annotation.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\annotation_colored.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\options.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\options_colored.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\fingerprint.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\fingerprint_colored.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\arrow_circle_left.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\arrow_circle_right.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\fast_forward.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\rewind.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\chevron_double_left.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\chevron_double_right.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\chevron_left.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\chevron_right.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\chip.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\speaker.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\code.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\id_card.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\eye.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\document.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\share.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\play.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\play_left.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\exit.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\icons\star.png" BaseSize="20,20" />
-        <MauiImage Include="Resources\Images\board\empty.png" />
-        <MauiImage Include="Resources\Images\board\img1.png" />
-        <MauiImage Include="Resources\Images\board\img2.png" />
-        <MauiImage Include="Resources\Images\board\img3.png" />
-        <MauiImage Include="Resources\Images\board\img4.png" />
-        <MauiImage Include="Resources\Images\board\img5.png" />
-        <MauiImage Include="Resources\Images\board\img6.png" />
-        <MauiImage Include="Resources\Images\board\img7.png" />
-        <MauiImage Include="Resources\Images\board\img8.png" />
-        <MauiImage Include="Resources\Images\board\img_a.png" />
-        <MauiImage Include="Resources\Images\board\img_b.png" />
-        <MauiImage Include="Resources\Images\board\img_c.png" />
-        <MauiImage Include="Resources\Images\board\img_d.png" />
-        <MauiImage Include="Resources\Images\board\img_e.png" />
-        <MauiImage Include="Resources\Images\board\img_f.png" />
-        <MauiImage Include="Resources\Images\board\img_g.png" />
-        <MauiImage Include="Resources\Images\board\img_h.png" />
-        <MauiImage Include="Resources\Images\board\bb.png" />
-        <MauiImage Include="Resources\Images\board\bk.png" />
-        <MauiImage Include="Resources\Images\board\bn.png" />
-        <MauiImage Include="Resources\Images\board\bp.png" />
-        <MauiImage Include="Resources\Images\board\bq.png" />
-        <MauiImage Include="Resources\Images\board\br.png" />
-        <MauiImage Include="Resources\Images\board\wb.png" />
-        <MauiImage Include="Resources\Images\board\wk.png" />
-        <MauiImage Include="Resources\Images\board\wn.png" />
-        <MauiImage Include="Resources\Images\board\wp.png" />
-        <MauiImage Include="Resources\Images\board\wq.png" />
-        <MauiImage Include="Resources\Images\board\wr.png" />
+        <MauiImage Include="Resources\Images\main.png" />
+        <MauiImage Include="Resources\Images\empty.png" />
+        <MauiImage Include="Resources\Images\home.png" />
+        <MauiImage Include="Resources\Images\home_colored.png" />
+        <MauiImage Include="Resources\Images\cube.png" />
+        <MauiImage Include="Resources\Images\cube_colored.png" />
+        <MauiImage Include="Resources\Images\library.png" />
+        <MauiImage Include="Resources\Images\library_colored.png" />
+        <MauiImage Include="Resources\Images\annotation.png" />
+        <MauiImage Include="Resources\Images\annotation_colored.png" />
+        <MauiImage Include="Resources\Images\options.png" />
+        <MauiImage Include="Resources\Images\options_colored.png" />
+        <MauiImage Include="Resources\Images\fingerprint.png" />
+        <MauiImage Include="Resources\Images\fingerprint_colored.png" />
+        <MauiImage Include="Resources\Images\arrow_circle_left.png" />
+        <MauiImage Include="Resources\Images\arrow_circle_right.png" />
+        <MauiImage Include="Resources\Images\fast_forward.png" />
+        <MauiImage Include="Resources\Images\rewind.png" />
+        <MauiImage Include="Resources\Images\chevron_double_left.png" />
+        <MauiImage Include="Resources\Images\chevron_double_right.png" />
+        <MauiImage Include="Resources\Images\chevron_left.png" />
+        <MauiImage Include="Resources\Images\chevron_right.png" />
+        <MauiImage Include="Resources\Images\chip.png" />
+        <MauiImage Include="Resources\Images\speaker.png" />
+        <MauiImage Include="Resources\Images\code.png" />
+        <MauiImage Include="Resources\Images\id_card.png" />
+        <MauiImage Include="Resources\Images\eye.png" />
+        <MauiImage Include="Resources\Images\document.png" />
+        <MauiImage Include="Resources\Images\share.png" />
+        <MauiImage Include="Resources\Images\play_left.png" />
+        <MauiImage Include="Resources\Images\exit.png" />
+        <MauiImage Include="Resources\Images\star.png" />
+        <MauiImage Include="Resources\Images\img1.png" />
+        <MauiImage Include="Resources\Images\img2.png" />
+        <MauiImage Include="Resources\Images\img3.png" />
+        <MauiImage Include="Resources\Images\img4.png" />
+        <MauiImage Include="Resources\Images\img5.png" />
+        <MauiImage Include="Resources\Images\img6.png" />
+        <MauiImage Include="Resources\Images\img7.png" />
+        <MauiImage Include="Resources\Images\img8.png" />
+        <MauiImage Include="Resources\Images\img_a.png" />
+        <MauiImage Include="Resources\Images\img_b.png" />
+        <MauiImage Include="Resources\Images\img_c.png" />
+        <MauiImage Include="Resources\Images\img_d.png" />
+        <MauiImage Include="Resources\Images\img_e.png" />
+        <MauiImage Include="Resources\Images\img_f.png" />
+        <MauiImage Include="Resources\Images\img_g.png" />
+        <MauiImage Include="Resources\Images\img_h.png" />
+        <MauiImage Include="Resources\Images\bb.png" />
+        <MauiImage Include="Resources\Images\bk.png" />
+        <MauiImage Include="Resources\Images\bn.png" />
+        <MauiImage Include="Resources\Images\bp.png" />
+        <MauiImage Include="Resources\Images\bq.png" />
+        <MauiImage Include="Resources\Images\br.png" />
+        <MauiImage Include="Resources\Images\wb.png" />
+        <MauiImage Include="Resources\Images\wk.png" />
+        <MauiImage Include="Resources\Images\wn.png" />
+        <MauiImage Include="Resources\Images\wp.png" />
+        <MauiImage Include="Resources\Images\wq.png" />
+        <MauiImage Include="Resources\Images\wr.png" />
 
         <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
         <MauiAsset Include="Resources\Raw\*" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />

@@ -16,6 +16,9 @@ let numOfPuzzlesPerLevel = 50
 
 let fontSize = 20.
 
+let visualWidth =
+    DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density
+
 let appStoreUrl =
     match os with
     | Android -> "https://play.google.com/store/apps/details?id=com.github.mrdimosthenis.blindfoldchesstraining"
