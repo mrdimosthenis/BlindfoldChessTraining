@@ -21,7 +21,7 @@ let openingPuzzleLines () = puzzleLines "opening_puzzles.jsonl"
 
 let sponsorDetails () =
     let url =
-        "https://raw.githubusercontent.com/mrdimosthenis/BlindfoldChessTraining/master/sponsor.json"
+        "https://mrdimosthenis.github.io/BlindfoldChessTraining/sponsor.json"
 
     try
         Http.RequestString(url, timeout = 3000)
