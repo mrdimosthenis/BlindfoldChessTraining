@@ -7,7 +7,7 @@ open Fabulous.Maui
 open type Fabulous.Maui.View
 
 let webImg src : WidgetFabImage =
-    Image(Uri src).width Constants.visualWidth
+    Image(Uri src).width (0.9 * Constants.visualWidth)
 
 let mainLogo: WidgetFabImage = Image("main.png")
 
