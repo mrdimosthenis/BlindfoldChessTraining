@@ -91,7 +91,7 @@ let residentImg (resident: Logic.Board.Resident) =
 let boardGrid areCoordsEnabled boardSizeRatio (board: Logic.Board.Board) =
     let maxRowColIndex = if areCoordsEnabled then 8 else 7
 
-    let squareWidth =
+    let squareSize =
         boardSizeRatio * Constants.visualWidth / (float maxRowColIndex + 1.)
 
     let rowColRange = seq { 0..maxRowColIndex }
@@ -124,7 +124,7 @@ let boardGrid areCoordsEnabled boardSizeRatio (board: Logic.Board.Board) =
                     | false, r, c when (r + c) % 2 = 1 -> imgBl
                     | _ -> imgBl
 
-                image.gridRow(row).gridColumn(col).width(squareWidth).height squareWidth
+                image.gridRow(row).gridColumn(col).size squareSize
 
         for row in rowColRange do
             for col in rowColRange do
@@ -135,7 +135,7 @@ let boardGrid areCoordsEnabled boardSizeRatio (board: Logic.Board.Board) =
                     | true, r, c -> residentImg (board[7 - r][c - 1])
                     | false, r, c -> residentImg (board[7 - r][c])
 
-                image.gridRow(row).gridColumn(col).width(squareWidth).height squareWidth
+                image.gridRow(row).gridColumn(col).size squareSize
     })
         .centerHorizontal()
         .gestureRecognizers () {
