@@ -12,13 +12,16 @@ let view model =
     | Some { SponsorName = sponsorName
              SponsorImage = sponsorImage },
       true ->
+        let sponsorImg =
+            UIElems.Icons.webImg(sponsorImage).size (0.9 * Constants.visualWidth)
+
         [ $"Sponsor: {sponsorName}" |> UIElems.Components.label fontSizeRatio |> Lbl
-          sponsorImage |> UIElems.Icons.webImg |> Img
+          Img sponsorImg
           "please wait a few seconds" |> UIElems.Components.label fontSizeRatio |> Lbl
           true |> ActivityIndicator |> Ind ]
         |> UIElems.Page.template model "" UIElems.Icons.emptyImg
     | _ ->
-        [ Img UIElems.Icons.mainLogo
+        [ UIElems.Icons.mainLogo.size (0.75 * Constants.visualWidth) |> Img
           EndgamePuzzlesPage |> SelectPage |> UIElems.Icons.cube "Endgame Puzzles" |> Btn
           OpeningPuzzlesPage
           |> SelectPage

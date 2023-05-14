@@ -6,8 +6,7 @@ open BlindfoldChessTraining.Types
 open Fabulous.Maui
 open type Fabulous.Maui.View
 
-let webImg src : WidgetFabImage =
-    Image(Uri src).width (0.9 * Constants.visualWidth)
+let webImg src : WidgetFabImage = Image(Uri src)
 
 let mainLogo: WidgetFabImage = Image("main.png")
 

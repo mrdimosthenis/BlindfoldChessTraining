@@ -23,5 +23,7 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>CFBundleDisplayName</key>
+	<string>Blindfold Chess Training</string>
 </dict>
 </plist>
