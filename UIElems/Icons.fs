@@ -15,7 +15,6 @@ let emptyImg: WidgetFabImage = Image("empty.png")
 let emptyBtn msg =
     (Components.btnIcon "empty.png" msg).opacity 0
 
-let home: WidgetFabImage = Image("home.png")
 let homeColored: WidgetFabImage = Image("home_colored.png")
 
 let cube text msg =

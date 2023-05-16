@@ -79,7 +79,6 @@
 
         <MauiImage Include="Resources\Images\main.png"/>
         <MauiImage Include="Resources\Images\empty.png"/>
-        <MauiImage Include="Resources\Images\home.png"/>
         <MauiImage Include="Resources\Images\home_colored.png"/>
         <MauiImage Include="Resources\Images\cube.png"/>
         <MauiImage Include="Resources\Images\cube_colored.png"/>
