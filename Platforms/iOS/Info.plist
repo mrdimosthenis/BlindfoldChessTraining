@@ -21,9 +21,11 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
 	<key>CFBundleDisplayName</key>
-	<string>Blindfold Chess Training</string>
+	<string>Blindfold&#x2007;Chess&#x2007;Training</string>
 </dict>
 </plist>
