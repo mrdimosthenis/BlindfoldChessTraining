@@ -2,6 +2,8 @@
 
 Blindfold Chess Training is a mobile application for Android and iOS designed to help chess players improve their visualization skills. The application allows users to practice blindfold chess by relying on memory and mental board visualization.
 
+![](screenshot.jpg)
+
 ## Project Status
 
 This project is currently inactive and is maintained here as a portfolio piece. Previously, the application was fully published and actively available on both the Google Play Store and the Apple App Store. It was eventually delisted due to the time constraints. The codebase remains functional and serves as a demonstration of functional programming in mobile development.
